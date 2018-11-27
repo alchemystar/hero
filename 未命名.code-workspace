@@ -1,0 +1,8 @@
+{
+    "settings": {
+        "files.associations": {
+            "server.h": "c",
+            "list.h": "c"
+        }
+    }
+}

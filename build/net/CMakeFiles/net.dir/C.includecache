@@ -1,0 +1,26 @@
+#IncludeRegexLine: ^[ 	]*[#%][ 	]*(include|import)[ 	]*[<"]([^">]+)([">])
+
+#IncludeRegexScan: ^.*$
+
+#IncludeRegexComplain: ^$
+
+#IncludeRegexTransform: 
+
+/Users/alchemystar/mycode/hero/net/proto/list.h
+
+/Users/alchemystar/mycode/hero/net/proto/packet.h
+stdio.h
+-
+list.h
+/Users/alchemystar/mycode/hero/net/proto/list.h
+
+/Users/alchemystar/mycode/hero/net/server.c
+server.h
+/Users/alchemystar/mycode/hero/net/server.h
+
+/Users/alchemystar/mycode/hero/net/server.h
+stdio.h
+-
+proto/packet.h
+/Users/alchemystar/mycode/hero/net/proto/packet.h
+

@@ -1,0 +1,4 @@
+# 设置当前代码路径=>DIR_NET_SRC
+AUX_SOURCE_DIRECTORY(. DIR_PROTO_SRCS)
+# 将当前路径的编译结果加入proto
+ADD_LIBRARY (proto ${DIR_PROTO_SRCS})
