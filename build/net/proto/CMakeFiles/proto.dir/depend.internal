@@ -5,6 +5,10 @@ net/proto/CMakeFiles/proto.dir/list_test.c.o
  /Users/alchemystar/mycode/hero/net/proto/list.h
  /Users/alchemystar/mycode/hero/net/proto/list_test.c
 net/proto/CMakeFiles/proto.dir/packet.c.o
+ /Users/alchemystar/mycode/hero/net/basic.h
+ /Users/alchemystar/mycode/hero/net/buffer_util.h
+ /Users/alchemystar/mycode/hero/net/network.h
  /Users/alchemystar/mycode/hero/net/proto/list.h
  /Users/alchemystar/mycode/hero/net/proto/packet.c
  /Users/alchemystar/mycode/hero/net/proto/packet.h
+ /Users/alchemystar/mycode/hero/net/proto/packet_const.h

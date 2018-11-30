@@ -5,4 +5,6 @@
 
 void start_server();
 
+void process_connection(int sockfd);
+
 #endif

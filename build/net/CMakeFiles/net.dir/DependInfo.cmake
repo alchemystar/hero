@@ -4,6 +4,9 @@ set(CMAKE_DEPENDS_LANGUAGES
   )
 # The set of files for implicit dependencies of each language:
 set(CMAKE_DEPENDS_CHECK_C
+  "/Users/alchemystar/mycode/hero/net/basic.c" "/Users/alchemystar/mycode/hero/build/net/CMakeFiles/net.dir/basic.c.o"
+  "/Users/alchemystar/mycode/hero/net/buffer_util.c" "/Users/alchemystar/mycode/hero/build/net/CMakeFiles/net.dir/buffer_util.c.o"
+  "/Users/alchemystar/mycode/hero/net/network.c" "/Users/alchemystar/mycode/hero/build/net/CMakeFiles/net.dir/network.c.o"
   "/Users/alchemystar/mycode/hero/net/server.c" "/Users/alchemystar/mycode/hero/build/net/CMakeFiles/net.dir/server.c.o"
   )
 set(CMAKE_C_COMPILER_ID "Clang")

@@ -1,11 +1,16 @@
-#include <stdio.h>
-#include "list.h"
-
 #ifndef HERO_PACKET_H
 #define HERO_PACKET_H
 
+#include <stdio.h>
+#include "list.h"
+#include "../buffer_util.h"
 #define FIELD_COUNT 0xfe
 #define SQL_STATE_MARKER '#'
+
+#define MYSQL_HEADER_LEN 4
+#define MYSQL_HEADER_END_POS 3
+#define PACKET_ID_POS 4
+#define UTF8_CHAR_INDEX 83
 
 // 定义to_string的函数指针
 typedef char*(*to_string)();
@@ -33,6 +38,8 @@ typedef struct _auth_packet{
     unsigned char* extra;
     char* user;
     unsigned char* password;
+    // 表示password对应byte长度,不参与buffer的写入
+    int password_length;
     char* database;
 }auth_packet;
 
@@ -79,7 +86,7 @@ typedef struct _hand_shake_packet{
     mysql_packet header;
     unsigned char protol_version;
     unsigned char* server_version;
-    long threadId;
+    long thread_id;
     unsigned char* seed;
     int server_capabilities;
     unsigned char server_charset_index;
@@ -124,5 +131,20 @@ typedef struct _result_set{
     row_data data;
     eof_packet* last_eof;
 }result_set;
+
+
+int caculate_handshake_size();
+
+hand_shake_packet* get_handshake_packet();
+
+ok_packet* get_ok_packet();
+
+packet_buffer* get_handshake_buff();
+
+packet_buffer* get_packet_buffer(int size);
+
+void free_handshake_packet(hand_shake_packet* packet);
+
+void free_packet_buffer(packet_buffer* pb);
 
 #endif

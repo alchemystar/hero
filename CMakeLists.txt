@@ -9,7 +9,7 @@ aux_source_directory(. source_list)
 # 子目录net路径
 ADD_SUBDIRECTORY(net)
 #debug 模式
-set (CMAKE_CXX_FLAGS  "${CMAKE_CXX_FLAGS} -g")
+set (CMAKE_CXX_FLAGS  "${CMAKE_CXX_FLAGS} -g ")
 #生成可执行的文件
 add_executable(hero ${source_list}) 
 #link对应net lib

@@ -10,6 +10,10 @@
 net/server.h
 /Users/alchemystar/mycode/hero/net/server.h
 
+/Users/alchemystar/mycode/hero/net/buffer_util.h
+
+/Users/alchemystar/mycode/hero/net/config.h
+
 /Users/alchemystar/mycode/hero/net/proto/list.h
 
 /Users/alchemystar/mycode/hero/net/proto/packet.h
@@ -17,10 +21,14 @@ stdio.h
 -
 list.h
 /Users/alchemystar/mycode/hero/net/proto/list.h
+../buffer_util.h
+/Users/alchemystar/mycode/hero/net/buffer_util.h
 
 /Users/alchemystar/mycode/hero/net/server.h
 stdio.h
 -
+config.h
+/Users/alchemystar/mycode/hero/net/config.h
 proto/packet.h
 /Users/alchemystar/mycode/hero/net/proto/packet.h
 

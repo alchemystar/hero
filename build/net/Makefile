@@ -125,6 +125,87 @@ net/fast:
 	cd /Users/alchemystar/mycode/hero/build && $(MAKE) -f net/CMakeFiles/net.dir/build.make net/CMakeFiles/net.dir/build
 .PHONY : net/fast
 
+basic.o: basic.c.o
+
+.PHONY : basic.o
+
+# target to build an object file
+basic.c.o:
+	cd /Users/alchemystar/mycode/hero/build && $(MAKE) -f net/CMakeFiles/net.dir/build.make net/CMakeFiles/net.dir/basic.c.o
+.PHONY : basic.c.o
+
+basic.i: basic.c.i
+
+.PHONY : basic.i
+
+# target to preprocess a source file
+basic.c.i:
+	cd /Users/alchemystar/mycode/hero/build && $(MAKE) -f net/CMakeFiles/net.dir/build.make net/CMakeFiles/net.dir/basic.c.i
+.PHONY : basic.c.i
+
+basic.s: basic.c.s
+
+.PHONY : basic.s
+
+# target to generate assembly for a file
+basic.c.s:
+	cd /Users/alchemystar/mycode/hero/build && $(MAKE) -f net/CMakeFiles/net.dir/build.make net/CMakeFiles/net.dir/basic.c.s
+.PHONY : basic.c.s
+
+buffer_util.o: buffer_util.c.o
+
+.PHONY : buffer_util.o
+
+# target to build an object file
+buffer_util.c.o:
+	cd /Users/alchemystar/mycode/hero/build && $(MAKE) -f net/CMakeFiles/net.dir/build.make net/CMakeFiles/net.dir/buffer_util.c.o
+.PHONY : buffer_util.c.o
+
+buffer_util.i: buffer_util.c.i
+
+.PHONY : buffer_util.i
+
+# target to preprocess a source file
+buffer_util.c.i:
+	cd /Users/alchemystar/mycode/hero/build && $(MAKE) -f net/CMakeFiles/net.dir/build.make net/CMakeFiles/net.dir/buffer_util.c.i
+.PHONY : buffer_util.c.i
+
+buffer_util.s: buffer_util.c.s
+
+.PHONY : buffer_util.s
+
+# target to generate assembly for a file
+buffer_util.c.s:
+	cd /Users/alchemystar/mycode/hero/build && $(MAKE) -f net/CMakeFiles/net.dir/build.make net/CMakeFiles/net.dir/buffer_util.c.s
+.PHONY : buffer_util.c.s
+
+network.o: network.c.o
+
+.PHONY : network.o
+
+# target to build an object file
+network.c.o:
+	cd /Users/alchemystar/mycode/hero/build && $(MAKE) -f net/CMakeFiles/net.dir/build.make net/CMakeFiles/net.dir/network.c.o
+.PHONY : network.c.o
+
+network.i: network.c.i
+
+.PHONY : network.i
+
+# target to preprocess a source file
+network.c.i:
+	cd /Users/alchemystar/mycode/hero/build && $(MAKE) -f net/CMakeFiles/net.dir/build.make net/CMakeFiles/net.dir/network.c.i
+.PHONY : network.c.i
+
+network.s: network.c.s
+
+.PHONY : network.s
+
+# target to generate assembly for a file
+network.c.s:
+	cd /Users/alchemystar/mycode/hero/build && $(MAKE) -f net/CMakeFiles/net.dir/build.make net/CMakeFiles/net.dir/network.c.s
+.PHONY : network.c.s
+
 server.o: server.c.o
 
 .PHONY : server.o
@@ -161,6 +242,15 @@ help:
 	@echo "... rebuild_cache"
 	@echo "... edit_cache"
 	@echo "... net"
+	@echo "... basic.o"
+	@echo "... basic.i"
+	@echo "... basic.s"
+	@echo "... buffer_util.o"
+	@echo "... buffer_util.i"
+	@echo "... buffer_util.s"
+	@echo "... network.o"
+	@echo "... network.i"
+	@echo "... network.s"
 	@echo "... server.o"
 	@echo "... server.i"
 	@echo "... server.s"

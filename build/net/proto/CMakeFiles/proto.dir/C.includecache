@@ -6,6 +6,16 @@
 
 #IncludeRegexTransform: 
 
+/Users/alchemystar/mycode/hero/net/basic.h
+
+/Users/alchemystar/mycode/hero/net/buffer_util.h
+
+/Users/alchemystar/mycode/hero/net/network.h
+proto/packet.h
+/Users/alchemystar/mycode/hero/net/proto/packet.h
+basic.h
+/Users/alchemystar/mycode/hero/net/basic.h
+
 /Users/alchemystar/mycode/hero/net/proto/list.h
 
 /Users/alchemystar/mycode/hero/net/proto/list_test.c
@@ -15,10 +25,26 @@ list.h
 /Users/alchemystar/mycode/hero/net/proto/packet.c
 packet.h
 /Users/alchemystar/mycode/hero/net/proto/packet.h
+packet_const.h
+/Users/alchemystar/mycode/hero/net/proto/packet_const.h
+string.h
+-
+../network.h
+/Users/alchemystar/mycode/hero/net/network.h
+../basic.h
+/Users/alchemystar/mycode/hero/net/basic.h
+stdatomic.h
+-
+stdlib.h
+-
 
 /Users/alchemystar/mycode/hero/net/proto/packet.h
 stdio.h
 -
 list.h
 /Users/alchemystar/mycode/hero/net/proto/list.h
+../buffer_util.h
+/Users/alchemystar/mycode/hero/net/buffer_util.h
+
+/Users/alchemystar/mycode/hero/net/proto/packet_const.h
 
