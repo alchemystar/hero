@@ -1,6 +1,5 @@
 #include "buffer_util.h"
 #include <string.h>
-#include "basic.h"
 
 int read_byte(packet_buffer* pb){
     unsigned char* buffer = pb->buffer + pb->pos;
@@ -88,7 +87,20 @@ long read_length(packet_buffer* pb){
     }
 }
 
-char* read_string_with_null(packet_buffer* pb){
+char* read_string(packet_buffer* pb,mem_pool* pool){
+    if(pb->pos >= pb->length){
+        return NULL;
+    }  
+      int string_len = pb->length - pb->pos + 1;
+      int content_len = string_len - 1;
+      char* s = mem_pool_alloc(string_len,pool);
+      memcpy(s,pb->buffer+pb->pos,content_len);
+      s[content_len] = 0; 
+      pb->pos = pb->length;  
+      return s;
+}
+
+char* read_string_with_null(packet_buffer* pb,mem_pool* pool){
     if(pb->pos >= pb->length){
         return NULL;
     }
@@ -103,7 +115,7 @@ char* read_string_with_null(packet_buffer* pb){
       // 1 for char 0  
       int string_len = pb->length - pb->pos + 1;
       int content_len = string_len - 1;
-      char* s = mem_alloc(string_len);
+      char* s = mem_pool_alloc(string_len,pool);
       memcpy(s,pb->buffer+pb->pos,content_len);
       s[content_len] = 0; 
       pb->pos = pb->length;  
@@ -113,7 +125,7 @@ char* read_string_with_null(packet_buffer* pb){
         // 1 for char 0  
         int string_len = offset - pb->pos + 1;
         int content_len = string_len - 1;
-        char* s = mem_alloc(string_len);
+        char* s = mem_pool_alloc(string_len,pool);
         memcpy(s,pb->buffer+pb->pos,content_len);
         s[string_len]=0;
         pb->pos = offset+1;
@@ -125,13 +137,14 @@ char* read_string_with_null(packet_buffer* pb){
 }
 
 // 同时还返回字节数量
-char* read_bytes_with_length(packet_buffer* pb,int* bytes_length){
+char* read_bytes_with_length(packet_buffer* pb,mem_pool* pool,int* bytes_length){
     int length = read_length(pb);
     if(length <= 0 ){
         return NULL;
     }
-    unsigned char* bytes = mem_alloc(length);
+    unsigned char* bytes = mem_pool_alloc(length,pool);
     *bytes_length = length;
+    memcpy(bytes,pb->buffer+pb->pos,length);
     pb->pos +=length;
     return bytes;
 }

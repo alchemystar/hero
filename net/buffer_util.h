@@ -1,5 +1,6 @@
 #ifndef HERO_BUFFER_UTIL_H
 #define HERO_BUFFER_UTIL_H
+#include "basic.h"
 
 typedef struct _packet_buffer{
     int pos;
@@ -15,8 +16,9 @@ int read_packet_length(unsigned char* buffer);
 long read_ub4(packet_buffer* pb);
 long read_long(packet_buffer* pb);
 long read_length(packet_buffer* pb);
-char* read_string_with_null(packet_buffer* pb);
-char* read_bytes_with_length(packet_buffer* pb,int* bytes_length);
+char* read_string(packet_buffer* pb,mem_pool* pool);
+char* read_string_with_null(packet_buffer* pb,mem_pool* pool);
+char* read_bytes_with_length(packet_buffer* pb,mem_pool* pool,int* bytes_length);
 
 void write_byte(packet_buffer* pb ,unsigned char c);
 void write_UB2(packet_buffer* pb,int i);

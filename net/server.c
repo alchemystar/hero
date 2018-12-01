@@ -1,8 +1,8 @@
 #include "server.h"
 #include <sys/socket.h>
 #include <netinet/in.h>
-
-void handle_one_connection(int sockfd);
+#include "basic.h"
+#include "network.h"
 
 // 先用bio搞一搞
 // 后端调试成功之后再采用epoll
@@ -49,6 +49,8 @@ void start_server(){
 }
 
 void process_connection(int sockfd){
-    handle_one_connection(sockfd);
+    mem_pool* pool = mem_pool_create(DEFAULT_MEM_POOL_SIZE);
+    handle_one_connection(sockfd,pool);
+    mem_pool_free(pool);
     // close(sockfd);
 }

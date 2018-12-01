@@ -13,15 +13,33 @@ net/CMakeFiles/net.dir/network.c.o: ../net/buffer_util.h
 net/CMakeFiles/net.dir/network.c.o: ../net/config.h
 net/CMakeFiles/net.dir/network.c.o: ../net/network.c
 net/CMakeFiles/net.dir/network.c.o: ../net/network.h
+net/CMakeFiles/net.dir/network.c.o: ../net/password.h
 net/CMakeFiles/net.dir/network.c.o: ../net/proto/capacity.h
 net/CMakeFiles/net.dir/network.c.o: ../net/proto/list.h
 net/CMakeFiles/net.dir/network.c.o: ../net/proto/packet.h
 net/CMakeFiles/net.dir/network.c.o: ../net/proto/packet_const.h
+net/CMakeFiles/net.dir/network.c.o: ../net/query.h
 
+net/CMakeFiles/net.dir/password.c.o: ../net/password.c
+net/CMakeFiles/net.dir/password.c.o: ../net/password.h
+
+net/CMakeFiles/net.dir/query.c.o: ../net/basic.h
+net/CMakeFiles/net.dir/query.c.o: ../net/buffer_util.h
+net/CMakeFiles/net.dir/query.c.o: ../net/config.h
+net/CMakeFiles/net.dir/query.c.o: ../net/proto/list.h
+net/CMakeFiles/net.dir/query.c.o: ../net/proto/packet.h
+net/CMakeFiles/net.dir/query.c.o: ../net/query.c
+net/CMakeFiles/net.dir/query.c.o: ../net/query.h
+
+net/CMakeFiles/net.dir/server.c.o: ../net/basic.h
 net/CMakeFiles/net.dir/server.c.o: ../net/buffer_util.h
 net/CMakeFiles/net.dir/server.c.o: ../net/config.h
+net/CMakeFiles/net.dir/server.c.o: ../net/network.h
 net/CMakeFiles/net.dir/server.c.o: ../net/proto/list.h
 net/CMakeFiles/net.dir/server.c.o: ../net/proto/packet.h
 net/CMakeFiles/net.dir/server.c.o: ../net/server.c
 net/CMakeFiles/net.dir/server.c.o: ../net/server.h
+
+net/CMakeFiles/net.dir/server_parse.c.o: ../net/server_parse.c
+net/CMakeFiles/net.dir/server_parse.c.o: ../net/server_parse.h
 

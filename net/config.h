@@ -6,4 +6,7 @@
 #define MAX_BACK_LOG 128
 #define TRUE 1
 #define FALSE 0
+#define USER_NAME "pay"
+#define PASS_WORD "MiraCle"
+#define MAX_FRAME_SIZE (RECV_MAX_BUFFER_SIZE-MYSQL_HEADER_LEN)
 #endif

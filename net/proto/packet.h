@@ -11,6 +11,11 @@
 #define MYSQL_HEADER_END_POS 3
 #define PACKET_ID_POS 4
 #define UTF8_CHAR_INDEX 83
+#define SCRAMBLE_PASSWORD_LEN 20
+
+#define COM_QUIT 1
+#define COM_INIT_DB  2
+#define COM_QUERY 3
 
 // 定义to_string的函数指针
 typedef char*(*to_string)();
@@ -92,6 +97,8 @@ typedef struct _hand_shake_packet{
     unsigned char server_charset_index;
     int server_status;
     unsigned char* rest_of_scramble_buff;
+    // 用作auth解密用，不参与网络传输
+    unsigned char* scramble;
 }hand_shake_packet;
 
 typedef struct  _ok_packet{
@@ -135,15 +142,14 @@ typedef struct _result_set{
 
 int caculate_handshake_size();
 
-hand_shake_packet* get_handshake_packet();
+hand_shake_packet* get_handshake_packet(mem_pool* pool);
 
-ok_packet* get_ok_packet();
+ok_packet* get_ok_packet(mem_pool* pool);
 
+// packet buff 和 内存池分开
 packet_buffer* get_handshake_buff();
 
 packet_buffer* get_packet_buffer(int size);
-
-void free_handshake_packet(hand_shake_packet* packet);
 
 void free_packet_buffer(packet_buffer* pb);
 

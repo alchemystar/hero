@@ -6,8 +6,10 @@
 #include "proto/packet_const.h"
 #include "buffer_util.h"
 #include <sys/errno.h>
+#include <string.h>
+#include "password.h"
+#include "query.h"
 
-#define MAX_FRAME_SIZE RECV_MAX_BUFFER_SIZE-MYSQL_HEADER_LEN
 
 #define AUTH_OKAY_SIZE 11
 
@@ -19,9 +21,10 @@ unsigned char AUTH_OKAY[] = {7, 0, 0, 2, 0, 0, 0, 2, 0, 0, 0};
 
 unsigned char FILLER[] = {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,0, 0, 0, 0, 0, 0, 0, 0, 0, 0};
 
-void send_handshake(int sockfd);
+// 这边由于需要修改指针类型的result，所以需要双重指针
+int send_handshake(int sockfd,mem_pool* pool,hand_shake_packet** result);
 
-auth_packet* read_auth(int sockfd);
+int read_auth(int sockfd,mem_pool* pool,auth_packet** result);
 
 void send_auth_okay(int sockfd);
 
@@ -29,17 +32,33 @@ int check_auth(auth_packet* auth,hand_shake_packet* handshake);
 
 int get_server_capacities();
 
-void handle_one_connection(int sockfd){
+int handle_one_connection(int sockfd,mem_pool* pool){
     // 发送hand_shake包
-    send_handshake(sockfd);
-    // 当前读出来do nothing,直接返回okay
-    auth_packet* auth=read_auth(sockfd);
-
+    hand_shake_packet* handshake;
+    if(!send_handshake(sockfd,pool,&handshake)){
+        return FALSE;
+    }
+    // 接收auth包
+    auth_packet* auth;
+    if(!read_auth(sockfd,pool,&auth)){
+        return FALSE;
+    }
+    // 校验权限
+    if(!check_auth(auth,handshake)){
+        printf("check auth failed\n");
+        // send error packet;
+        return FALSE;
+    }
+    printf("check auth okay\n");
     send_auth_okay(sockfd);
+    handle_command(sockfd,pool);
+    return TRUE;
 }
 
-void send_handshake(int sockfd){
-    hand_shake_packet* hand_shake  = get_handshake_packet();
+// here for handshake
+int send_handshake(int sockfd,mem_pool* pool,hand_shake_packet** result){
+    hand_shake_packet* hand_shake  = get_handshake_packet(pool);
+    // 不在内存池中分配，所以需要手动释放内存
     packet_buffer* pb = get_handshake_buff();
     // 写入 hand_shake buffer
     int handshake_size = caculate_handshake_size();
@@ -59,44 +78,35 @@ void send_handshake(int sockfd){
     write_with_null(pb,hand_shake->rest_of_scramble_buff,12);
     // 写入socket具体的数据
     writen(sockfd,pb->length,pb->buffer);
-    // todo release对应的hand_shake,放到session里面，不应该释放
-    free_handshake_packet(hand_shake);
     // release 对应的buffer
     free_packet_buffer(pb);
+    *result = hand_shake;
+    return TRUE;
 }
 
-void send_auth_okay(int sockfd){
-    writen(sockfd,AUTH_OKAY_SIZE,AUTH_OKAY);
-}
-
-int check_auth(auth_packet* auth,hand_shake_packet* handshake){
-
-}
-
-// here for handshake
-auth_packet* read_auth(int sockfd){
-    unsigned char* header_buffer = mem_alloc(4);
+// here for auth
+int read_auth(int sockfd,mem_pool* pool,auth_packet** result){
+    // 小而且定量的内存直接栈上分配
+    unsigned char header_buffer[4];
     // 读取4个字节(MySQL Header Len)
     if(!readn(sockfd,MYSQL_HEADER_LEN,header_buffer)){
         printf("read handshake error");
-        return;
+        return NULL;
     }
     // 读取长度
     int length = read_packet_length(header_buffer);
     if(length > MAX_FRAME_SIZE){
-        printf("handshake size more than max size,length=%d",length);
-        return;
+        printf("handshake size more than max size,length=%d",length);     
+        return NULL;
     }
     // 读取packet_id
     int packet_id = header_buffer[PACKET_ID_POS];
-    // 清理header buffer
-    mem_free(header_buffer);
     // 创建auth_buffer
     packet_buffer* pb = get_packet_buffer(length);
     // 读取整个body
     readn(sockfd,length,pb->buffer);
     // 构建对应的auth结构体
-    auth_packet* auth = mem_alloc(sizeof(auth_packet));
+    auth_packet* auth = mem_pool_alloc(sizeof(auth_packet),pool);
     auth->header.packet_length = length;
     auth->header.packet_id = packet_id;
     auth->client_flags = read_ub4(pb);
@@ -106,23 +116,51 @@ auth_packet* read_auth(int sockfd){
     int current = pb->pos;
     int len = read_length(pb);
     if(len >0 && len < FILLER_SIZE){
-        unsigned char* extra = mem_alloc(len);
+        unsigned char* extra = mem_pool_alloc(len,pool);
         // 到position的位置copy
         memcpy(extra,pb->buffer+current,len);   
         auth->extra = extra; 
+    } else{
+        // NULL for mem free
+        auth->extra = NULL;
     }
     // skip filler length
     pb->pos = current + FILLER_SIZE;
     // read user
-    auth->user = read_string_with_null(pb);
-    auth->password = read_bytes_with_length(pb,&(auth->password_length));
+    auth->user = read_string_with_null(pb,pool);
+    auth->password = read_bytes_with_length(pb,pool,&(auth->password_length));
     int remaining = packet_has_remaining(pb);
     if(((auth->client_flags & CLIENT_CONNECT_WITH_DB)) !=0 && (remaining > 0)){
-        auth->database = read_string_with_null(pb);
+        auth->database = read_string_with_null(pb,pool);
+    }else{
+        auth->database = NULL;
     }
     // 清理packet_buffer
     free_packet_buffer(pb);
-    return auth;
+    *result = auth;
+    return TRUE;
+}
+
+int check_auth(auth_packet* auth,hand_shake_packet* handshake){
+    printf("user:%s:login\n" , auth->user);
+    if(auth->password_length != SCRAMBLE_PASSWORD_LEN){
+        printf("auth packet password_length not 20");
+        return FALSE;
+    }
+    // 直接用栈上变量,无需申请内存
+    unsigned char scramble_buffer[20];
+    scramble(scramble_buffer,handshake->scramble,PASS_WORD);
+    // 摘要认证
+    for(int i=0 ; i < SCRAMBLE_PASSWORD_LEN ; i++){
+        if(scramble_buffer[i] != auth->password[i]){
+            return FALSE;
+        }
+    }
+    return TRUE;
+}
+
+void send_auth_okay(int sockfd){
+    writen(sockfd,AUTH_OKAY_SIZE,AUTH_OKAY);
 }
 
 // 返回读到的length

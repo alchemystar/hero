@@ -2,10 +2,12 @@
 #include "proto/packet.h"
 #include "basic.h"
 
-void handle_one_connection(int sockfd);
+int handle_one_connection(int sockfd,mem_pool* pool);
 
 int readn(int sockfd,int size,unsigned char* recv_buff);
 
 int writen(int sockfd,int size ,unsigned char* write_buff);
+
+void read_query(int sockfd, mem_pool* pool);
 
 #endif

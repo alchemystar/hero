@@ -1,0 +1,22 @@
+{
+    "files.associations": {
+        "server.h": "c",
+        "socket.h": "c",
+        "in.h": "c",
+        "config.h": "c",
+        "network.h": "c",
+        "packet.h": "c",
+        "list.h": "c",
+        "stdio.h": "c",
+        "capacity.h": "c",
+        "buffer_util.h": "c",
+        "packet_const.h": "c",
+        "string.h": "c",
+        "basic.h": "c",
+        "stdatomic.h": "c",
+        "stdlib.h": "c",
+        "password.h": "c",
+        "query.h": "c",
+        "server_parse.h": "c"
+    }
+}

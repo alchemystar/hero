@@ -206,6 +206,60 @@ network.c.s:
 	cd /Users/alchemystar/mycode/hero/build && $(MAKE) -f net/CMakeFiles/net.dir/build.make net/CMakeFiles/net.dir/network.c.s
 .PHONY : network.c.s
 
+password.o: password.c.o
+
+.PHONY : password.o
+
+# target to build an object file
+password.c.o:
+	cd /Users/alchemystar/mycode/hero/build && $(MAKE) -f net/CMakeFiles/net.dir/build.make net/CMakeFiles/net.dir/password.c.o
+.PHONY : password.c.o
+
+password.i: password.c.i
+
+.PHONY : password.i
+
+# target to preprocess a source file
+password.c.i:
+	cd /Users/alchemystar/mycode/hero/build && $(MAKE) -f net/CMakeFiles/net.dir/build.make net/CMakeFiles/net.dir/password.c.i
+.PHONY : password.c.i
+
+password.s: password.c.s
+
+.PHONY : password.s
+
+# target to generate assembly for a file
+password.c.s:
+	cd /Users/alchemystar/mycode/hero/build && $(MAKE) -f net/CMakeFiles/net.dir/build.make net/CMakeFiles/net.dir/password.c.s
+.PHONY : password.c.s
+
+query.o: query.c.o
+
+.PHONY : query.o
+
+# target to build an object file
+query.c.o:
+	cd /Users/alchemystar/mycode/hero/build && $(MAKE) -f net/CMakeFiles/net.dir/build.make net/CMakeFiles/net.dir/query.c.o
+.PHONY : query.c.o
+
+query.i: query.c.i
+
+.PHONY : query.i
+
+# target to preprocess a source file
+query.c.i:
+	cd /Users/alchemystar/mycode/hero/build && $(MAKE) -f net/CMakeFiles/net.dir/build.make net/CMakeFiles/net.dir/query.c.i
+.PHONY : query.c.i
+
+query.s: query.c.s
+
+.PHONY : query.s
+
+# target to generate assembly for a file
+query.c.s:
+	cd /Users/alchemystar/mycode/hero/build && $(MAKE) -f net/CMakeFiles/net.dir/build.make net/CMakeFiles/net.dir/query.c.s
+.PHONY : query.c.s
+
 server.o: server.c.o
 
 .PHONY : server.o
@@ -233,6 +287,33 @@ server.c.s:
 	cd /Users/alchemystar/mycode/hero/build && $(MAKE) -f net/CMakeFiles/net.dir/build.make net/CMakeFiles/net.dir/server.c.s
 .PHONY : server.c.s
 
+server_parse.o: server_parse.c.o
+
+.PHONY : server_parse.o
+
+# target to build an object file
+server_parse.c.o:
+	cd /Users/alchemystar/mycode/hero/build && $(MAKE) -f net/CMakeFiles/net.dir/build.make net/CMakeFiles/net.dir/server_parse.c.o
+.PHONY : server_parse.c.o
+
+server_parse.i: server_parse.c.i
+
+.PHONY : server_parse.i
+
+# target to preprocess a source file
+server_parse.c.i:
+	cd /Users/alchemystar/mycode/hero/build && $(MAKE) -f net/CMakeFiles/net.dir/build.make net/CMakeFiles/net.dir/server_parse.c.i
+.PHONY : server_parse.c.i
+
+server_parse.s: server_parse.c.s
+
+.PHONY : server_parse.s
+
+# target to generate assembly for a file
+server_parse.c.s:
+	cd /Users/alchemystar/mycode/hero/build && $(MAKE) -f net/CMakeFiles/net.dir/build.make net/CMakeFiles/net.dir/server_parse.c.s
+.PHONY : server_parse.c.s
+
 # Help Target
 help:
 	@echo "The following are some of the valid targets for this Makefile:"
@@ -251,9 +332,18 @@ help:
 	@echo "... network.o"
 	@echo "... network.i"
 	@echo "... network.s"
+	@echo "... password.o"
+	@echo "... password.i"
+	@echo "... password.s"
+	@echo "... query.o"
+	@echo "... query.i"
+	@echo "... query.s"
 	@echo "... server.o"
 	@echo "... server.i"
 	@echo "... server.s"
+	@echo "... server_parse.o"
+	@echo "... server_parse.i"
+	@echo "... server_parse.s"
 .PHONY : help
 
 
