@@ -17,6 +17,7 @@
         "stdlib.h": "c",
         "password.h": "c",
         "query.h": "c",
-        "server_parse.h": "c"
+        "server_parse.h": "c",
+        "show_handle.h": "c"
     }
 }

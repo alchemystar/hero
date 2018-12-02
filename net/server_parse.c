@@ -1,6 +1,11 @@
 #include "server_parse.h"
 #include <string.h>
 
+int s_check(char* sql,int offset,int length);
+int se_check(char* sql,int offset,int length);
+int select_check(char* sql,int offset,int length);
+int show_check(char* sql,int offset,int length);
+
 int server_parse_sql(char* sql){
     printf("sql = %s\n",sql);
     int length = strlen(sql);
@@ -42,7 +47,7 @@ int server_parse_sql(char* sql){
             case 'S':
             case 's':
                 // s check
-                return -1;
+                return s_check(sql,i,length);
             case 'U':
             case 'u':
                 // u check
@@ -54,4 +59,72 @@ int server_parse_sql(char* sql){
                 return -1;                
         }
     }
-}//
+}
+
+int s_check(char* sql,int offset,int length){
+    if(length > ++offset){
+        switch(sql[offset]){
+            case 'A':
+            case 'a':
+                // save point check
+                return -1;
+            case 'E':
+            case 'e':
+                // se check
+                return se_check(sql,offset,length);
+            case 'H':
+            case 'h':
+                // show check;
+                return show_check(sql,offset,length);   
+            case 'T':
+            case 't':
+                // start check
+                return -1;    
+            default:
+                return OTHER;         
+        }
+    }
+    return OTHER;
+}
+
+int show_check(char* sql,int offset,int length){
+    if(length > offset + 3){
+        char c1 = sql[++offset];
+        char c2 = sql[++offset];
+        char c3 = sql[++offset];
+        if ((c1 == 'O' || c1 == 'o') && (c2 == 'W' || c2 == 'w') && (c3 == ' ' || c3 == '\t' || c3 == '\r' || c3 == '\n')) {
+            return (offset << 8) | SHOW;
+        }
+    }
+    return OTHER;
+}
+
+int se_check(char* sql,int offset,int length){
+    if(length > ++offset){
+        switch(sql[offset]){
+            case 'L':
+            case 'l':
+                return select_check(sql,offset,length);
+            case 'T':
+            case 't':
+                // set check
+                return OTHER;    
+            default:
+                return OTHER;
+        }
+    }
+    return OTHER;
+}
+
+int select_check(char* sql,int offset,int length){
+    if(length > offset + 4){
+        char c1 = sql[++offset];
+        char c2 = sql[++offset];
+        char c3 = sql[++offset];
+        char c4 = sql[++offset];
+        if ((c1 == 'E' || c1 == 'e') && (c2 == 'C' || c2 == 'c') && (c3 == 'T' || c3 == 't')
+                    && (c4 == ' ' || c4 == '\t' || c4 == '\r' || c4 == '\n' || c4 == '/' || c4 == '#')) {
+            return (offset << 8) | SELECT;   
+        }     
+    }
+}

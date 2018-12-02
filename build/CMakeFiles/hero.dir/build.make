@@ -92,6 +92,7 @@ hero: CMakeFiles/hero.dir/main.c.o
 hero: CMakeFiles/hero.dir/build.make
 hero: net/libnet.a
 hero: net/proto/libproto.a
+hero: net/com/libcom.a
 hero: CMakeFiles/hero.dir/link.txt
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --bold --progress-dir=/Users/alchemystar/mycode/hero/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_2) "Linking C executable hero"
 	$(CMAKE_COMMAND) -E cmake_link_script CMakeFiles/hero.dir/link.txt --verbose=$(VERBOSE)

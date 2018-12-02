@@ -17,6 +17,8 @@
 #define COM_INIT_DB  2
 #define COM_QUERY 3
 
+#define DEFAULT_PB_SIZE 512
+
 // 定义to_string的函数指针
 typedef char*(*to_string)();
 // 定义读取内存的操作
@@ -67,8 +69,8 @@ typedef struct _error_packet{
     unsigned char field_count;
     int error;
     unsigned char mark;
-    unsigned char* sql_state;
-    unsigned char* message;
+    char* sql_state;
+    char* message;
 }error_packet;
 
 typedef struct _field_packet{
@@ -118,39 +120,54 @@ typedef struct _result_set_header{
 }result_set_header;
 
 typedef struct _field_value{
-    // struct _field_value* next;
     unsigned char* value;
-    struct list_head list;
+    int length;
+    struct _field_value *next;
 }field_value;
 
-typedef struct _row_data{
+typedef struct _row_packet{
     mysql_packet header;
     int field_count;
     // 通用链表设计，对应的value链表
-    field_value value_list;
-}row_data;
+    field_value* value_list;
+}row_packet;
 
 // 代表了整个result结构体
 typedef struct _result_set{
     result_set_header* header;
     struct list_head fields;
     eof_packet* eof_packet;
-    row_data data;
+    row_packet* data;
     eof_packet* last_eof;
 }result_set;
 
 
-int caculate_handshake_size();
-
 hand_shake_packet* get_handshake_packet(mem_pool* pool);
-
 ok_packet* get_ok_packet(mem_pool* pool);
+result_set_header* get_result_set_header(mem_pool* pool);
+field_packet* get_field_packet(mem_pool* pool);
+eof_packet* get_eof_packet(mem_pool* pool);
+row_packet* get_row_packet(mem_pool* pool);
+error_packet* get_error_packet(mem_pool* pool);
+
+int add_field_value_to_row(mem_pool* pool,row_packet* row,unsigned char* buffer,int length);
+
+int caculate_handshake_size();
+int caculate_result_set_header_size(result_set_header* ptr);
+int caculate_field_size(field_packet* ptr);
+int caculate_eof_size();
+int caculate_row_size(row_packet* row);
+int caculate_error_packet_size(error_packet* error);
 
 // packet buff 和 内存池分开
 packet_buffer* get_handshake_buff();
-
 packet_buffer* get_packet_buffer(int size);
-
 void free_packet_buffer(packet_buffer* pb);
+
+int write_result_set_header(packet_buffer*pb,result_set_header* header);
+int write_field(packet_buffer* pb,field_packet* field);
+int write_eof(packet_buffer* pb,eof_packet* eof);
+int write_row(packet_buffer* pb,row_packet* row);
+int write_error(packet_buffer* pb,error_packet* error);
 
 #endif

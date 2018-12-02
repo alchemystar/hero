@@ -1,6 +1,9 @@
 #include "buffer_util.h"
 #include <string.h>
+#include "config.h"
+#include <stdio.h>
 
+// todo buffer_util read的error改造
 int read_byte(packet_buffer* pb){
     unsigned char* buffer = pb->buffer + pb->pos;
     if(pb->pos + 1 > pb->length ){
@@ -149,43 +152,50 @@ char* read_bytes_with_length(packet_buffer* pb,mem_pool* pool,int* bytes_length)
     return bytes;
 }
 
-void write_byte(packet_buffer* pb ,unsigned char c){
+int write_byte(packet_buffer* pb ,unsigned char c){
     if(pb->pos + 1 > pb->length ){
-        printf("error write_bytes more than max len");
-        return;
+       if(!expand(pb,1)){
+          return FALSE;
+       }
     }
     unsigned char* write_buff = pb->buffer + pb->pos;
     write_buff[0] = c;
     pb->pos++;
+    return TRUE;
 }
 
-void write_UB2(packet_buffer* pb, int i){
+int write_UB2(packet_buffer* pb, int i){
     if(pb->pos + 2 > pb->length ){
-        printf("error write_bytes more than max len");
-        return;
+        if(!expand(pb,2)){
+           return FALSE;
+        }
     }
     unsigned char* write_buff = pb->buffer + pb->pos;
     write_buff[0] = (unsigned char)(i&0xff);
     write_buff[1] = (unsigned char)(i>>8);
     pb->pos += 2;
+    return TRUE;
 }
 
-void write_UB3(packet_buffer* pb, int i){
+int write_UB3(packet_buffer* pb, int i){
     if(pb->pos + 3 > pb->length ){
-        printf("error write_bytes more than max len");
-        return;
+        if(!expand(pb,3)){
+           return FALSE;
+        }
     }
     unsigned char* write_buff = pb->buffer + pb->pos;
     write_buff[0] = (unsigned char)(i&0xff);
     write_buff[1] = (unsigned char)(i>>8);
     write_buff[2] = (unsigned char)(i>>16);
     pb->pos += 3;
+    return TRUE;
 }
 
-void write_UB4(packet_buffer* pb,int i){
+int write_UB4(packet_buffer* pb,int i){
     if(pb->pos + 4 > pb->length ){
-        printf("error write_bytes more than max len");
-        return;
+        if(!expand(pb,4)){
+           return FALSE;
+        }
     }
     unsigned char* write_buff = pb->buffer + pb->pos;
     write_buff[0] = (unsigned char)(i&0xff);
@@ -193,12 +203,14 @@ void write_UB4(packet_buffer* pb,int i){
     write_buff[2] = (unsigned char)(i>>16);
     write_buff[3] = (unsigned char)(i>>24);
     pb->pos += 4;
+    return TRUE;
 }
 
-void write_long(packet_buffer* pb,long l){
+int write_long(packet_buffer* pb,long l){
     if(pb->pos + 8 > pb->length ){
-        printf("error write_bytes more than max len");
-        return;
+        if(!expand(pb,8)){
+           return FALSE;
+        }
     }
     unsigned char* write_buff = pb->buffer + pb->pos;
     write_buff[0] = (unsigned char)(l&0xff);
@@ -210,28 +222,31 @@ void write_long(packet_buffer* pb,long l){
     write_buff[6] = (unsigned char)(l>>48);
     write_buff[7] = (unsigned char)(l>>56);
     pb->pos +=8;
+    return TRUE;
 }
 
-void write_length(packet_buffer* pb,long l){
+int write_length(packet_buffer* pb,long l){
      unsigned char* write_buff = pb->buffer + pb->pos;
     if(l < 251){
-        write_byte(pb,l);
-        return;
+        return write_byte(pb,l);
     }else if(l < 0x10000L){
-        write_byte(pb,253);
-        write_UB3(pb,l);
-        return;
+        if(!write_byte(pb,253)){
+            return FALSE;
+        }
+        return write_UB3(pb,l);
     }else{
-        write_byte(pb,254);
-        write_long(pb,l);
-        return;
+        if(!write_byte(pb,254)){
+            return FALSE;
+        }
+        return write_long(pb,l);
     }
 }
 
-void write_bytes(packet_buffer* pb ,unsigned char* src ,int length){
+int write_bytes(packet_buffer* pb ,unsigned char* src ,int length){
     if(pb->pos + length > pb->length ){
-        printf("error write_bytes more than max len");
-        return;
+        if(!expand(pb,length)){
+           return FALSE;
+        }
     }
     unsigned char* write_buff = pb->buffer + pb->pos;
     memcpy(write_buff,src,length);
@@ -240,23 +255,80 @@ void write_bytes(packet_buffer* pb ,unsigned char* src ,int length){
     //     write_byte(pb,src[i]);
     // }
     pb->pos += length;
+    return TRUE;
 }
 
-void write_with_null(packet_buffer* pb , unsigned char* src , int length){
+int write_with_null(packet_buffer* pb , unsigned char* src , int length){
 
-    write_bytes(pb,src,length);
-    write_byte(pb,0);
+    if(!write_bytes(pb,src,length)){
+        return FALSE;
+    }
+    return write_byte(pb,0);
 }
 
+int write_with_length(packet_buffer* pb,unsigned char* src,int length){
+    if(!write_length(pb,length)){
+        return FALSE;
+    }
+    return write_bytes(pb,src,length);
+}
+
+int write_string_with_length_or_null(packet_buffer* pb ,char* src){
+    if(src == NULL){
+       return write_byte(pb,0);
+    }else{
+       return write_with_length(pb,src,strlen(src));
+    }
+}
+
+int get_length(long length){
+    if (length < 251) {
+        return 1;
+    } else if (length < 0x10000L) {
+        return 3;
+    } else if (length < 0x1000000L) {
+        return 4;
+    } else {
+        return 9;
+    }  
+}
+
+int get_length_with_bytes(long length){
+     if (length < 251) {
+        return 1+length;
+    } else if (length < 0x10000L) {
+        return 3+length;
+    } else if (length < 0x1000000L) {
+        return 4+length;
+    } else {
+        return 9+length;
+    }     
+}
 
 packet_buffer* get_packet_buffer(int size){
     unsigned char* buff = mem_alloc(size);
+    if(buff == NULL){
+        return NULL;
+    }
     int size_packet_buffer = sizeof(packet_buffer);
     packet_buffer* pb = (packet_buffer*)mem_alloc(sizeof(packet_buffer));
+    if(pb == NULL){
+        // 需要free掉之前申请的buff
+        free(buff);
+        return NULL;
+    }
     pb->pos = 0 ;
     pb->length = size;
     pb->buffer = buff;
     return pb;
+}
+
+// for debug
+void printf_packet_buffer(packet_buffer* pb){
+    for(int i=0 ; i< pb->pos ; i++){
+        printf("%d ",pb->buffer[i]);
+    }
+    printf("\n");
 }
 
 void free_packet_buffer(packet_buffer* pb){
@@ -266,4 +338,25 @@ void free_packet_buffer(packet_buffer* pb){
 
 int packet_has_remaining(packet_buffer* pb){
     return pb->length - pb->pos;
+}
+
+int expand(packet_buffer* pb,int size){
+    // 向上2幂次取整
+    int to_expand_size = pb->length + size;
+    int new_size = 1;
+    while(new_size < to_expand_size){
+        new_size <<= 1;
+    }
+    unsigned char* new_buffer = mem_alloc(new_size);
+    if(new_buffer == NULL){
+        printf("Memory EXHAUSTED");
+        return FALSE;
+    }
+    unsigned char* old_buffer = pb->buffer;
+    int old_length = pb->length;
+    memcpy(new_buffer,old_buffer,old_length);
+    mem_free(old_buffer);
+    pb->buffer = new_buffer;
+    pb->length = new_size;
+    return TRUE;
 }

@@ -6,7 +6,18 @@
 	],
 	"settings": {
 		"files.associations": {
-			"server.h": "c"
+			"server.h": "c",
+			"network.h": "c",
+			"basic.h": "c",
+			"packet.h": "c",
+			"packet_const.h": "c",
+			"buffer_util.h": "c",
+			"limits": "c",
+			"type_traits": "c",
+			"query.h": "c",
+			"show_handle.h": "c",
+			"sql_error_code.h": "c",
+			"select_handle.h": "c"
 		}
 	}
 }

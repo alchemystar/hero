@@ -16,6 +16,7 @@ set(CMAKE_C_TARGET_INCLUDE_PATH
 set(CMAKE_TARGET_LINKED_INFO_FILES
   "/Users/alchemystar/mycode/hero/build/net/CMakeFiles/net.dir/DependInfo.cmake"
   "/Users/alchemystar/mycode/hero/build/net/proto/CMakeFiles/proto.dir/DependInfo.cmake"
+  "/Users/alchemystar/mycode/hero/build/net/com/CMakeFiles/com.dir/DependInfo.cmake"
   )
 
 # Fortran module output directory.

@@ -189,6 +189,12 @@ EXECUTABLE_OUTPUT_PATH:PATH=
 //Single output directory for building all libraries.
 LIBRARY_OUTPUT_PATH:PATH=
 
+//Dependencies for target
+com_LIB_DEPENDS:STATIC=
+
+//Dependencies for target
+command_lib_LIB_DEPENDS:STATIC=
+
 //Value Computed by CMake
 hero_BINARY_DIR:STATIC=/Users/alchemystar/mycode/hero/build
 
@@ -196,7 +202,7 @@ hero_BINARY_DIR:STATIC=/Users/alchemystar/mycode/hero/build
 hero_SOURCE_DIR:STATIC=/Users/alchemystar/mycode/hero
 
 //Dependencies for the target
-net_LIB_DEPENDS:STATIC=general;proto;
+net_LIB_DEPENDS:STATIC=general;proto;general;com;
 
 //Dependencies for target
 proto_LIB_DEPENDS:STATIC=
@@ -294,7 +300,7 @@ CMAKE_MODULE_LINKER_FLAGS_RELWITHDEBINFO-ADVANCED:INTERNAL=1
 //ADVANCED property for variable: CMAKE_NM
 CMAKE_NM-ADVANCED:INTERNAL=1
 //number of local generators
-CMAKE_NUMBER_OF_MAKEFILES:INTERNAL=3
+CMAKE_NUMBER_OF_MAKEFILES:INTERNAL=4
 //ADVANCED property for variable: CMAKE_OBJCOPY
 CMAKE_OBJCOPY-ADVANCED:INTERNAL=1
 //ADVANCED property for variable: CMAKE_OBJDUMP

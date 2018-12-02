@@ -7,3 +7,6 @@
 /Users/alchemystar/mycode/hero/build/net/proto/CMakeFiles/rebuild_cache.dir
 /Users/alchemystar/mycode/hero/build/net/proto/CMakeFiles/edit_cache.dir
 /Users/alchemystar/mycode/hero/build/net/proto/CMakeFiles/proto.dir
+/Users/alchemystar/mycode/hero/build/net/com/CMakeFiles/rebuild_cache.dir
+/Users/alchemystar/mycode/hero/build/net/com/CMakeFiles/edit_cache.dir
+/Users/alchemystar/mycode/hero/build/net/com/CMakeFiles/com.dir

@@ -65,9 +65,10 @@ CMAKE_BINARY_DIR = /Users/alchemystar/mycode/hero/build
 # All Build rule for target.
 CMakeFiles/hero.dir/all: net/CMakeFiles/net.dir/all
 CMakeFiles/hero.dir/all: net/proto/CMakeFiles/proto.dir/all
+CMakeFiles/hero.dir/all: net/com/CMakeFiles/com.dir/all
 	$(MAKE) -f CMakeFiles/hero.dir/build.make CMakeFiles/hero.dir/depend
 	$(MAKE) -f CMakeFiles/hero.dir/build.make CMakeFiles/hero.dir/build
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --progress-dir=/Users/alchemystar/mycode/hero/build/CMakeFiles --progress-num=1,2 "Built target hero"
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --progress-dir=/Users/alchemystar/mycode/hero/build/CMakeFiles --progress-num=4,5 "Built target hero"
 .PHONY : CMakeFiles/hero.dir/all
 
 # Include target in all.
@@ -77,7 +78,7 @@ all: CMakeFiles/hero.dir/all
 
 # Build rule for subdir invocation for target.
 CMakeFiles/hero.dir/rule: cmake_check_build_system
-	$(CMAKE_COMMAND) -E cmake_progress_start /Users/alchemystar/mycode/hero/build/CMakeFiles 13
+	$(CMAKE_COMMAND) -E cmake_progress_start /Users/alchemystar/mycode/hero/build/CMakeFiles 16
 	$(MAKE) -f CMakeFiles/Makefile2 CMakeFiles/hero.dir/all
 	$(CMAKE_COMMAND) -E cmake_progress_start /Users/alchemystar/mycode/hero/build/CMakeFiles 0
 .PHONY : CMakeFiles/hero.dir/rule
@@ -103,17 +104,20 @@ clean: CMakeFiles/hero.dir/clean
 # Convenience name for "all" pass in the directory.
 net/all: net/CMakeFiles/net.dir/all
 net/all: net/proto/all
+net/all: net/com/all
 
 .PHONY : net/all
 
 # Convenience name for "clean" pass in the directory.
 net/clean: net/CMakeFiles/net.dir/clean
 net/clean: net/proto/clean
+net/clean: net/com/clean
 
 .PHONY : net/clean
 
 # Convenience name for "preinstall" pass in the directory.
 net/preinstall: net/proto/preinstall
+net/preinstall: net/com/preinstall
 
 .PHONY : net/preinstall
 
@@ -122,9 +126,10 @@ net/preinstall: net/proto/preinstall
 
 # All Build rule for target.
 net/CMakeFiles/net.dir/all: net/proto/CMakeFiles/proto.dir/all
+net/CMakeFiles/net.dir/all: net/com/CMakeFiles/com.dir/all
 	$(MAKE) -f net/CMakeFiles/net.dir/build.make net/CMakeFiles/net.dir/depend
 	$(MAKE) -f net/CMakeFiles/net.dir/build.make net/CMakeFiles/net.dir/build
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --progress-dir=/Users/alchemystar/mycode/hero/build/CMakeFiles --progress-num=3,4,5,6,7,8,9,10 "Built target net"
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --progress-dir=/Users/alchemystar/mycode/hero/build/CMakeFiles --progress-num=6,7,8,9,10,11,12,13 "Built target net"
 .PHONY : net/CMakeFiles/net.dir/all
 
 # Include target in all.
@@ -134,7 +139,7 @@ all: net/CMakeFiles/net.dir/all
 
 # Build rule for subdir invocation for target.
 net/CMakeFiles/net.dir/rule: cmake_check_build_system
-	$(CMAKE_COMMAND) -E cmake_progress_start /Users/alchemystar/mycode/hero/build/CMakeFiles 11
+	$(CMAKE_COMMAND) -E cmake_progress_start /Users/alchemystar/mycode/hero/build/CMakeFiles 14
 	$(MAKE) -f CMakeFiles/Makefile2 net/CMakeFiles/net.dir/all
 	$(CMAKE_COMMAND) -E cmake_progress_start /Users/alchemystar/mycode/hero/build/CMakeFiles 0
 .PHONY : net/CMakeFiles/net.dir/rule
@@ -179,7 +184,7 @@ net/proto/preinstall:
 net/proto/CMakeFiles/proto.dir/all:
 	$(MAKE) -f net/proto/CMakeFiles/proto.dir/build.make net/proto/CMakeFiles/proto.dir/depend
 	$(MAKE) -f net/proto/CMakeFiles/proto.dir/build.make net/proto/CMakeFiles/proto.dir/build
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --progress-dir=/Users/alchemystar/mycode/hero/build/CMakeFiles --progress-num=11,12,13 "Built target proto"
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --progress-dir=/Users/alchemystar/mycode/hero/build/CMakeFiles --progress-num=14,15,16 "Built target proto"
 .PHONY : net/proto/CMakeFiles/proto.dir/all
 
 # Include target in all.
@@ -206,6 +211,61 @@ net/proto/CMakeFiles/proto.dir/clean:
 
 # clean rule for target.
 clean: net/proto/CMakeFiles/proto.dir/clean
+
+.PHONY : clean
+
+#=============================================================================
+# Directory level rules for directory net/com
+
+# Convenience name for "all" pass in the directory.
+net/com/all: net/com/CMakeFiles/com.dir/all
+
+.PHONY : net/com/all
+
+# Convenience name for "clean" pass in the directory.
+net/com/clean: net/com/CMakeFiles/com.dir/clean
+
+.PHONY : net/com/clean
+
+# Convenience name for "preinstall" pass in the directory.
+net/com/preinstall:
+
+.PHONY : net/com/preinstall
+
+#=============================================================================
+# Target rules for target net/com/CMakeFiles/com.dir
+
+# All Build rule for target.
+net/com/CMakeFiles/com.dir/all:
+	$(MAKE) -f net/com/CMakeFiles/com.dir/build.make net/com/CMakeFiles/com.dir/depend
+	$(MAKE) -f net/com/CMakeFiles/com.dir/build.make net/com/CMakeFiles/com.dir/build
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --progress-dir=/Users/alchemystar/mycode/hero/build/CMakeFiles --progress-num=1,2,3 "Built target com"
+.PHONY : net/com/CMakeFiles/com.dir/all
+
+# Include target in all.
+all: net/com/CMakeFiles/com.dir/all
+
+.PHONY : all
+
+# Build rule for subdir invocation for target.
+net/com/CMakeFiles/com.dir/rule: cmake_check_build_system
+	$(CMAKE_COMMAND) -E cmake_progress_start /Users/alchemystar/mycode/hero/build/CMakeFiles 3
+	$(MAKE) -f CMakeFiles/Makefile2 net/com/CMakeFiles/com.dir/all
+	$(CMAKE_COMMAND) -E cmake_progress_start /Users/alchemystar/mycode/hero/build/CMakeFiles 0
+.PHONY : net/com/CMakeFiles/com.dir/rule
+
+# Convenience name for target.
+com: net/com/CMakeFiles/com.dir/rule
+
+.PHONY : com
+
+# clean rule for target.
+net/com/CMakeFiles/com.dir/clean:
+	$(MAKE) -f net/com/CMakeFiles/com.dir/build.make net/com/CMakeFiles/com.dir/clean
+.PHONY : net/com/CMakeFiles/com.dir/clean
+
+# clean rule for target.
+clean: net/com/CMakeFiles/com.dir/clean
 
 .PHONY : clean
 

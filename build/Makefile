@@ -149,6 +149,19 @@ proto/fast:
 	$(MAKE) -f net/proto/CMakeFiles/proto.dir/build.make net/proto/CMakeFiles/proto.dir/build
 .PHONY : proto/fast
 
+#=============================================================================
+# Target rules for targets named com
+
+# Build rule for target.
+com: cmake_check_build_system
+	$(MAKE) -f CMakeFiles/Makefile2 com
+.PHONY : com
+
+# fast build rule for target.
+com/fast:
+	$(MAKE) -f net/com/CMakeFiles/com.dir/build.make net/com/CMakeFiles/com.dir/build
+.PHONY : com/fast
+
 main.o: main.c.o
 
 .PHONY : main.o
@@ -187,6 +200,7 @@ help:
 	@echo "... hero"
 	@echo "... net"
 	@echo "... proto"
+	@echo "... com"
 	@echo "... main.o"
 	@echo "... main.i"
 	@echo "... main.s"

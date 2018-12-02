@@ -19,9 +19,21 @@ buffer_util.h
 /Users/alchemystar/mycode/hero/net/buffer_util.h
 string.h
 -
+config.h
+/Users/alchemystar/mycode/hero/net/config.h
+stdio.h
+-
 
 /Users/alchemystar/mycode/hero/net/buffer_util.h
 basic.h
+/Users/alchemystar/mycode/hero/net/basic.h
+
+/Users/alchemystar/mycode/hero/net/com/select_handle.h
+../basic.h
+/Users/alchemystar/mycode/hero/net/basic.h
+
+/Users/alchemystar/mycode/hero/net/com/show_handle.h
+../basic.h
 /Users/alchemystar/mycode/hero/net/basic.h
 
 /Users/alchemystar/mycode/hero/net/config.h
@@ -91,6 +103,16 @@ config.h
 /Users/alchemystar/mycode/hero/net/config.h
 buffer_util.h
 /Users/alchemystar/mycode/hero/net/buffer_util.h
+server_parse.h
+/Users/alchemystar/mycode/hero/net/server_parse.h
+com/show_handle.h
+/Users/alchemystar/mycode/hero/net/com/show_handle.h
+com/select_handle.h
+/Users/alchemystar/mycode/hero/net/com/select_handle.h
+network.h
+/Users/alchemystar/mycode/hero/net/network.h
+sql_error_code.h
+/Users/alchemystar/mycode/hero/net/sql_error_code.h
 
 /Users/alchemystar/mycode/hero/net/query.h
 proto/packet.h
@@ -123,4 +145,6 @@ string.h
 -
 
 /Users/alchemystar/mycode/hero/net/server_parse.h
+
+/Users/alchemystar/mycode/hero/net/sql_error_code.h
 

@@ -12,6 +12,8 @@
 basic.h
 /Users/alchemystar/mycode/hero/net/basic.h
 
+/Users/alchemystar/mycode/hero/net/config.h
+
 /Users/alchemystar/mycode/hero/net/network.h
 proto/packet.h
 /Users/alchemystar/mycode/hero/net/proto/packet.h
@@ -35,10 +37,16 @@ string.h
 /Users/alchemystar/mycode/hero/net/network.h
 ../basic.h
 /Users/alchemystar/mycode/hero/net/basic.h
+../buffer_util.h
+/Users/alchemystar/mycode/hero/net/buffer_util.h
 stdatomic.h
 -
 stdlib.h
 -
+../config.h
+/Users/alchemystar/mycode/hero/net/config.h
+string.h
+/Users/alchemystar/mycode/hero/net/proto/string.h
 
 /Users/alchemystar/mycode/hero/net/proto/packet.h
 stdio.h

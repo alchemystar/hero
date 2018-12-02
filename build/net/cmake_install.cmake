@@ -30,6 +30,7 @@ endif()
 if(NOT CMAKE_INSTALL_LOCAL_ONLY)
   # Include the install script for each subdirectory.
   include("/Users/alchemystar/mycode/hero/build/net/proto/cmake_install.cmake")
+  include("/Users/alchemystar/mycode/hero/build/net/com/cmake_install.cmake")
 
 endif()
 

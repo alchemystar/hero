@@ -1,9 +1,20 @@
 #include "basic.h"
 #include <stdio.h>
 
-// 64位 8字节对齐
-#define HERO_ALIGN_SIZE 8
+// for 对齐
+// 采用<<c interface and implemention>>的实现
+union hero_align{
+    int i;
+    long l;
+    long *lp;
+    void *p;
+    void (*fp)(void);
+    float f;
+    double d;
+    long double ld;
+};
 
+// todo 需要参照<<c interface and implement>> 将mem_pool自身内存也纳入其buffer中
 mem_pool* mem_pool_create(int size){
     // 至少分配512字节的空间，防止碎片太多
     if(size < DEFAULT_MEM_POOL_SIZE){
@@ -33,11 +44,17 @@ mem_pool* mem_pool_create(int size){
 }
 
 void* mem_pool_alloc(int size,mem_pool* pool){
-    // 对齐size为8字节倍数
-    int mod = size%HERO_ALIGN_SIZE;
-    if(mod != 0){
-        size = size + HERO_ALIGN_SIZE - size%HERO_ALIGN_SIZE;
-    }
+    // 内存向上对齐
+    // 数学推导过程大致如下
+    // if size = k*n:
+	//  (k *n + n -1)/n = k+(n-1)/n = > k
+    // else if size = k*n+a && 1=<a<n
+	//  (k*n+a + n - 1)/n = k + (a+n-1)/n
+	//  1=<a<n
+	//  n+(a-1)/n = 1 + 0=>k+1 => okay
+    // size = ((size+sizeof(union hero_align)-1)/(sizeof(union hero_align))) * (sizeof(union hero_align));
+    // 更进一步 (size/align) == size & ~(align - 1)=>下面的表达式
+    size = (size + sizeof(union hero_align) - 1) & (~(sizeof(union hero_align) - 1));
     mem_pool* entry;
     // 记录最后一个last_entry,即->next=NULL的那个
     mem_pool* last_entry;
@@ -57,6 +74,7 @@ void* mem_pool_alloc(int size,mem_pool* pool){
     mem_pool* mem_pool = mem_pool_create(size);
     if(mem_pool == NULL) {
         // 内存耗尽
+        printf("Memory Exhausted");
         return NULL;
     }else{
         // 当前last_entry已经指向了最后一个mem_pool
@@ -87,7 +105,8 @@ void* mem_alloc(int size){
     while (mem_size < size){
       mem_size <<= 1;
     }
-    return malloc(size);
+    // 直接清0,calloc,防止野指针情况
+    return calloc(1,size);
 }
 // for 预留内存池实现
 void mem_free(void* addr){

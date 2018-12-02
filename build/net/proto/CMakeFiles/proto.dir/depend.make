@@ -6,6 +6,7 @@ net/proto/CMakeFiles/proto.dir/list_test.c.o: ../net/proto/list_test.c
 
 net/proto/CMakeFiles/proto.dir/packet.c.o: ../net/basic.h
 net/proto/CMakeFiles/proto.dir/packet.c.o: ../net/buffer_util.h
+net/proto/CMakeFiles/proto.dir/packet.c.o: ../net/config.h
 net/proto/CMakeFiles/proto.dir/packet.c.o: ../net/network.h
 net/proto/CMakeFiles/proto.dir/packet.c.o: ../net/proto/list.h
 net/proto/CMakeFiles/proto.dir/packet.c.o: ../net/proto/packet.c

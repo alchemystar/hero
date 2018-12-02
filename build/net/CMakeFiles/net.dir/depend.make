@@ -7,6 +7,7 @@ net/CMakeFiles/net.dir/basic.c.o: ../net/basic.h
 net/CMakeFiles/net.dir/buffer_util.c.o: ../net/basic.h
 net/CMakeFiles/net.dir/buffer_util.c.o: ../net/buffer_util.c
 net/CMakeFiles/net.dir/buffer_util.c.o: ../net/buffer_util.h
+net/CMakeFiles/net.dir/buffer_util.c.o: ../net/config.h
 
 net/CMakeFiles/net.dir/network.c.o: ../net/basic.h
 net/CMakeFiles/net.dir/network.c.o: ../net/buffer_util.h
@@ -25,11 +26,16 @@ net/CMakeFiles/net.dir/password.c.o: ../net/password.h
 
 net/CMakeFiles/net.dir/query.c.o: ../net/basic.h
 net/CMakeFiles/net.dir/query.c.o: ../net/buffer_util.h
+net/CMakeFiles/net.dir/query.c.o: ../net/com/select_handle.h
+net/CMakeFiles/net.dir/query.c.o: ../net/com/show_handle.h
 net/CMakeFiles/net.dir/query.c.o: ../net/config.h
+net/CMakeFiles/net.dir/query.c.o: ../net/network.h
 net/CMakeFiles/net.dir/query.c.o: ../net/proto/list.h
 net/CMakeFiles/net.dir/query.c.o: ../net/proto/packet.h
 net/CMakeFiles/net.dir/query.c.o: ../net/query.c
 net/CMakeFiles/net.dir/query.c.o: ../net/query.h
+net/CMakeFiles/net.dir/query.c.o: ../net/server_parse.h
+net/CMakeFiles/net.dir/query.c.o: ../net/sql_error_code.h
 
 net/CMakeFiles/net.dir/server.c.o: ../net/basic.h
 net/CMakeFiles/net.dir/server.c.o: ../net/buffer_util.h

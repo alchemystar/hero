@@ -51,17 +51,29 @@ int handle_one_connection(int sockfd,mem_pool* pool){
     }
     printf("check auth okay\n");
     send_auth_okay(sockfd);
-    handle_command(sockfd,pool);
+    while(TRUE){
+        if(!handle_command(sockfd,pool)){
+            break;
+        }
+    }
     return TRUE;
 }
 
 // here for handshake
 int send_handshake(int sockfd,mem_pool* pool,hand_shake_packet** result){
     hand_shake_packet* hand_shake  = get_handshake_packet(pool);
+    if(hand_shake == NULL){
+        return FALSE;
+    }
     // 不在内存池中分配，所以需要手动释放内存
     packet_buffer* pb = get_handshake_buff();
+    if(pb == NULL){
+        free_packet_buffer(pb);
+        return FALSE;
+    }
     // 写入 hand_shake buffer
     int handshake_size = caculate_handshake_size();
+    // 由于这边申请的是确定的buffer size,所以下面应该不会进行expand=>无需进行内存分配检查
     write_UB3(pb,handshake_size);
     write_byte(pb,hand_shake->header.packet_id);
     write_byte(pb,hand_shake->protol_version);

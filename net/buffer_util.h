@@ -20,19 +20,27 @@ char* read_string(packet_buffer* pb,mem_pool* pool);
 char* read_string_with_null(packet_buffer* pb,mem_pool* pool);
 char* read_bytes_with_length(packet_buffer* pb,mem_pool* pool,int* bytes_length);
 
-void write_byte(packet_buffer* pb ,unsigned char c);
-void write_UB2(packet_buffer* pb,int i);
-void write_UB3(packet_buffer* pb, int i);
-void write_UB4(packet_buffer* pb,int i);
-void write_long(packet_buffer* pb,long l);
-void write_length(packet_buffer* pb,long l);
-void write_bytes(packet_buffer* pb ,unsigned char* src ,int length);
-void write_with_null(packet_buffer* pb , unsigned char* src , int length);
+int write_byte(packet_buffer* pb ,unsigned char c);
+int write_UB2(packet_buffer* pb,int i);
+int write_UB3(packet_buffer* pb, int i);
+int write_UB4(packet_buffer* pb,int i);
+int write_long(packet_buffer* pb,long l);
+int write_length(packet_buffer* pb,long l);
+int write_bytes(packet_buffer* pb ,unsigned char* src ,int length);
+int write_with_null(packet_buffer* pb , unsigned char* src , int length);
+int write_with_length(packet_buffer* pb,unsigned char* src,int length);
+int write_string_with_length_or_null(packet_buffer* pb ,char* src );
 
 packet_buffer* get_packet_buffer(int size);
+
+int get_length(long length);
+
+int get_length_with_bytes(long length);
 
 void free_packet_buffer(packet_buffer* pb);   
 
 int packet_has_remaining(packet_buffer* pb);
+
+int expand(packet_buffer* pb,int size);
 
 #endif
