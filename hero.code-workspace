@@ -17,7 +17,10 @@
 			"query.h": "c",
 			"show_handle.h": "c",
 			"sql_error_code.h": "c",
-			"select_handle.h": "c"
+			"select_handle.h": "c",
+			"config.h": "c",
+			"string.h": "c",
+			"stdio.h": "c"
 		}
 	}
 }

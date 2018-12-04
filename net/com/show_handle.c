@@ -3,6 +3,7 @@
 #include "../server_parse.h"
 #include "../proto/packet.h"
 #include "../network.h"
+#include "handle_util.h"
 
 #define OTHER -1
 #define DATABASES 1
@@ -27,7 +28,7 @@ int show_tables_check(char* sql,int offset,int length);
 
 int write_databases(int sockfd,mem_pool* pool);
 
-int write_tables(int sockfd,mem_pool* pool);
+int  write_tables(int sockfd,mem_pool* pool);
 
 int handle_show(int sockfd,char* sql,int offset,mem_pool* pool){
     int type = show_parse_sql(sql,offset,strlen(sql));
@@ -90,7 +91,7 @@ int show_database_check(char* sql,int offset,int length){
 		   (c7 == 's' || c7 =='S') && 
 		   (c8 == 'e' || c8 =='E') && 
 		   (c9 == 's' || c9 =='S') &&
-		   (c10 == '\0' || c10 == '\n' || c10 == '\r' || c10 == '\n' || c10==';' || c10 == ' ')
+		   (is_char_eof(c10))
 		) {
 			return DATABASES;
 		}
@@ -114,7 +115,7 @@ int show_tables_check(char* sql,int offset,int length){
 		   (c4 == 'l' || c4 =='L') && 
 		   (c5 == 'e' || c5 =='E') && 
 		   (c6 == 's' || c6 =='S') && 
-		   (c7 == '\0' || c7 == '\n' || c7 == '\r' || c7 == '\n' || c7==';' || c7 == ' ' )
+		   (is_char_eof(c7))
 		) {
 			return SHOWTABLES;
 		}
@@ -130,7 +131,10 @@ int write_databases(int sockfd,mem_pool* pool){
     }
     int packet_id = 1;
     // 发送result set header
-    result_set_header* header = get_result_set_header(pool);     
+    result_set_header* header = get_result_set_header(pool);   
+    if(header == NULL){
+        return NULL;
+    }      
     header->field_count = 1;
     header->extra = 0;
     int size = caculate_result_set_header_size(header);
@@ -153,7 +157,7 @@ int write_databases(int sockfd,mem_pool* pool){
     }
     // 发送 eof
     eof_packet* eof = get_eof_packet(pool);
-    if(field == NULL){
+    if(eof == NULL){
         goto error_process;
     }
     eof->header.packet_length = caculate_eof_size();
@@ -185,13 +189,17 @@ error_process:
 
 int write_tables(int sockfd,mem_pool* pool){
     // 一开始申请一块512字节内存
+    // todo 8 for debug
     packet_buffer* pb = get_packet_buffer(DEFAULT_PB_SIZE);
     if(pb == NULL){
         return NULL;
     }
     int packet_id = 1;
     // 发送result set header
-    result_set_header* header = get_result_set_header(pool);     
+    result_set_header* header = get_result_set_header(pool); 
+    if(header == NULL){
+        return NULL;
+    }    
     header->field_count = 1;
     header->extra = 0;
     int size = caculate_result_set_header_size(header);
@@ -211,21 +219,22 @@ int write_tables(int sockfd,mem_pool* pool){
     field->header.packet_id = packet_id++;
     if(!write_field(pb,field)){
         goto error_process;
-    }
+    } 
     // 发送 eof
-    eof_packet* eof = get_eof_packet(pool);
-    if(field == NULL){
+    eof_packet* eof = get_eof_packet(pool);  
+    if(eof == NULL){
         goto error_process;
     }
     eof->header.packet_length = caculate_eof_size();
-    eof->header.packet_id = packet_id++;
+    eof->header.packet_id = packet_id++;   
     if(!write_eof(pb,eof)){
         goto error_process;
-    }
+    }   
     // 发送 row
-    row_packet* row = get_row_packet(pool);
-    row->field_count=1;
+    row_packet* row = get_row_packet(pool);       
+    row->field_count=1;   
     add_field_value_to_row(pool,row,"hero_table",strlen("hero_table"));
+    
     row->header.packet_length = caculate_row_size(row);
     row->header.packet_id = packet_id++;
     if(!write_row(pb,row)){

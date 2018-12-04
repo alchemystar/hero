@@ -125,6 +125,33 @@ com/fast:
 	cd /Users/alchemystar/mycode/hero/build && $(MAKE) -f net/com/CMakeFiles/com.dir/build.make net/com/CMakeFiles/com.dir/build
 .PHONY : com/fast
 
+handle_util.o: handle_util.c.o
+
+.PHONY : handle_util.o
+
+# target to build an object file
+handle_util.c.o:
+	cd /Users/alchemystar/mycode/hero/build && $(MAKE) -f net/com/CMakeFiles/com.dir/build.make net/com/CMakeFiles/com.dir/handle_util.c.o
+.PHONY : handle_util.c.o
+
+handle_util.i: handle_util.c.i
+
+.PHONY : handle_util.i
+
+# target to preprocess a source file
+handle_util.c.i:
+	cd /Users/alchemystar/mycode/hero/build && $(MAKE) -f net/com/CMakeFiles/com.dir/build.make net/com/CMakeFiles/com.dir/handle_util.c.i
+.PHONY : handle_util.c.i
+
+handle_util.s: handle_util.c.s
+
+.PHONY : handle_util.s
+
+# target to generate assembly for a file
+handle_util.c.s:
+	cd /Users/alchemystar/mycode/hero/build && $(MAKE) -f net/com/CMakeFiles/com.dir/build.make net/com/CMakeFiles/com.dir/handle_util.c.s
+.PHONY : handle_util.c.s
+
 select_handle.o: select_handle.c.o
 
 .PHONY : select_handle.o
@@ -188,6 +215,9 @@ help:
 	@echo "... rebuild_cache"
 	@echo "... edit_cache"
 	@echo "... com"
+	@echo "... handle_util.o"
+	@echo "... handle_util.i"
+	@echo "... handle_util.s"
 	@echo "... select_handle.o"
 	@echo "... select_handle.i"
 	@echo "... select_handle.s"

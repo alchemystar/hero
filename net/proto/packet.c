@@ -69,7 +69,7 @@ ok_packet* get_ok_packet(mem_pool* pool){
 }
 
 result_set_header* get_result_set_header(mem_pool* pool){
-    result_set_header* header = mem_pool_alloc(sizeof(result_set_header),pool);
+    result_set_header* header = (result_set_header*)mem_pool_alloc(sizeof(result_set_header),pool);
     if(header == NULL){
         return NULL;
     }
@@ -81,7 +81,7 @@ result_set_header* get_result_set_header(mem_pool* pool){
 }
 
 unsigned char* random_seed(int size,mem_pool* pool){
-    unsigned char* buffer = mem_pool_alloc(size,pool);
+    unsigned char* buffer = (unsigned char*)mem_pool_alloc(size,pool);
     if(buffer == NULL){
         return NULL;
     }
@@ -94,7 +94,7 @@ unsigned char* random_seed(int size,mem_pool* pool){
 }
 
 field_packet* get_field_packet(mem_pool* pool){
-    field_packet* field = mem_pool_alloc(sizeof(field),pool);
+    field_packet* field = (field_packet*)mem_pool_alloc(sizeof(field_packet),pool);
     if(field == NULL){
         return NULL;
     }
@@ -115,7 +115,7 @@ field_packet* get_field_packet(mem_pool* pool){
 
 
 eof_packet* get_eof_packet(mem_pool* pool){
-    eof_packet* eof = mem_pool_alloc(sizeof(eof_packet),pool);
+    eof_packet* eof = (eof_packet*)mem_pool_alloc(sizeof(eof_packet),pool);
     if(eof == NULL){
         return NULL;
     }
@@ -128,7 +128,7 @@ eof_packet* get_eof_packet(mem_pool* pool){
 }
 
 row_packet* get_row_packet(mem_pool* pool){
-    row_packet* row = mem_pool_alloc(sizeof(row_packet),pool);
+    row_packet* row = (row_packet*)mem_pool_alloc(sizeof(row_packet),pool);
     if(row == NULL){
         return NULL;
     }
@@ -140,7 +140,7 @@ row_packet* get_row_packet(mem_pool* pool){
 }
 
 error_packet* get_error_packet(mem_pool* pool){
-    error_packet* error = mem_pool_alloc(sizeof(error_packet),pool);
+    error_packet* error = (error_packet*)mem_pool_alloc(sizeof(error_packet),pool);
     if(error == NULL){
         return NULL;
     } 
@@ -349,14 +349,14 @@ int write_error(packet_buffer* pb,error_packet* error){
 }
 
 field_value* get_field_value(mem_pool* pool,unsigned char* buffer,int length){
-    field_value* field_value = mem_pool_alloc(sizeof(field_value),pool);
-    if(field_value == NULL){
+    field_value* value = (field_value*)mem_pool_alloc(sizeof(field_value),pool);
+    if(value == NULL){
         return NULL;
     }
-    field_value->value = buffer;
-    field_value->length = length;
-    field_value->next = NULL;
-    return field_value;   
+    value->value = buffer;
+    value->length = length;
+    value->next = NULL;
+    return value;   
 }
 
 int add_field_value_to_row(mem_pool* pool,row_packet* row,unsigned char* buffer,int length){

@@ -69,7 +69,7 @@ int write_unkown_error_message(int sockfd,mem_pool* pool){
     error->header.packet_length=caculate_error_packet_size(error);
     error->header.packet_id = 1;
     error->error = ER_UNKNOWN_COM_ERROR;
-    packet_buffer* pb = get_packet_buffer(error->header.packet_id + MYSQL_HEADER_LEN);
+    packet_buffer* pb = get_packet_buffer(error->header.packet_length + MYSQL_HEADER_LEN);
     if(pb == NULL){
         return NULL;
     }
@@ -82,5 +82,6 @@ int write_unkown_error_message(int sockfd,mem_pool* pool){
     free_packet_buffer(pb);
     return TRUE;
 error_process:
+    free_packet_buffer(pb);
     return FALSE;
 }

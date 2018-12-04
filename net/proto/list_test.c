@@ -7,7 +7,7 @@ typedef struct _item{
 }item,*item_ptr;
 
 void testListHead(){
-    item_ptr itemHeader = malloc(sizeof(item));
+    item_ptr itemHeader = (item_ptr)malloc(sizeof(item));
     itemHeader->n=1;
     // 所有对list的操作都是按list_head为
     INIT_LIST_HEAD(&(itemHeader->list));

@@ -4,6 +4,7 @@
 
 typedef struct _packet_buffer{
     int pos;
+    int read_limit; // for read,write则无此限制
     int length;
     unsigned char* buffer;
 }packet_buffer;
@@ -39,7 +40,7 @@ int get_length_with_bytes(long length);
 
 void free_packet_buffer(packet_buffer* pb);   
 
-int packet_has_remaining(packet_buffer* pb);
+int packet_has_read_remaining(packet_buffer* pb);
 
 int expand(packet_buffer* pb,int size);
 

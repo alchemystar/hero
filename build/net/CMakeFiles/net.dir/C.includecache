@@ -11,6 +11,8 @@ basic.h
 /Users/alchemystar/mycode/hero/net/basic.h
 stdio.h
 -
+stdlib.h
+-
 
 /Users/alchemystar/mycode/hero/net/basic.h
 
@@ -23,6 +25,8 @@ config.h
 /Users/alchemystar/mycode/hero/net/config.h
 stdio.h
 -
+basic.h
+/Users/alchemystar/mycode/hero/net/basic.h
 
 /Users/alchemystar/mycode/hero/net/buffer_util.h
 basic.h

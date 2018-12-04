@@ -4,6 +4,7 @@
 #include "../proto/packet.h"
 #include "../network.h"
 #include "../proto/packet_const.h"
+#include "handle_util.h"
 
 #define OTHER -1
 #define VERSION_COMMENT 1
@@ -110,7 +111,7 @@ int verion_comment_check(char* sql,int offset,int length){
 		   (c12 == 'e' || c13 =='E') && 
 		   (c13 == 'n' || c14 =='N') && 
 		   (c14 == 't' || c15 =='T') &&          
-		   (c15 == '\0' || c15 == ' ' || c15 == '\n' || c15 == '\r' || c15 == '\n' || c15==';')
+		   (is_char_eof(c15))
 		) {
 			return VERSION_COMMENT;
 		}
@@ -131,6 +132,9 @@ int write_version_comment(int sockfd,mem_pool* pool){
     header->field_count = 1;
     header->extra = 0;
     int size = caculate_result_set_header_size(header);
+    if(header == NULL){
+        return NULL;
+    }     
     header->header.packet_length = size;
     header->header.packet_id = packet_id++;
     // 参照kernel的错误处理方法
@@ -150,7 +154,7 @@ int write_version_comment(int sockfd,mem_pool* pool){
     }
     // 发送 eof
     eof_packet* eof = get_eof_packet(pool);
-    if(field == NULL){
+    if(eof == NULL){
         goto error_process;
     }
     eof->header.packet_length = caculate_eof_size();

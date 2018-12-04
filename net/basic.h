@@ -12,6 +12,19 @@ typedef struct _mem_pool{
     void* next;
 }mem_pool;
 
+// for 对齐
+// 采用<<c interface and implemention>>的实现
+union hero_align{
+    int i;
+    long l;
+    long *lp;
+    void *p;
+    void (*fp)(void);
+    float f;
+    double d;
+    long double ld;
+};
+
 // 必须以2的整数倍分配
 mem_pool* mem_pool_create(int size);
 void* mem_pool_alloc(int size,mem_pool* pool);
@@ -19,5 +32,5 @@ void mem_pool_free(mem_pool* pool);
 
 void* mem_alloc(int size);
 void mem_free(void* address);
-
+void* mem_realloc(void* ptr ,int size);
 #endif

@@ -89,7 +89,7 @@ int send_handshake(int sockfd,mem_pool* pool,hand_shake_packet** result){
     // rest_of_scramble_buff 固定12字节
     write_with_null(pb,hand_shake->rest_of_scramble_buff,12);
     // 写入socket具体的数据
-    writen(sockfd,pb->length,pb->buffer);
+    writen(sockfd,pb->pos,pb->buffer);
     // release 对应的buffer
     free_packet_buffer(pb);
     *result = hand_shake;
@@ -118,7 +118,7 @@ int read_auth(int sockfd,mem_pool* pool,auth_packet** result){
     // 读取整个body
     readn(sockfd,length,pb->buffer);
     // 构建对应的auth结构体
-    auth_packet* auth = mem_pool_alloc(sizeof(auth_packet),pool);
+    auth_packet* auth = (auth_packet*)mem_pool_alloc(sizeof(auth_packet),pool);
     auth->header.packet_length = length;
     auth->header.packet_id = packet_id;
     auth->client_flags = read_ub4(pb);
@@ -128,7 +128,7 @@ int read_auth(int sockfd,mem_pool* pool,auth_packet** result){
     int current = pb->pos;
     int len = read_length(pb);
     if(len >0 && len < FILLER_SIZE){
-        unsigned char* extra = mem_pool_alloc(len,pool);
+        unsigned char* extra = (unsigned char*)mem_pool_alloc(len,pool);
         // 到position的位置copy
         memcpy(extra,pb->buffer+current,len);   
         auth->extra = extra; 
@@ -141,7 +141,7 @@ int read_auth(int sockfd,mem_pool* pool,auth_packet** result){
     // read user
     auth->user = read_string_with_null(pb,pool);
     auth->password = read_bytes_with_length(pb,pool,&(auth->password_length));
-    int remaining = packet_has_remaining(pb);
+    int remaining = packet_has_read_remaining(pb);
     if(((auth->client_flags & CLIENT_CONNECT_WITH_DB)) !=0 && (remaining > 0)){
         auth->database = read_string_with_null(pb,pool);
     }else{

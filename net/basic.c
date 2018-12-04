@@ -1,18 +1,7 @@
 #include "basic.h"
 #include <stdio.h>
-
-// for 对齐
-// 采用<<c interface and implemention>>的实现
-union hero_align{
-    int i;
-    long l;
-    long *lp;
-    void *p;
-    void (*fp)(void);
-    float f;
-    double d;
-    long double ld;
-};
+// 这边stdlib.h是为了malloc,or use void* cast
+#include <stdlib.h>
 
 // todo 需要参照<<c interface and implement>> 将mem_pool自身内存也纳入其buffer中
 mem_pool* mem_pool_create(int size){
@@ -25,13 +14,14 @@ mem_pool* mem_pool_create(int size){
     while (mem_size < size){
         mem_size <<= 1;
     }
-    mem_pool* pool = mem_alloc(sizeof(mem_pool));
+    size = (size + sizeof(union hero_align) - 1) & (~(sizeof(union hero_align) - 1));
+    mem_pool* pool = (void*)malloc(sizeof(mem_pool));
     if(pool == NULL){
         printf("mem exhausted");
         return NULL;       
     }
     // 用malloc的原因是少走向上取整这一步
-    unsigned char* buffer = malloc(mem_size);
+    unsigned char* buffer = (void*)malloc(mem_size);
     if(buffer == NULL){
         printf("mem exhausted");
         return NULL;
@@ -44,6 +34,10 @@ mem_pool* mem_pool_create(int size){
 }
 
 void* mem_pool_alloc(int size,mem_pool* pool){
+    // todo #if debug 
+    if(size == sizeof(void*)){
+        printf("are you sure?,size=%d may cause error\n",size);
+    }
     // 内存向上对齐
     // 数学推导过程大致如下
     // if size = k*n:
@@ -99,16 +93,17 @@ void mem_pool_free(mem_pool* pool){
 
 // for 预留内存池实现,返回是指针类型
 void* mem_alloc(int size){
-    // 这边不做内存对齐的原因是malloc内部已经内存对齐
-    int mem_size = 1;
-    // 向上2的幂次取整
-    while (mem_size < size){
-      mem_size <<= 1;
-    }
-    // 直接清0,calloc,防止野指针情况
-    return calloc(1,size);
+    // todo #if debug 
+    if(size == sizeof(void*)){
+        printf("are you sure?,size=%d may cause error\n",size);
+    }    
+    return (void*)malloc(size);
 }
 // for 预留内存池实现
 void mem_free(void* addr){
     free(addr);
+}
+
+void* mem_realloc(void* ptr ,int size){
+    return (void*)realloc(ptr,size);
 }

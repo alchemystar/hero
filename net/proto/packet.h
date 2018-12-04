@@ -9,7 +9,7 @@
 
 #define MYSQL_HEADER_LEN 4
 #define MYSQL_HEADER_END_POS 3
-#define PACKET_ID_POS 4
+#define PACKET_ID_POS 3
 #define UTF8_CHAR_INDEX 83
 #define SCRAMBLE_PASSWORD_LEN 20
 
@@ -122,7 +122,7 @@ typedef struct _result_set_header{
 typedef struct _field_value{
     unsigned char* value;
     int length;
-    struct _field_value *next;
+    void *next;
 }field_value;
 
 typedef struct _row_packet{
