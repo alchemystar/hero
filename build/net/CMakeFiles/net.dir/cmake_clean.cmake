@@ -6,6 +6,7 @@ file(REMOVE_RECURSE
   "CMakeFiles/net.dir/query.c.o"
   "CMakeFiles/net.dir/server.c.o"
   "CMakeFiles/net.dir/server_parse.c.o"
+  "CMakeFiles/net.dir/session.c.o"
   "libnet.pdb"
   "libnet.a"
 )

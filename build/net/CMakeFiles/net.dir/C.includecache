@@ -150,5 +150,7 @@ string.h
 
 /Users/alchemystar/mycode/hero/net/server_parse.h
 
+/Users/alchemystar/mycode/hero/net/session.c
+
 /Users/alchemystar/mycode/hero/net/sql_error_code.h
 

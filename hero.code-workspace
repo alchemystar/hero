@@ -20,7 +20,16 @@
 			"select_handle.h": "c",
 			"config.h": "c",
 			"string.h": "c",
-			"stdio.h": "c"
+			"stdio.h": "c",
+			"glib.h": "c",
+			"galloca.h": "c",
+			"gconvert.h": "c",
+			"gbitlock.h": "c",
+			"garray.h": "c",
+			"gtypes.h": "c",
+			"gversionmacros.h": "c",
+			"gmacros.h": "c",
+			"tcmalloc.h": "c"
 		}
 	}
 }

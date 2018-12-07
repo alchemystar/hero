@@ -2,6 +2,8 @@
 #define HERO_BASIC_H
 #define DEFAULT_MEM_POOL_SIZE 512
 
+#define HERO_DEBUG
+
 // 简易内存池实现
 typedef struct _mem_pool{
     int pos;

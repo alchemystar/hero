@@ -49,3 +49,5 @@ net/CMakeFiles/net.dir/server.c.o: ../net/server.h
 net/CMakeFiles/net.dir/server_parse.c.o: ../net/server_parse.c
 net/CMakeFiles/net.dir/server_parse.c.o: ../net/server_parse.h
 
+net/CMakeFiles/net.dir/session.c.o: ../net/session.c
+

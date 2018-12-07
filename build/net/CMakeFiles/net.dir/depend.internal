@@ -49,3 +49,5 @@ net/CMakeFiles/net.dir/server.c.o
 net/CMakeFiles/net.dir/server_parse.c.o
  /Users/alchemystar/mycode/hero/net/server_parse.c
  /Users/alchemystar/mycode/hero/net/server_parse.h
+net/CMakeFiles/net.dir/session.c.o
+ /Users/alchemystar/mycode/hero/net/session.c

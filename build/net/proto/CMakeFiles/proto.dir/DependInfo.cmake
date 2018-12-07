@@ -11,6 +11,10 @@ set(CMAKE_C_COMPILER_ID "Clang")
 
 # The include file search paths:
 set(CMAKE_C_TARGET_INCLUDE_PATH
+  "/usr/local/Cellar/glib/2.58.1/include/glib-2.0"
+  "/usr/local/Cellar/glib/2.58.1/lib/glib-2.0/include"
+  "/usr/local/opt/gettext/include"
+  "/usr/local/Cellar/pcre/8.42/include"
   )
 
 # Targets to which this target links.

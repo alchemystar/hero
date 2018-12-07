@@ -29,6 +29,9 @@ SUFFIXES =
 .SUFFIXES: .hpux_make_needs_suffix_list
 
 
+# Produce verbose output by default.
+VERBOSE = 1
+
 # Suppress display of executed commands.
 $(VERBOSE).SILENT:
 
@@ -78,7 +81,7 @@ all: CMakeFiles/hero.dir/all
 
 # Build rule for subdir invocation for target.
 CMakeFiles/hero.dir/rule: cmake_check_build_system
-	$(CMAKE_COMMAND) -E cmake_progress_start /Users/alchemystar/mycode/hero/build/CMakeFiles 17
+	$(CMAKE_COMMAND) -E cmake_progress_start /Users/alchemystar/mycode/hero/build/CMakeFiles 18
 	$(MAKE) -f CMakeFiles/Makefile2 CMakeFiles/hero.dir/all
 	$(CMAKE_COMMAND) -E cmake_progress_start /Users/alchemystar/mycode/hero/build/CMakeFiles 0
 .PHONY : CMakeFiles/hero.dir/rule
@@ -129,7 +132,7 @@ net/CMakeFiles/net.dir/all: net/proto/CMakeFiles/proto.dir/all
 net/CMakeFiles/net.dir/all: net/com/CMakeFiles/com.dir/all
 	$(MAKE) -f net/CMakeFiles/net.dir/build.make net/CMakeFiles/net.dir/depend
 	$(MAKE) -f net/CMakeFiles/net.dir/build.make net/CMakeFiles/net.dir/build
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --progress-dir=/Users/alchemystar/mycode/hero/build/CMakeFiles --progress-num=7,8,9,10,11,12,13,14 "Built target net"
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --progress-dir=/Users/alchemystar/mycode/hero/build/CMakeFiles --progress-num=7,8,9,10,11,12,13,14,15 "Built target net"
 .PHONY : net/CMakeFiles/net.dir/all
 
 # Include target in all.
@@ -139,7 +142,7 @@ all: net/CMakeFiles/net.dir/all
 
 # Build rule for subdir invocation for target.
 net/CMakeFiles/net.dir/rule: cmake_check_build_system
-	$(CMAKE_COMMAND) -E cmake_progress_start /Users/alchemystar/mycode/hero/build/CMakeFiles 15
+	$(CMAKE_COMMAND) -E cmake_progress_start /Users/alchemystar/mycode/hero/build/CMakeFiles 16
 	$(MAKE) -f CMakeFiles/Makefile2 net/CMakeFiles/net.dir/all
 	$(CMAKE_COMMAND) -E cmake_progress_start /Users/alchemystar/mycode/hero/build/CMakeFiles 0
 .PHONY : net/CMakeFiles/net.dir/rule
@@ -184,7 +187,7 @@ net/proto/preinstall:
 net/proto/CMakeFiles/proto.dir/all:
 	$(MAKE) -f net/proto/CMakeFiles/proto.dir/build.make net/proto/CMakeFiles/proto.dir/depend
 	$(MAKE) -f net/proto/CMakeFiles/proto.dir/build.make net/proto/CMakeFiles/proto.dir/build
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --progress-dir=/Users/alchemystar/mycode/hero/build/CMakeFiles --progress-num=15,16,17 "Built target proto"
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --progress-dir=/Users/alchemystar/mycode/hero/build/CMakeFiles --progress-num=16,17,18 "Built target proto"
 .PHONY : net/proto/CMakeFiles/proto.dir/all
 
 # Include target in all.

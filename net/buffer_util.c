@@ -315,6 +315,8 @@ packet_buffer* get_packet_buffer(int size){
     }
     // 校正为向上取整的buffer size
     size = actual_size;
+    // 同时地址对齐
+    size = (size + sizeof(union hero_align) - 1) & (~(sizeof(union hero_align) - 1));
     unsigned char* buff = (char*)mem_alloc(size);
     if(buff == NULL){
         return NULL;

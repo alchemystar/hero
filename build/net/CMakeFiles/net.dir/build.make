@@ -225,6 +225,30 @@ net/CMakeFiles/net.dir/server_parse.c.o.provides: net/CMakeFiles/net.dir/server_
 net/CMakeFiles/net.dir/server_parse.c.o.provides.build: net/CMakeFiles/net.dir/server_parse.c.o
 
 
+net/CMakeFiles/net.dir/session.c.o: net/CMakeFiles/net.dir/flags.make
+net/CMakeFiles/net.dir/session.c.o: ../net/session.c
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/Users/alchemystar/mycode/hero/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_8) "Building C object net/CMakeFiles/net.dir/session.c.o"
+	cd /Users/alchemystar/mycode/hero/build/net && /usr/bin/clang $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -o CMakeFiles/net.dir/session.c.o   -c /Users/alchemystar/mycode/hero/net/session.c
+
+net/CMakeFiles/net.dir/session.c.i: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing C source to CMakeFiles/net.dir/session.c.i"
+	cd /Users/alchemystar/mycode/hero/build/net && /usr/bin/clang $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -E /Users/alchemystar/mycode/hero/net/session.c > CMakeFiles/net.dir/session.c.i
+
+net/CMakeFiles/net.dir/session.c.s: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling C source to assembly CMakeFiles/net.dir/session.c.s"
+	cd /Users/alchemystar/mycode/hero/build/net && /usr/bin/clang $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -S /Users/alchemystar/mycode/hero/net/session.c -o CMakeFiles/net.dir/session.c.s
+
+net/CMakeFiles/net.dir/session.c.o.requires:
+
+.PHONY : net/CMakeFiles/net.dir/session.c.o.requires
+
+net/CMakeFiles/net.dir/session.c.o.provides: net/CMakeFiles/net.dir/session.c.o.requires
+	$(MAKE) -f net/CMakeFiles/net.dir/build.make net/CMakeFiles/net.dir/session.c.o.provides.build
+.PHONY : net/CMakeFiles/net.dir/session.c.o.provides
+
+net/CMakeFiles/net.dir/session.c.o.provides.build: net/CMakeFiles/net.dir/session.c.o
+
+
 # Object files for target net
 net_OBJECTS = \
 "CMakeFiles/net.dir/basic.c.o" \
@@ -233,7 +257,8 @@ net_OBJECTS = \
 "CMakeFiles/net.dir/password.c.o" \
 "CMakeFiles/net.dir/query.c.o" \
 "CMakeFiles/net.dir/server.c.o" \
-"CMakeFiles/net.dir/server_parse.c.o"
+"CMakeFiles/net.dir/server_parse.c.o" \
+"CMakeFiles/net.dir/session.c.o"
 
 # External object files for target net
 net_EXTERNAL_OBJECTS =
@@ -245,9 +270,10 @@ net/libnet.a: net/CMakeFiles/net.dir/password.c.o
 net/libnet.a: net/CMakeFiles/net.dir/query.c.o
 net/libnet.a: net/CMakeFiles/net.dir/server.c.o
 net/libnet.a: net/CMakeFiles/net.dir/server_parse.c.o
+net/libnet.a: net/CMakeFiles/net.dir/session.c.o
 net/libnet.a: net/CMakeFiles/net.dir/build.make
 net/libnet.a: net/CMakeFiles/net.dir/link.txt
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --bold --progress-dir=/Users/alchemystar/mycode/hero/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_8) "Linking C static library libnet.a"
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --bold --progress-dir=/Users/alchemystar/mycode/hero/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_9) "Linking C static library libnet.a"
 	cd /Users/alchemystar/mycode/hero/build/net && $(CMAKE_COMMAND) -P CMakeFiles/net.dir/cmake_clean_target.cmake
 	cd /Users/alchemystar/mycode/hero/build/net && $(CMAKE_COMMAND) -E cmake_link_script CMakeFiles/net.dir/link.txt --verbose=$(VERBOSE)
 
@@ -263,6 +289,7 @@ net/CMakeFiles/net.dir/requires: net/CMakeFiles/net.dir/password.c.o.requires
 net/CMakeFiles/net.dir/requires: net/CMakeFiles/net.dir/query.c.o.requires
 net/CMakeFiles/net.dir/requires: net/CMakeFiles/net.dir/server.c.o.requires
 net/CMakeFiles/net.dir/requires: net/CMakeFiles/net.dir/server_parse.c.o.requires
+net/CMakeFiles/net.dir/requires: net/CMakeFiles/net.dir/session.c.o.requires
 
 .PHONY : net/CMakeFiles/net.dir/requires
 

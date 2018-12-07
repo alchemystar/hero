@@ -18,6 +18,9 @@ SUFFIXES =
 .SUFFIXES: .hpux_make_needs_suffix_list
 
 
+# Produce verbose output by default.
+VERBOSE = 1
+
 # Suppress display of executed commands.
 $(VERBOSE).SILENT:
 
@@ -91,6 +94,7 @@ hero_EXTERNAL_OBJECTS =
 hero: CMakeFiles/hero.dir/main.c.o
 hero: CMakeFiles/hero.dir/build.make
 hero: net/libnet.a
+hero: /usr/local/lib/libtcmalloc_minimal.a
 hero: net/proto/libproto.a
 hero: net/com/libcom.a
 hero: CMakeFiles/hero.dir/link.txt

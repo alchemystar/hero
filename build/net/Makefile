@@ -314,6 +314,33 @@ server_parse.c.s:
 	cd /Users/alchemystar/mycode/hero/build && $(MAKE) -f net/CMakeFiles/net.dir/build.make net/CMakeFiles/net.dir/server_parse.c.s
 .PHONY : server_parse.c.s
 
+session.o: session.c.o
+
+.PHONY : session.o
+
+# target to build an object file
+session.c.o:
+	cd /Users/alchemystar/mycode/hero/build && $(MAKE) -f net/CMakeFiles/net.dir/build.make net/CMakeFiles/net.dir/session.c.o
+.PHONY : session.c.o
+
+session.i: session.c.i
+
+.PHONY : session.i
+
+# target to preprocess a source file
+session.c.i:
+	cd /Users/alchemystar/mycode/hero/build && $(MAKE) -f net/CMakeFiles/net.dir/build.make net/CMakeFiles/net.dir/session.c.i
+.PHONY : session.c.i
+
+session.s: session.c.s
+
+.PHONY : session.s
+
+# target to generate assembly for a file
+session.c.s:
+	cd /Users/alchemystar/mycode/hero/build && $(MAKE) -f net/CMakeFiles/net.dir/build.make net/CMakeFiles/net.dir/session.c.s
+.PHONY : session.c.s
+
 # Help Target
 help:
 	@echo "The following are some of the valid targets for this Makefile:"
@@ -344,6 +371,9 @@ help:
 	@echo "... server_parse.o"
 	@echo "... server_parse.i"
 	@echo "... server_parse.s"
+	@echo "... session.o"
+	@echo "... session.i"
+	@echo "... session.s"
 .PHONY : help
 
 

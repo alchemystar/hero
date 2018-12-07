@@ -183,3 +183,7 @@ error_process:
     free_packet_buffer(pb);
     return FALSE;    
 }
+
+int default_execute(int sockfd,char* sql,int offset,mem_pool* pool){
+    
+}

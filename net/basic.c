@@ -1,6 +1,7 @@
 #include "basic.h"
 #include <stdio.h>
 // 这边stdlib.h是为了malloc,or use void* cast
+// 现在cmake里面link了tcmalloc=>底层非ptmalloc而是tcmalloc
 #include <stdlib.h>
 
 // todo 需要参照<<c interface and implement>> 将mem_pool自身内存也纳入其buffer中
@@ -34,10 +35,11 @@ mem_pool* mem_pool_create(int size){
 }
 
 void* mem_pool_alloc(int size,mem_pool* pool){
-    // todo #if debug 
-    if(size == sizeof(void*)){
-        printf("are you sure?,size=%d may cause error\n",size);
-    }
+    #ifdef HERO_DEBUG
+        if(size == sizeof(void*)){
+            printf("are you sure?,size=%d may cause error\n",size);
+        }
+    #endif
     // 内存向上对齐
     // 数学推导过程大致如下
     // if size = k*n:
@@ -93,11 +95,12 @@ void mem_pool_free(mem_pool* pool){
 
 // for 预留内存池实现,返回是指针类型
 void* mem_alloc(int size){
-    // todo #if debug 
-    if(size == sizeof(void*)){
-        printf("are you sure?,size=%d may cause error\n",size);
-    }    
-    return (void*)malloc(size);
+    #ifdef HERO_DEBUG
+        if(size == sizeof(void*)){
+            printf("are you sure?,size=%d may cause error\n",size);
+        }
+    #endif
+    return (void*)calloc(1,size);
 }
 // for 预留内存池实现
 void mem_free(void* addr){
@@ -105,5 +108,10 @@ void mem_free(void* addr){
 }
 
 void* mem_realloc(void* ptr ,int size){
+    #ifdef HERO_DEBUG
+        if(size == sizeof(void*)){
+            printf("are you sure?,size=%d may cause error\n",size);
+        }
+    #endif    
     return (void*)realloc(ptr,size);
 }

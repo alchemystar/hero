@@ -19,5 +19,6 @@
         "query.h": "c",
         "server_parse.h": "c",
         "show_handle.h": "c"
-    }
+    },
+    "C_Cpp.configurationWarnings": "Disabled"
 }

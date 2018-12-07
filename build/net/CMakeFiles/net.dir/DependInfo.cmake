@@ -11,11 +11,16 @@ set(CMAKE_DEPENDS_CHECK_C
   "/Users/alchemystar/mycode/hero/net/query.c" "/Users/alchemystar/mycode/hero/build/net/CMakeFiles/net.dir/query.c.o"
   "/Users/alchemystar/mycode/hero/net/server.c" "/Users/alchemystar/mycode/hero/build/net/CMakeFiles/net.dir/server.c.o"
   "/Users/alchemystar/mycode/hero/net/server_parse.c" "/Users/alchemystar/mycode/hero/build/net/CMakeFiles/net.dir/server_parse.c.o"
+  "/Users/alchemystar/mycode/hero/net/session.c" "/Users/alchemystar/mycode/hero/build/net/CMakeFiles/net.dir/session.c.o"
   )
 set(CMAKE_C_COMPILER_ID "Clang")
 
 # The include file search paths:
 set(CMAKE_C_TARGET_INCLUDE_PATH
+  "/usr/local/Cellar/glib/2.58.1/include/glib-2.0"
+  "/usr/local/Cellar/glib/2.58.1/lib/glib-2.0/include"
+  "/usr/local/opt/gettext/include"
+  "/usr/local/Cellar/pcre/8.42/include"
   )
 
 # Targets to which this target links.

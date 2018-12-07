@@ -10,7 +10,6 @@
 #include "password.h"
 #include "query.h"
 
-
 #define AUTH_OKAY_SIZE 11
 
 #define FILLER_SIZE 23
