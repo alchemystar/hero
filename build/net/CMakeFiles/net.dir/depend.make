@@ -9,9 +9,17 @@ net/CMakeFiles/net.dir/buffer_util.c.o: ../net/buffer_util.c
 net/CMakeFiles/net.dir/buffer_util.c.o: ../net/buffer_util.h
 net/CMakeFiles/net.dir/buffer_util.c.o: ../net/config.h
 
+net/CMakeFiles/net.dir/conn.c.o: ../net/basic.h
+net/CMakeFiles/net.dir/conn.c.o: ../net/buffer_util.h
+net/CMakeFiles/net.dir/conn.c.o: ../net/conn.c
+net/CMakeFiles/net.dir/conn.c.o: ../net/conn.h
+net/CMakeFiles/net.dir/conn.c.o: ../net/proto/list.h
+net/CMakeFiles/net.dir/conn.c.o: ../net/proto/packet.h
+
 net/CMakeFiles/net.dir/network.c.o: ../net/basic.h
 net/CMakeFiles/net.dir/network.c.o: ../net/buffer_util.h
 net/CMakeFiles/net.dir/network.c.o: ../net/config.h
+net/CMakeFiles/net.dir/network.c.o: ../net/conn.h
 net/CMakeFiles/net.dir/network.c.o: ../net/network.c
 net/CMakeFiles/net.dir/network.c.o: ../net/network.h
 net/CMakeFiles/net.dir/network.c.o: ../net/password.h
@@ -29,6 +37,7 @@ net/CMakeFiles/net.dir/query.c.o: ../net/buffer_util.h
 net/CMakeFiles/net.dir/query.c.o: ../net/com/select_handle.h
 net/CMakeFiles/net.dir/query.c.o: ../net/com/show_handle.h
 net/CMakeFiles/net.dir/query.c.o: ../net/config.h
+net/CMakeFiles/net.dir/query.c.o: ../net/conn.h
 net/CMakeFiles/net.dir/query.c.o: ../net/network.h
 net/CMakeFiles/net.dir/query.c.o: ../net/proto/list.h
 net/CMakeFiles/net.dir/query.c.o: ../net/proto/packet.h
@@ -40,6 +49,7 @@ net/CMakeFiles/net.dir/query.c.o: ../net/sql_error_code.h
 net/CMakeFiles/net.dir/server.c.o: ../net/basic.h
 net/CMakeFiles/net.dir/server.c.o: ../net/buffer_util.h
 net/CMakeFiles/net.dir/server.c.o: ../net/config.h
+net/CMakeFiles/net.dir/server.c.o: ../net/conn.h
 net/CMakeFiles/net.dir/server.c.o: ../net/network.h
 net/CMakeFiles/net.dir/server.c.o: ../net/proto/list.h
 net/CMakeFiles/net.dir/server.c.o: ../net/proto/packet.h

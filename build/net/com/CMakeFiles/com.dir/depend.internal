@@ -10,8 +10,9 @@ net/com/CMakeFiles/com.dir/select_handle.c.o
  /Users/alchemystar/mycode/hero/net/buffer_util.h
  /Users/alchemystar/mycode/hero/net/com/handle_util.h
  /Users/alchemystar/mycode/hero/net/com/select_handle.c
- /Users/alchemystar/mycode/hero/net/com/show_handle.h
+ /Users/alchemystar/mycode/hero/net/com/select_handle.h
  /Users/alchemystar/mycode/hero/net/config.h
+ /Users/alchemystar/mycode/hero/net/conn.h
  /Users/alchemystar/mycode/hero/net/network.h
  /Users/alchemystar/mycode/hero/net/proto/list.h
  /Users/alchemystar/mycode/hero/net/proto/packet.h
@@ -24,6 +25,7 @@ net/com/CMakeFiles/com.dir/show_handle.c.o
  /Users/alchemystar/mycode/hero/net/com/show_handle.c
  /Users/alchemystar/mycode/hero/net/com/show_handle.h
  /Users/alchemystar/mycode/hero/net/config.h
+ /Users/alchemystar/mycode/hero/net/conn.h
  /Users/alchemystar/mycode/hero/net/network.h
  /Users/alchemystar/mycode/hero/net/proto/list.h
  /Users/alchemystar/mycode/hero/net/proto/packet.h

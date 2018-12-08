@@ -159,9 +159,6 @@ int caculate_eof_size();
 int caculate_row_size(row_packet* row);
 int caculate_error_packet_size(error_packet* error);
 
-// packet buff 和 内存池分开
-packet_buffer* get_handshake_buff();
-packet_buffer* get_packet_buffer(int size);
 void free_packet_buffer(packet_buffer* pb);
 
 int write_result_set_header(packet_buffer*pb,result_set_header* header);

@@ -9,8 +9,9 @@ net/com/CMakeFiles/com.dir/select_handle.c.o: ../net/basic.h
 net/com/CMakeFiles/com.dir/select_handle.c.o: ../net/buffer_util.h
 net/com/CMakeFiles/com.dir/select_handle.c.o: ../net/com/handle_util.h
 net/com/CMakeFiles/com.dir/select_handle.c.o: ../net/com/select_handle.c
-net/com/CMakeFiles/com.dir/select_handle.c.o: ../net/com/show_handle.h
+net/com/CMakeFiles/com.dir/select_handle.c.o: ../net/com/select_handle.h
 net/com/CMakeFiles/com.dir/select_handle.c.o: ../net/config.h
+net/com/CMakeFiles/com.dir/select_handle.c.o: ../net/conn.h
 net/com/CMakeFiles/com.dir/select_handle.c.o: ../net/network.h
 net/com/CMakeFiles/com.dir/select_handle.c.o: ../net/proto/list.h
 net/com/CMakeFiles/com.dir/select_handle.c.o: ../net/proto/packet.h
@@ -23,6 +24,7 @@ net/com/CMakeFiles/com.dir/show_handle.c.o: ../net/com/handle_util.h
 net/com/CMakeFiles/com.dir/show_handle.c.o: ../net/com/show_handle.c
 net/com/CMakeFiles/com.dir/show_handle.c.o: ../net/com/show_handle.h
 net/com/CMakeFiles/com.dir/show_handle.c.o: ../net/config.h
+net/com/CMakeFiles/com.dir/show_handle.c.o: ../net/conn.h
 net/com/CMakeFiles/com.dir/show_handle.c.o: ../net/network.h
 net/com/CMakeFiles/com.dir/show_handle.c.o: ../net/proto/list.h
 net/com/CMakeFiles/com.dir/show_handle.c.o: ../net/proto/packet.h

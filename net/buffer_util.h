@@ -34,6 +34,8 @@ int write_string_with_length_or_null(packet_buffer* pb ,char* src );
 
 packet_buffer* get_packet_buffer(int size);
 
+void set_packet_buffer_read_limit(packet_buffer* pb , int read_limit);
+
 int get_length(long length);
 
 int get_length_with_bytes(long length);
@@ -43,5 +45,7 @@ void free_packet_buffer(packet_buffer* pb);
 int packet_has_read_remaining(packet_buffer* pb);
 
 int expand(packet_buffer* pb,int size);
+
+void reset_packet_buffer(packet_buffer* pb);
 
 #endif

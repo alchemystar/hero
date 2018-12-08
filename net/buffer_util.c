@@ -8,8 +8,8 @@
 int read_byte(packet_buffer* pb){
     unsigned char* buffer = pb->buffer + pb->pos;
     if(pb->pos + 1 > pb->read_limit ){
-        printf("error write_bytes more than max len");
-        return -1;
+       printf("error read_bytes more than max len,pos=%d,read_limit=%d",pb->pos,pb->length);
+       return -1;
     }
     int i = buffer[0];
     pb->pos +=1;
@@ -19,8 +19,8 @@ int read_byte(packet_buffer* pb){
 int read_ub2(packet_buffer* pb){
     unsigned char* buffer = pb->buffer + pb->pos;
     if(pb->pos + 2 > pb->read_limit ){
-        printf("error write_bytes more than max len");
-        return -1;
+       printf("error read_bytes more than max len,pos=%d,read_limit=%d",pb->pos,pb->length);
+       return -1;
     }
     int i = buffer[0] | (buffer[1] << 8);
     pb->pos +=2;
@@ -29,8 +29,8 @@ int read_ub2(packet_buffer* pb){
 int read_ub3(packet_buffer* pb){
     unsigned char* buffer = pb->buffer + pb->pos;
     if(pb->pos + 3 > pb->read_limit){
-        printf("error write_bytes more than max len");
-        return -1;
+       printf("error read_bytes more than max len,pos=%d,read_limit=%d",pb->pos,pb->length);
+       return -1;
     }    
     int i = buffer[0] | (buffer[1] << 8) | (buffer[2] << 16);
     pb->pos +=3;
@@ -44,8 +44,8 @@ int read_packet_length(unsigned char* buffer){
 long read_ub4(packet_buffer* pb){
     unsigned char* buffer = pb->buffer + pb->pos;
     if(pb->pos + 4 > pb->read_limit ){
-        printf("error write_bytes more than max len");
-        return -1;
+       printf("error read_bytes more than max len,pos=%d,read_limit=%d",pb->pos,pb->length);
+       return -1;
     }    
     int i = buffer[0] | (buffer[1] << 8) | (buffer[2] << 16) | (buffer[3] << 24);
     pb->pos +=4;
@@ -54,8 +54,8 @@ long read_ub4(packet_buffer* pb){
 long read_long(packet_buffer* pb){
     unsigned char* buffer = pb->buffer + pb->pos;
     if(pb->pos + 8 > pb->read_limit ){
-        printf("error write_bytes more than max len");
-        return -1;
+       printf("error read_bytes more than max len,pos=%d,read_limit=%d",pb->pos,pb->length);
+       return -1;
     }    
     long l = buffer[0];
     l = l | buffer[1] << 8;
@@ -72,7 +72,7 @@ long read_long(packet_buffer* pb){
 long read_length(packet_buffer* pb){
     unsigned char* buffer = pb->buffer + pb->pos;
      if(pb->pos + 1 > pb->read_limit ){
-        printf("error write_bytes more than max len");
+        printf("error read_bytes more than max len,pos=%d,read_limit=%d",pb->pos,pb->length);
         return -1;
     }   
     int length = buffer[0];
@@ -334,6 +334,10 @@ packet_buffer* get_packet_buffer(int size){
     return pb;
 }
 
+void set_packet_buffer_read_limit(packet_buffer* pb , int read_limit){
+    pb->read_limit = read_limit;
+}
+
 // for debug
 void printf_packet_buffer(packet_buffer* pb){
     for(int i=0 ; i< pb->pos ; i++){
@@ -358,12 +362,22 @@ int expand(packet_buffer* pb,int size){
     while(new_size < to_expand_size){
         new_size <<= 1;
     }
+    // 由于realloc失败不会释放pb->buffer,所以用p来代替
     void* p = mem_realloc(pb->buffer,new_size);
     if(p == NULL){
+        // pb->buffer的释放在最后free_packet_buffer中处理
         printf("memory exhausted");
         return FALSE;
     } 
     pb->buffer = p;
     pb->length = new_size;
+    // read_limit在真正读取的时候设置
     return TRUE;
+}
+
+// 重置packet_buffer for 复用
+// todo 在适当的地方，例如返回连接池的时候将pb适当的进行裁剪，防止占用内存过大 
+void reset_packet_buffer(packet_buffer* pb){
+    pb->pos = 0;
+    pb->read_limit = 0;
 }

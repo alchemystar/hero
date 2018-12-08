@@ -1,8 +1,7 @@
-#include "show_handle.h"
+#include "select_handle.h"
 #include "../config.h"
 #include "../server_parse.h"
 #include "../proto/packet.h"
-#include "../network.h"
 #include "../proto/packet_const.h"
 #include "handle_util.h"
 
@@ -23,14 +22,16 @@ int verion_comment_check(char* sql,int offset,int length);
 
 int select_2_check(char* sql,int offset,int length);
 
-int write_version_comment(int sockfd,mem_pool* pool);
+int write_version_comment(front_conn* front);
 
-int handle_select(int sockfd,char* sql,int offset,mem_pool* pool){
+int handle_select(front_conn* front,char* sql,int offset){
+    int sockfd = front->conn.sockfd;
+    mem_pool* pool = front->conn.pool;
     int type = select_parse_sql(sql,offset,strlen(sql));
     switch(type){
         case VERSION_COMMENT:
             printf("it's version_comment\n");
-            return write_version_comment(sockfd,pool);
+            return write_version_comment(front);
         default:
             return TRUE;   
     }
@@ -120,9 +121,10 @@ int verion_comment_check(char* sql,int offset,int length){
 }
 
 
-int write_version_comment(int sockfd,mem_pool* pool){
-    // 一开始申请一块512字节内存
-    packet_buffer* pb = get_packet_buffer(DEFAULT_PB_SIZE);
+int write_version_comment(front_conn* front){
+    int sockfd = front->conn.sockfd;
+    mem_pool* pool = front->conn.pool;
+    packet_buffer* pb = get_conn_write_buffer(&(front->conn));
     if(pb == NULL){
         return NULL;
     }
@@ -177,10 +179,10 @@ int write_version_comment(int sockfd,mem_pool* pool){
         goto error_process;
     }
     writen(sockfd,pb->pos,pb->buffer);
-    free_packet_buffer(pb);
+    reset_packet_buffer(pb);
     return TRUE;
 error_process:
-    free_packet_buffer(pb);
+    reset_packet_buffer(pb);
     return FALSE;    
 }
 

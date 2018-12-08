@@ -7,12 +7,14 @@
 #include "network.h"
 #include "sql_error_code.h"
 
-int handle_com_query(int sockfd,packet_buffer* pb , mem_pool* pool);
+int handle_com_query(front_conn* front);
 
-int write_unkown_error_message(int sockfd,mem_pool* pool);
+int write_unkown_error_message(front_conn* front);
 
-int handle_command(int sockfd,mem_pool* pool){
-    unsigned char header_buffer[4];
+int handle_command(front_conn* front){
+    unsigned char* header_buffer = front->conn.header;
+    int sockfd = front->conn.sockfd;
+    mem_pool* pool = front->conn.pool;
     // 读取4个字节(MySQL Header Len)
     if(!readn(sockfd,MYSQL_HEADER_LEN,header_buffer)){
         printf("read handshake error");
@@ -20,41 +22,50 @@ int handle_command(int sockfd,mem_pool* pool){
     }
     // 读取长度
     int length = read_packet_length(header_buffer);
+    printf("length = %d\n",length);
     if(length > MAX_FRAME_SIZE){
         printf("handshake size more than max size,length=%d",length);     
         return FALSE;
     }
     // 读取packet_id
-    int packet_id = header_buffer[PACKET_ID_POS];
-    // 创建整个包的buffer
-    packet_buffer* pb = get_packet_buffer(length);
-    if(pb == NULL){
+    front->conn.packet_id = header_buffer[PACKET_ID_POS];
+    // 使用front conn的buffer
+    packet_buffer* pb = get_conn_read_buffer(&(front->conn),length);
+    if( pb == NULL) {
         return FALSE;
     }
     // 读取整个body
-    readn(sockfd,length,pb->buffer);
+    if(!readn(sockfd,length,pb->buffer)){
+        reset_packet_buffer(pb);
+        return FALSE;
+    }
+    // 设置read_limit
+    set_packet_buffer_read_limit(pb,length);
     // 首字节为type
     int type = read_byte(pb);
+    int result = FALSE;
     switch(type){
         case COM_QUERY:
-            return handle_com_query(sockfd,pb,pool);
+            result = handle_com_query(front);
+            break;
         default:
-            return write_unkown_error_message(sockfd,pool);
+            result = write_unkown_error_message(front);
+            break;
     }
-    // 清理packet buffer
-    free_packet_buffer(pb);
-    return TRUE;
+    // 重置packet_buffer   
+    reset_packet_buffer(pb);
+    return result;
 }
 
-int handle_com_query(int sockfd,packet_buffer* pb , mem_pool* pool){
-    char* sql = read_string(pb,pool);
+int handle_com_query(front_conn* front){
+    char* sql = read_string(front->conn.read_buffer,front->conn.pool);
     int rs = server_parse_sql(sql);
     switch(rs & 0xff){
         case SHOW:
-            return handle_show(sockfd,sql,rs >> 8,pool);
+            return handle_show(front,sql,rs >> 8);
         case SELECT:
             printf("it's select\n");
-            return handle_select(sockfd,sql,rs >> 8,pool);    
+            return handle_select(front,sql,rs >> 8);    
         default:
             break;    
     }
@@ -62,14 +73,16 @@ int handle_com_query(int sockfd,packet_buffer* pb , mem_pool* pool){
 }
 
 // todo default error packet 不再n申请内存
-int write_unkown_error_message(int sockfd,mem_pool* pool){
+int write_unkown_error_message(front_conn* front){
+    int sockfd = front->conn.sockfd;
+    mem_pool* pool = front->conn.pool;
     printf("unknown command\n");
     error_packet* error = get_error_packet(pool);
     error->message = "Unknown command";
     error->header.packet_length=caculate_error_packet_size(error);
-    error->header.packet_id = 1;
+    error->header.packet_id = front->conn.packet_id+1;
     error->error = ER_UNKNOWN_COM_ERROR;
-    packet_buffer* pb = get_packet_buffer(error->header.packet_length + MYSQL_HEADER_LEN);
+    packet_buffer* pb = get_conn_write_buffer(&front->conn);
     if(pb == NULL){
         return NULL;
     }
@@ -79,9 +92,9 @@ int write_unkown_error_message(int sockfd,mem_pool* pool){
     if(!writen(sockfd,pb->pos,pb->buffer)){
         goto error_process;
     }
-    free_packet_buffer(pb);
+    reset_packet_buffer(pb);
     return TRUE;
 error_process:
-    free_packet_buffer(pb);
+    reset_packet_buffer(pb);
     return FALSE;
 }

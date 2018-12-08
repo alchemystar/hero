@@ -8,6 +8,7 @@ net/proto/CMakeFiles/proto.dir/packet.c.o
  /Users/alchemystar/mycode/hero/net/basic.h
  /Users/alchemystar/mycode/hero/net/buffer_util.h
  /Users/alchemystar/mycode/hero/net/config.h
+ /Users/alchemystar/mycode/hero/net/conn.h
  /Users/alchemystar/mycode/hero/net/network.h
  /Users/alchemystar/mycode/hero/net/proto/list.h
  /Users/alchemystar/mycode/hero/net/proto/packet.c

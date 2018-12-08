@@ -154,11 +154,6 @@ error_packet* get_error_packet(mem_pool* pool){
     return error;
 }
 
-packet_buffer* get_handshake_buff(){
-    // 还需要加上头长度
-    return get_packet_buffer(caculate_handshake_size()+MYSQL_HEADER_LEN);
-}
-
 int caculate_result_set_header_size(result_set_header* ptr){
     int size = get_length(ptr->field_count);
     if(ptr->extra > 0){

@@ -9,10 +9,18 @@ net/CMakeFiles/net.dir/buffer_util.c.o
  /Users/alchemystar/mycode/hero/net/buffer_util.c
  /Users/alchemystar/mycode/hero/net/buffer_util.h
  /Users/alchemystar/mycode/hero/net/config.h
+net/CMakeFiles/net.dir/conn.c.o
+ /Users/alchemystar/mycode/hero/net/basic.h
+ /Users/alchemystar/mycode/hero/net/buffer_util.h
+ /Users/alchemystar/mycode/hero/net/conn.c
+ /Users/alchemystar/mycode/hero/net/conn.h
+ /Users/alchemystar/mycode/hero/net/proto/list.h
+ /Users/alchemystar/mycode/hero/net/proto/packet.h
 net/CMakeFiles/net.dir/network.c.o
  /Users/alchemystar/mycode/hero/net/basic.h
  /Users/alchemystar/mycode/hero/net/buffer_util.h
  /Users/alchemystar/mycode/hero/net/config.h
+ /Users/alchemystar/mycode/hero/net/conn.h
  /Users/alchemystar/mycode/hero/net/network.c
  /Users/alchemystar/mycode/hero/net/network.h
  /Users/alchemystar/mycode/hero/net/password.h
@@ -30,6 +38,7 @@ net/CMakeFiles/net.dir/query.c.o
  /Users/alchemystar/mycode/hero/net/com/select_handle.h
  /Users/alchemystar/mycode/hero/net/com/show_handle.h
  /Users/alchemystar/mycode/hero/net/config.h
+ /Users/alchemystar/mycode/hero/net/conn.h
  /Users/alchemystar/mycode/hero/net/network.h
  /Users/alchemystar/mycode/hero/net/proto/list.h
  /Users/alchemystar/mycode/hero/net/proto/packet.h
@@ -41,6 +50,7 @@ net/CMakeFiles/net.dir/server.c.o
  /Users/alchemystar/mycode/hero/net/basic.h
  /Users/alchemystar/mycode/hero/net/buffer_util.h
  /Users/alchemystar/mycode/hero/net/config.h
+ /Users/alchemystar/mycode/hero/net/conn.h
  /Users/alchemystar/mycode/hero/net/network.h
  /Users/alchemystar/mycode/hero/net/proto/list.h
  /Users/alchemystar/mycode/hero/net/proto/packet.h

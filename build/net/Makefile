@@ -179,6 +179,33 @@ buffer_util.c.s:
 	cd /Users/alchemystar/mycode/hero/build && $(MAKE) -f net/CMakeFiles/net.dir/build.make net/CMakeFiles/net.dir/buffer_util.c.s
 .PHONY : buffer_util.c.s
 
+conn.o: conn.c.o
+
+.PHONY : conn.o
+
+# target to build an object file
+conn.c.o:
+	cd /Users/alchemystar/mycode/hero/build && $(MAKE) -f net/CMakeFiles/net.dir/build.make net/CMakeFiles/net.dir/conn.c.o
+.PHONY : conn.c.o
+
+conn.i: conn.c.i
+
+.PHONY : conn.i
+
+# target to preprocess a source file
+conn.c.i:
+	cd /Users/alchemystar/mycode/hero/build && $(MAKE) -f net/CMakeFiles/net.dir/build.make net/CMakeFiles/net.dir/conn.c.i
+.PHONY : conn.c.i
+
+conn.s: conn.c.s
+
+.PHONY : conn.s
+
+# target to generate assembly for a file
+conn.c.s:
+	cd /Users/alchemystar/mycode/hero/build && $(MAKE) -f net/CMakeFiles/net.dir/build.make net/CMakeFiles/net.dir/conn.c.s
+.PHONY : conn.c.s
+
 network.o: network.c.o
 
 .PHONY : network.o
@@ -356,6 +383,9 @@ help:
 	@echo "... buffer_util.o"
 	@echo "... buffer_util.i"
 	@echo "... buffer_util.s"
+	@echo "... conn.o"
+	@echo "... conn.i"
+	@echo "... conn.s"
 	@echo "... network.o"
 	@echo "... network.i"
 	@echo "... network.s"

@@ -1,7 +1,8 @@
 #ifndef HERO_QUERY_H
 #define HERO_QUERY_H
 #include "proto/packet.h"
+#include "conn.h"
 
-int handle_command(int sockfd,mem_pool* pool);
+int handle_command(front_conn* front);
 
 #endif

@@ -29,7 +29,12 @@
 			"gtypes.h": "c",
 			"gversionmacros.h": "c",
 			"gmacros.h": "c",
-			"tcmalloc.h": "c"
+			"tcmalloc.h": "c",
+			"conn.h": "c",
+			"socket.h": "c",
+			"time.h": "c",
+			"inet.h": "c",
+			"in.h": "c"
 		}
 	}
 }

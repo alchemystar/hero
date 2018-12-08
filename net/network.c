@@ -9,6 +9,7 @@
 #include <string.h>
 #include "password.h"
 #include "query.h"
+#include "conn.h"
 
 #define AUTH_OKAY_SIZE 11
 
@@ -21,9 +22,9 @@ unsigned char AUTH_OKAY[] = {7, 0, 0, 2, 0, 0, 0, 2, 0, 0, 0};
 unsigned char FILLER[] = {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,0, 0, 0, 0, 0, 0, 0, 0, 0, 0};
 
 // 这边由于需要修改指针类型的result，所以需要双重指针
-int send_handshake(int sockfd,mem_pool* pool,hand_shake_packet** result);
+int send_handshake(front_conn* front,hand_shake_packet** result);
 
-int read_auth(int sockfd,mem_pool* pool,auth_packet** result);
+int read_auth(front_conn* front,auth_packet** result);
 
 void send_auth_okay(int sockfd);
 
@@ -31,15 +32,18 @@ int check_auth(auth_packet* auth,hand_shake_packet* handshake);
 
 int get_server_capacities();
 
-int handle_one_connection(int sockfd,mem_pool* pool){
+int handle_one_connection(int sockfd,struct sockaddr_in* sockaddr,mem_pool* pool){
+    // 定义front conn
+    front_conn* front = (front_conn*) mem_pool_alloc(sizeof(front_conn),pool);
+    init_conn(&front->conn,sockfd,sockaddr,pool);
     // 发送hand_shake包
     hand_shake_packet* handshake;
-    if(!send_handshake(sockfd,pool,&handshake)){
+    if(!send_handshake(front,&handshake)){
         return FALSE;
     }
     // 接收auth包
     auth_packet* auth;
-    if(!read_auth(sockfd,pool,&auth)){
+    if(!read_auth(front,&auth)){
         return FALSE;
     }
     // 校验权限
@@ -49,25 +53,31 @@ int handle_one_connection(int sockfd,mem_pool* pool){
         return FALSE;
     }
     printf("check auth okay\n");
+    front->is_authed = TRUE;
+    front->schema = auth->database;
+    front->user = auth->user;
+    front->conn.charset_index = auth->charset_index;
     send_auth_okay(sockfd);
     while(TRUE){
-        if(!handle_command(sockfd,pool)){
+        if(!handle_command(front)){
             break;
         }
     }
+    free_front_conn(front);
     return TRUE;
 }
 
-// here for handshake
-int send_handshake(int sockfd,mem_pool* pool,hand_shake_packet** result){
+// here for handshake todo conn buffer
+int send_handshake(front_conn* front,hand_shake_packet** result){
+    int sockfd = front->conn.sockfd;
+    mem_pool* pool = front->conn.pool;
     hand_shake_packet* hand_shake  = get_handshake_packet(pool);
     if(hand_shake == NULL){
         return FALSE;
     }
     // 不在内存池中分配，所以需要手动释放内存
-    packet_buffer* pb = get_handshake_buff();
+    packet_buffer* pb = get_conn_read_buffer(&front->conn,caculate_handshake_size()+MYSQL_HEADER_LEN);
     if(pb == NULL){
-        free_packet_buffer(pb);
         return FALSE;
     }
     // 写入 hand_shake buffer
@@ -90,15 +100,17 @@ int send_handshake(int sockfd,mem_pool* pool,hand_shake_packet** result){
     // 写入socket具体的数据
     writen(sockfd,pb->pos,pb->buffer);
     // release 对应的buffer
-    free_packet_buffer(pb);
+    reset_packet_buffer(pb);
     *result = hand_shake;
     return TRUE;
 }
 
 // here for auth
-int read_auth(int sockfd,mem_pool* pool,auth_packet** result){
+int read_auth(front_conn* front,auth_packet** result){
+    int sockfd = front->conn.sockfd;
+    mem_pool* pool = front->conn.pool;    
     // 小而且定量的内存直接栈上分配
-    unsigned char header_buffer[4];
+    unsigned char* header_buffer = front->conn.header;
     // 读取4个字节(MySQL Header Len)
     if(!readn(sockfd,MYSQL_HEADER_LEN,header_buffer)){
         printf("read handshake error");
@@ -113,9 +125,17 @@ int read_auth(int sockfd,mem_pool* pool,auth_packet** result){
     // 读取packet_id
     int packet_id = header_buffer[PACKET_ID_POS];
     // 创建auth_buffer
-    packet_buffer* pb = get_packet_buffer(length);
+    packet_buffer* pb = get_conn_read_buffer(&(front->conn),length);
+    if(pb == NULL){
+        return FALSE;
+    }
     // 读取整个body
-    readn(sockfd,length,pb->buffer);
+    if(!readn(sockfd,length,pb->buffer)){
+        reset_packet_buffer(pb);
+        return FALSE;
+    }
+    // 设置pb read limit
+    set_packet_buffer_read_limit(pb,length);
     // 构建对应的auth结构体
     auth_packet* auth = (auth_packet*)mem_pool_alloc(sizeof(auth_packet),pool);
     auth->header.packet_length = length;
@@ -147,7 +167,7 @@ int read_auth(int sockfd,mem_pool* pool,auth_packet** result){
         auth->database = NULL;
     }
     // 清理packet_buffer
-    free_packet_buffer(pb);
+    reset_packet_buffer(pb);
     *result = auth;
     return TRUE;
 }

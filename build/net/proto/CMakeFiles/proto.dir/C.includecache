@@ -7,6 +7,10 @@
 #IncludeRegexTransform: 
 
 /Users/alchemystar/mycode/hero/net/basic.h
+sys/time.h
+-
+stdio.h
+-
 
 /Users/alchemystar/mycode/hero/net/buffer_util.h
 basic.h
@@ -14,11 +18,27 @@ basic.h
 
 /Users/alchemystar/mycode/hero/net/config.h
 
+/Users/alchemystar/mycode/hero/net/conn.h
+basic.h
+/Users/alchemystar/mycode/hero/net/basic.h
+proto/packet.h
+/Users/alchemystar/mycode/hero/net/proto/packet.h
+stdatomic.h
+/Users/alchemystar/mycode/hero/net/stdatomic.h
+sys/socket.h
+-
+netinet/in.h
+-
+
 /Users/alchemystar/mycode/hero/net/network.h
 proto/packet.h
 /Users/alchemystar/mycode/hero/net/proto/packet.h
 basic.h
 /Users/alchemystar/mycode/hero/net/basic.h
+netinet/in.h
+-
+conn.h
+/Users/alchemystar/mycode/hero/net/conn.h
 
 /Users/alchemystar/mycode/hero/net/proto/list.h
 

@@ -6,6 +6,7 @@ set(CMAKE_DEPENDS_LANGUAGES
 set(CMAKE_DEPENDS_CHECK_C
   "/Users/alchemystar/mycode/hero/net/basic.c" "/Users/alchemystar/mycode/hero/build/net/CMakeFiles/net.dir/basic.c.o"
   "/Users/alchemystar/mycode/hero/net/buffer_util.c" "/Users/alchemystar/mycode/hero/build/net/CMakeFiles/net.dir/buffer_util.c.o"
+  "/Users/alchemystar/mycode/hero/net/conn.c" "/Users/alchemystar/mycode/hero/build/net/CMakeFiles/net.dir/conn.c.o"
   "/Users/alchemystar/mycode/hero/net/network.c" "/Users/alchemystar/mycode/hero/build/net/CMakeFiles/net.dir/network.c.o"
   "/Users/alchemystar/mycode/hero/net/password.c" "/Users/alchemystar/mycode/hero/build/net/CMakeFiles/net.dir/password.c.o"
   "/Users/alchemystar/mycode/hero/net/query.c" "/Users/alchemystar/mycode/hero/build/net/CMakeFiles/net.dir/query.c.o"

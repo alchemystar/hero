@@ -1,8 +1,12 @@
 #ifndef HERO_BASIC_H
 #define HERO_BASIC_H
-#define DEFAULT_MEM_POOL_SIZE 512
+#include <sys/time.h>
+#include <stdio.h>
 
+#define DEFAULT_MEM_POOL_SIZE 512
 #define HERO_DEBUG
+#define TRUE 1
+#define FALSE 0
 
 // 简易内存池实现
 typedef struct _mem_pool{
@@ -35,4 +39,5 @@ void mem_pool_free(mem_pool* pool);
 void* mem_alloc(int size);
 void mem_free(void* address);
 void* mem_realloc(void* ptr ,int size);
+
 #endif

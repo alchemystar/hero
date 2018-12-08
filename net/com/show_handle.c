@@ -2,7 +2,6 @@
 #include "../config.h"
 #include "../server_parse.h"
 #include "../proto/packet.h"
-#include "../network.h"
 #include "handle_util.h"
 
 #define OTHER -1
@@ -26,19 +25,19 @@ int show_database_check(char* sql,int offset,int length);
 
 int show_tables_check(char* sql,int offset,int length);
 
-int write_databases(int sockfd,mem_pool* pool);
+int write_databases(front_conn* front);
 
-int  write_tables(int sockfd,mem_pool* pool);
+int  write_tables(front_conn* front);
 
-int handle_show(int sockfd,char* sql,int offset,mem_pool* pool){
+int handle_show(front_conn* front,char* sql,int offset){
     int type = show_parse_sql(sql,offset,strlen(sql));
     switch(type){
         case DATABASES:
             printf("it's show databases \n");
-            return write_databases(sockfd,pool);
+            return write_databases(front);
         case SHOWTABLES:
             printf("it's show tables\n");
-            return write_tables(sockfd,pool);
+            return write_tables(front);
         default:
             return TRUE;   
     }
@@ -123,9 +122,10 @@ int show_tables_check(char* sql,int offset,int length){
     return OTHER;
 }
 
-int write_databases(int sockfd,mem_pool* pool){
-    // 一开始申请一块512字节内存
-    packet_buffer* pb = get_packet_buffer(DEFAULT_PB_SIZE);
+int write_databases(front_conn* front){
+    int sockfd = front->conn.sockfd;
+    mem_pool* pool = front->conn.pool;
+    packet_buffer* pb = get_conn_write_buffer(&(front->conn));
     if(pb == NULL){
         return NULL;
     }
@@ -180,17 +180,17 @@ int write_databases(int sockfd,mem_pool* pool){
         goto error_process;
     }
     writen(sockfd,pb->pos,pb->buffer);
-    free_packet_buffer(pb);
+    reset_packet_buffer(pb);
     return TRUE;
 error_process:
-    free_packet_buffer(pb);
+    reset_packet_buffer(pb);
     return FALSE;    
 }
 
-int write_tables(int sockfd,mem_pool* pool){
-    // 一开始申请一块512字节内存
-    // todo 8 for debug
-    packet_buffer* pb = get_packet_buffer(DEFAULT_PB_SIZE);
+int write_tables(front_conn* front){
+    int sockfd = front->conn.sockfd;
+    mem_pool* pool = front->conn.pool;
+    packet_buffer* pb = get_conn_write_buffer(&(front->conn));
     if(pb == NULL){
         return NULL;
     }
@@ -246,9 +246,9 @@ int write_tables(int sockfd,mem_pool* pool){
         goto error_process;
     }
     writen(sockfd,pb->pos,pb->buffer);
-    free_packet_buffer(pb);
+    reset_packet_buffer(pb);
     return TRUE;
 error_process:
-    free_packet_buffer(pb);
+    reset_packet_buffer(pb);
     return FALSE;    
 }

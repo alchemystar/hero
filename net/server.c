@@ -1,8 +1,8 @@
 #include "server.h"
-#include <sys/socket.h>
-#include <netinet/in.h>
 #include "basic.h"
 #include "network.h"
+
+void process_connection(int sockfd,struct sockaddr_in* sockaddr_ptr);
 
 // 先用bio搞一搞
 // 后端调试成功之后再采用epoll
@@ -13,7 +13,6 @@ void start_server(){
     int sockfd;
     int fd_temp;
     struct sockaddr_in sock_addr;
-    struct sockaddr_in s_addr_client;
 
     sockfd_server = socket(AF_INET,SOCK_STREAM,0);
     // 设置重新利用PORT(ADDR),方便调试
@@ -35,22 +34,24 @@ void start_server(){
         exit(1);
     }
     // accept
-    int client_length = sizeof(s_addr_client);
     while(1){
         printf("waiting for new connection...");
-        sockfd = accept(sockfd_server,(struct sockaddr_ *)(&s_addr_client),(socklen_t *)&(client_length));
+        struct sockaddr_in* s_addr_client = mem_alloc(sizeof(struct sockaddr_in));
+              int client_length = sizeof(*s_addr_client);
+        sockfd = accept(sockfd_server,(struct sockaddr_ *)(s_addr_client),(socklen_t *)&(client_length));
         if(sockfd == -1){
             printf("Accept error!\n");
             continue;
         }
         printf("A new connection occurs\n");
-        process_connection(sockfd);
+        process_connection(sockfd,(struct sockaddr_in*)(&s_addr_client));
     }
 }
 
-void process_connection(int sockfd){
+
+void process_connection(int sockfd,struct sockaddr_in* sockaddr_ptr){
     mem_pool* pool = mem_pool_create(DEFAULT_MEM_POOL_SIZE);
-    handle_one_connection(sockfd,pool);
+    handle_one_connection(sockfd,sockaddr_ptr,pool);
     mem_pool_free(pool);
     // close(sockfd);
 }

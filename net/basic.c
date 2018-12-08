@@ -100,11 +100,14 @@ void* mem_alloc(int size){
             printf("are you sure?,size=%d may cause error\n",size);
         }
     #endif
+    // 这边用calloc,因为很多结构体的初始化都没有显示置NULL
     return (void*)calloc(1,size);
 }
 // for 预留内存池实现
 void mem_free(void* addr){
-    free(addr);
+    if(addr != NULL){
+        free(addr);
+    }
 }
 
 void* mem_realloc(void* ptr ,int size){
