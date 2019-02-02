@@ -11,6 +11,8 @@
 #include "query.h"
 #include "conn.h"
 
+// todo 信号量，需要各种IGN,参照redis
+
 #define AUTH_OKAY_SIZE 11
 
 #define FILLER_SIZE 23

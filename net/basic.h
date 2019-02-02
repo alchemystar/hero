@@ -2,6 +2,7 @@
 #define HERO_BASIC_H
 #include <sys/time.h>
 #include <stdio.h>
+#include <sys/errno.h>
 
 #define DEFAULT_MEM_POOL_SIZE 512
 #define HERO_DEBUG
@@ -34,10 +35,13 @@ union hero_align{
 // 必须以2的整数倍分配
 mem_pool* mem_pool_create(int size);
 void* mem_pool_alloc(int size,mem_pool* pool);
+void* mem_pool_alloc_ignore_check(int size,mem_pool* pool);
 void mem_pool_free(mem_pool* pool);
+
 
 void* mem_alloc(int size);
 void mem_free(void* address);
 void* mem_realloc(void* ptr ,int size);
+void init_signal_handlers();
 
 #endif

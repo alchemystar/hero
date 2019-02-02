@@ -6,6 +6,7 @@
 #include "proto/packet.h"
 #include <sys/socket.h>
 #include <netinet/in.h>
+#include "hero_poll.h"
 
 void start_server();
 

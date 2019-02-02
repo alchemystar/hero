@@ -206,6 +206,60 @@ conn.c.s:
 	cd /Users/alchemystar/mycode/hero/build && $(MAKE) -f net/CMakeFiles/net.dir/build.make net/CMakeFiles/net.dir/conn.c.s
 .PHONY : conn.c.s
 
+hero_poll.o: hero_poll.c.o
+
+.PHONY : hero_poll.o
+
+# target to build an object file
+hero_poll.c.o:
+	cd /Users/alchemystar/mycode/hero/build && $(MAKE) -f net/CMakeFiles/net.dir/build.make net/CMakeFiles/net.dir/hero_poll.c.o
+.PHONY : hero_poll.c.o
+
+hero_poll.i: hero_poll.c.i
+
+.PHONY : hero_poll.i
+
+# target to preprocess a source file
+hero_poll.c.i:
+	cd /Users/alchemystar/mycode/hero/build && $(MAKE) -f net/CMakeFiles/net.dir/build.make net/CMakeFiles/net.dir/hero_poll.c.i
+.PHONY : hero_poll.c.i
+
+hero_poll.s: hero_poll.c.s
+
+.PHONY : hero_poll.s
+
+# target to generate assembly for a file
+hero_poll.c.s:
+	cd /Users/alchemystar/mycode/hero/build && $(MAKE) -f net/CMakeFiles/net.dir/build.make net/CMakeFiles/net.dir/hero_poll.c.s
+.PHONY : hero_poll.c.s
+
+hero_worker.o: hero_worker.c.o
+
+.PHONY : hero_worker.o
+
+# target to build an object file
+hero_worker.c.o:
+	cd /Users/alchemystar/mycode/hero/build && $(MAKE) -f net/CMakeFiles/net.dir/build.make net/CMakeFiles/net.dir/hero_worker.c.o
+.PHONY : hero_worker.c.o
+
+hero_worker.i: hero_worker.c.i
+
+.PHONY : hero_worker.i
+
+# target to preprocess a source file
+hero_worker.c.i:
+	cd /Users/alchemystar/mycode/hero/build && $(MAKE) -f net/CMakeFiles/net.dir/build.make net/CMakeFiles/net.dir/hero_worker.c.i
+.PHONY : hero_worker.c.i
+
+hero_worker.s: hero_worker.c.s
+
+.PHONY : hero_worker.s
+
+# target to generate assembly for a file
+hero_worker.c.s:
+	cd /Users/alchemystar/mycode/hero/build && $(MAKE) -f net/CMakeFiles/net.dir/build.make net/CMakeFiles/net.dir/hero_worker.c.s
+.PHONY : hero_worker.c.s
+
 network.o: network.c.o
 
 .PHONY : network.o
@@ -386,6 +440,12 @@ help:
 	@echo "... conn.o"
 	@echo "... conn.i"
 	@echo "... conn.s"
+	@echo "... hero_poll.o"
+	@echo "... hero_poll.i"
+	@echo "... hero_poll.s"
+	@echo "... hero_worker.o"
+	@echo "... hero_worker.i"
+	@echo "... hero_worker.s"
 	@echo "... network.o"
 	@echo "... network.i"
 	@echo "... network.s"

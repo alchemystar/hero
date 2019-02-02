@@ -88,4 +88,6 @@ inline static packet_buffer * get_conn_write_buffer(connection* conn){
 
 void free_front_conn(front_conn* front);
 
+void release_conn_and_mempoll(connection* conn);
+
 #endif

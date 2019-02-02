@@ -34,7 +34,15 @@
 			"socket.h": "c",
 			"time.h": "c",
 			"inet.h": "c",
-			"in.h": "c"
+			"in.h": "c",
+			"epoll.h": "c",
+			"limits.h": "c",
+			"hero_poll.h": "c",
+			"sysinfo.h": "c",
+			"errno.h": "c",
+			"hero_worker.h": "c",
+			"stdlib.h": "c",
+			"pthread.h": "c"
 		}
 	}
 }

@@ -185,6 +185,9 @@ PKG_CONFIG_EXECUTABLE:FILEPATH=/usr/local/bin/pkg-config
 //Path to a library.
 TCMALLOC_LIB:FILEPATH=/usr/local/lib/libtcmalloc_minimal.a
 
+//Path to a library.
+UNWIND_LIB:FILEPATH=UNWIND_LIB-NOTFOUND
+
 //Dependencies for target
 com_LIB_DEPENDS:STATIC=
 

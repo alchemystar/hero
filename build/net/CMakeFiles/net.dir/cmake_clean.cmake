@@ -2,6 +2,8 @@ file(REMOVE_RECURSE
   "CMakeFiles/net.dir/basic.c.o"
   "CMakeFiles/net.dir/buffer_util.c.o"
   "CMakeFiles/net.dir/conn.c.o"
+  "CMakeFiles/net.dir/hero_poll.c.o"
+  "CMakeFiles/net.dir/hero_worker.c.o"
   "CMakeFiles/net.dir/network.c.o"
   "CMakeFiles/net.dir/password.c.o"
   "CMakeFiles/net.dir/query.c.o"

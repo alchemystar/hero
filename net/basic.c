@@ -3,6 +3,8 @@
 // 这边stdlib.h是为了malloc,or use void* cast
 // 现在cmake里面link了tcmalloc=>底层非ptmalloc而是tcmalloc
 #include <stdlib.h>
+#include <signal.h>
+// if use ctime,use ctime_r!
 
 // todo 需要参照<<c interface and implement>> 将mem_pool自身内存也纳入其buffer中
 mem_pool* mem_pool_create(int size){
@@ -40,6 +42,10 @@ void* mem_pool_alloc(int size,mem_pool* pool){
             printf("are you sure?,size=%d may cause error\n",size);
         }
     #endif
+    return mem_pool_alloc_ignore_check(size,pool);
+}
+
+void* mem_pool_alloc_ignore_check(int size,mem_pool* pool){
     // 内存向上对齐
     // 数学推导过程大致如下
     // if size = k*n:
@@ -101,6 +107,7 @@ void* mem_alloc(int size){
         }
     #endif
     // 这边用calloc,因为很多结构体的初始化都没有显示置NULL
+    // calloc在某些偏门的架构上对指针来其NULL!=0,当前不考虑这种情况
     return (void*)calloc(1,size);
 }
 // for 预留内存池实现
@@ -117,4 +124,12 @@ void* mem_realloc(void* ptr ,int size){
         }
     #endif    
     return (void*)realloc(ptr,size);
+}
+
+void init_signal_handlers() {
+    signal(SIGPIPE, SIG_IGN);
+    signal(SIGINT,  SIG_IGN);
+    signal(SIGHUP,  SIG_IGN);
+    signal(SIGUSR1, SIG_IGN);
+    signal(SIGUSR2, SIG_IGN);
 }

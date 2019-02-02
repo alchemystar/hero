@@ -16,6 +16,24 @@ net/CMakeFiles/net.dir/conn.c.o: ../net/conn.h
 net/CMakeFiles/net.dir/conn.c.o: ../net/proto/list.h
 net/CMakeFiles/net.dir/conn.c.o: ../net/proto/packet.h
 
+net/CMakeFiles/net.dir/hero_poll.c.o: ../net/basic.h
+net/CMakeFiles/net.dir/hero_poll.c.o: ../net/buffer_util.h
+net/CMakeFiles/net.dir/hero_poll.c.o: ../net/conn.h
+net/CMakeFiles/net.dir/hero_poll.c.o: ../net/hero_poll.c
+net/CMakeFiles/net.dir/hero_poll.c.o: ../net/hero_poll.h
+net/CMakeFiles/net.dir/hero_poll.c.o: ../net/hero_worker.h
+net/CMakeFiles/net.dir/hero_poll.c.o: ../net/proto/list.h
+net/CMakeFiles/net.dir/hero_poll.c.o: ../net/proto/packet.h
+
+net/CMakeFiles/net.dir/hero_worker.c.o: ../net/basic.h
+net/CMakeFiles/net.dir/hero_worker.c.o: ../net/buffer_util.h
+net/CMakeFiles/net.dir/hero_worker.c.o: ../net/conn.h
+net/CMakeFiles/net.dir/hero_worker.c.o: ../net/hero_poll.h
+net/CMakeFiles/net.dir/hero_worker.c.o: ../net/hero_worker.c
+net/CMakeFiles/net.dir/hero_worker.c.o: ../net/hero_worker.h
+net/CMakeFiles/net.dir/hero_worker.c.o: ../net/proto/list.h
+net/CMakeFiles/net.dir/hero_worker.c.o: ../net/proto/packet.h
+
 net/CMakeFiles/net.dir/network.c.o: ../net/basic.h
 net/CMakeFiles/net.dir/network.c.o: ../net/buffer_util.h
 net/CMakeFiles/net.dir/network.c.o: ../net/config.h
@@ -50,6 +68,7 @@ net/CMakeFiles/net.dir/server.c.o: ../net/basic.h
 net/CMakeFiles/net.dir/server.c.o: ../net/buffer_util.h
 net/CMakeFiles/net.dir/server.c.o: ../net/config.h
 net/CMakeFiles/net.dir/server.c.o: ../net/conn.h
+net/CMakeFiles/net.dir/server.c.o: ../net/hero_poll.h
 net/CMakeFiles/net.dir/server.c.o: ../net/network.h
 net/CMakeFiles/net.dir/server.c.o: ../net/proto/list.h
 net/CMakeFiles/net.dir/server.c.o: ../net/proto/packet.h

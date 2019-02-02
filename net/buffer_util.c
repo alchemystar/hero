@@ -347,8 +347,8 @@ void printf_packet_buffer(packet_buffer* pb){
 }
 
 void free_packet_buffer(packet_buffer* pb){
-    mem_free(pb->buffer);
-    mem_free(pb);
+    mem_free((void*)pb->buffer);
+    mem_free((void*)pb);
 }
 
 int packet_has_read_remaining(packet_buffer* pb){

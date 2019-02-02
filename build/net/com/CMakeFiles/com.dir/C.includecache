@@ -11,6 +11,8 @@ sys/time.h
 -
 stdio.h
 -
+sys/errno.h
+-
 
 /Users/alchemystar/mycode/hero/net/buffer_util.h
 basic.h

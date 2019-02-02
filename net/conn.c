@@ -2,9 +2,34 @@
 #include <sys/socket.h>
 #include <arpa/inet.h>
 #include "basic.h"
+#include <fcntl.h>
+#include <netinet/in.h>
+#include <netinet/tcp.h>
 
 atomic_int front_conn_id = 0 ;
 atomic_int back_conn_id = 0;
+
+connection* init_conn_and_mempoll(int sockfd,struct sockaddr_in* addr){
+    if(FALSE == set_fd_flags(sockfd)){
+        return NULL;
+    }
+    mem_pool* pool = mem_pool_create(DEFAULT_MEM_POOL_SIZE);
+    connection *conn_addr = (connection*)mem_pool_alloc(sizeof(connection),pool);
+    if(FALSE == init_conn(conn_addr,sockfd,addr,pool)){
+        return NULL;    
+    }
+    return conn_addr;
+}
+
+// release conn 直接就release其对应的内存池以及不从mem_poll分配的buffer
+void release_conn_and_mempoll(connection* conn){
+    close(conn->sockfd);
+    free_packet_buffer(conn->read_buffer);
+    free_packet_buffer(conn->write_buffer);
+    mem_pool_free(conn->pool);
+}
+
+
 
 int init_conn(connection* conn,int sockfd,struct sockaddr_in* addr,mem_pool* pool) {
     conn->sockfd = sockfd;
@@ -77,4 +102,34 @@ void free_front_conn(front_conn* front){
     free_packet_buffer(front->conn.read_buffer);
     free_packet_buffer(front->conn.write_buffer);
     // front_conn本身由mem_pool free
+}
+
+inline int set_fd_flags(int fd) {
+
+    if (fd < 0) {
+        return FALSE;
+    }
+    int opts;
+    if (0 > (opts = fcntl(fd, F_GETFL))) {
+        return FALSE;
+    }
+    // 这边置为非阻塞
+    opts = opts | O_NONBLOCK;
+    if (0 > fcntl(fd, F_SETFL, opts)) {
+        return FALSE;
+    }
+    struct linger li;
+    memset(&li, 0, sizeof(li));
+    // close时候丢弃buffer,同时发送rst,避免time_wait状态
+    li.l_onoff = 1;
+    li.l_linger = 0;
+
+    if (0 != setsockopt(fd, SOL_SOCKET, SO_LINGER, (const char*) &li, sizeof(li))) {
+        return FALSE;
+    }
+    int var = 1;
+    if (0 != setsockopt(fd, IPPROTO_TCP, TCP_NODELAY, &var, sizeof(var))) {
+        return FALSE;
+    }
+    return TRUE;
 }

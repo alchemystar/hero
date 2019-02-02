@@ -129,9 +129,57 @@ net/CMakeFiles/net.dir/conn.c.o.provides: net/CMakeFiles/net.dir/conn.c.o.requir
 net/CMakeFiles/net.dir/conn.c.o.provides.build: net/CMakeFiles/net.dir/conn.c.o
 
 
+net/CMakeFiles/net.dir/hero_poll.c.o: net/CMakeFiles/net.dir/flags.make
+net/CMakeFiles/net.dir/hero_poll.c.o: ../net/hero_poll.c
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/Users/alchemystar/mycode/hero/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_4) "Building C object net/CMakeFiles/net.dir/hero_poll.c.o"
+	cd /Users/alchemystar/mycode/hero/build/net && /Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/cc $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -o CMakeFiles/net.dir/hero_poll.c.o   -c /Users/alchemystar/mycode/hero/net/hero_poll.c
+
+net/CMakeFiles/net.dir/hero_poll.c.i: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing C source to CMakeFiles/net.dir/hero_poll.c.i"
+	cd /Users/alchemystar/mycode/hero/build/net && /Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/cc $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -E /Users/alchemystar/mycode/hero/net/hero_poll.c > CMakeFiles/net.dir/hero_poll.c.i
+
+net/CMakeFiles/net.dir/hero_poll.c.s: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling C source to assembly CMakeFiles/net.dir/hero_poll.c.s"
+	cd /Users/alchemystar/mycode/hero/build/net && /Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/cc $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -S /Users/alchemystar/mycode/hero/net/hero_poll.c -o CMakeFiles/net.dir/hero_poll.c.s
+
+net/CMakeFiles/net.dir/hero_poll.c.o.requires:
+
+.PHONY : net/CMakeFiles/net.dir/hero_poll.c.o.requires
+
+net/CMakeFiles/net.dir/hero_poll.c.o.provides: net/CMakeFiles/net.dir/hero_poll.c.o.requires
+	$(MAKE) -f net/CMakeFiles/net.dir/build.make net/CMakeFiles/net.dir/hero_poll.c.o.provides.build
+.PHONY : net/CMakeFiles/net.dir/hero_poll.c.o.provides
+
+net/CMakeFiles/net.dir/hero_poll.c.o.provides.build: net/CMakeFiles/net.dir/hero_poll.c.o
+
+
+net/CMakeFiles/net.dir/hero_worker.c.o: net/CMakeFiles/net.dir/flags.make
+net/CMakeFiles/net.dir/hero_worker.c.o: ../net/hero_worker.c
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/Users/alchemystar/mycode/hero/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_5) "Building C object net/CMakeFiles/net.dir/hero_worker.c.o"
+	cd /Users/alchemystar/mycode/hero/build/net && /Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/cc $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -o CMakeFiles/net.dir/hero_worker.c.o   -c /Users/alchemystar/mycode/hero/net/hero_worker.c
+
+net/CMakeFiles/net.dir/hero_worker.c.i: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing C source to CMakeFiles/net.dir/hero_worker.c.i"
+	cd /Users/alchemystar/mycode/hero/build/net && /Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/cc $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -E /Users/alchemystar/mycode/hero/net/hero_worker.c > CMakeFiles/net.dir/hero_worker.c.i
+
+net/CMakeFiles/net.dir/hero_worker.c.s: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling C source to assembly CMakeFiles/net.dir/hero_worker.c.s"
+	cd /Users/alchemystar/mycode/hero/build/net && /Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/cc $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -S /Users/alchemystar/mycode/hero/net/hero_worker.c -o CMakeFiles/net.dir/hero_worker.c.s
+
+net/CMakeFiles/net.dir/hero_worker.c.o.requires:
+
+.PHONY : net/CMakeFiles/net.dir/hero_worker.c.o.requires
+
+net/CMakeFiles/net.dir/hero_worker.c.o.provides: net/CMakeFiles/net.dir/hero_worker.c.o.requires
+	$(MAKE) -f net/CMakeFiles/net.dir/build.make net/CMakeFiles/net.dir/hero_worker.c.o.provides.build
+.PHONY : net/CMakeFiles/net.dir/hero_worker.c.o.provides
+
+net/CMakeFiles/net.dir/hero_worker.c.o.provides.build: net/CMakeFiles/net.dir/hero_worker.c.o
+
+
 net/CMakeFiles/net.dir/network.c.o: net/CMakeFiles/net.dir/flags.make
 net/CMakeFiles/net.dir/network.c.o: ../net/network.c
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/Users/alchemystar/mycode/hero/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_4) "Building C object net/CMakeFiles/net.dir/network.c.o"
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/Users/alchemystar/mycode/hero/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_6) "Building C object net/CMakeFiles/net.dir/network.c.o"
 	cd /Users/alchemystar/mycode/hero/build/net && /Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/cc $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -o CMakeFiles/net.dir/network.c.o   -c /Users/alchemystar/mycode/hero/net/network.c
 
 net/CMakeFiles/net.dir/network.c.i: cmake_force
@@ -155,7 +203,7 @@ net/CMakeFiles/net.dir/network.c.o.provides.build: net/CMakeFiles/net.dir/networ
 
 net/CMakeFiles/net.dir/password.c.o: net/CMakeFiles/net.dir/flags.make
 net/CMakeFiles/net.dir/password.c.o: ../net/password.c
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/Users/alchemystar/mycode/hero/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_5) "Building C object net/CMakeFiles/net.dir/password.c.o"
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/Users/alchemystar/mycode/hero/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_7) "Building C object net/CMakeFiles/net.dir/password.c.o"
 	cd /Users/alchemystar/mycode/hero/build/net && /Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/cc $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -o CMakeFiles/net.dir/password.c.o   -c /Users/alchemystar/mycode/hero/net/password.c
 
 net/CMakeFiles/net.dir/password.c.i: cmake_force
@@ -179,7 +227,7 @@ net/CMakeFiles/net.dir/password.c.o.provides.build: net/CMakeFiles/net.dir/passw
 
 net/CMakeFiles/net.dir/query.c.o: net/CMakeFiles/net.dir/flags.make
 net/CMakeFiles/net.dir/query.c.o: ../net/query.c
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/Users/alchemystar/mycode/hero/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_6) "Building C object net/CMakeFiles/net.dir/query.c.o"
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/Users/alchemystar/mycode/hero/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_8) "Building C object net/CMakeFiles/net.dir/query.c.o"
 	cd /Users/alchemystar/mycode/hero/build/net && /Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/cc $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -o CMakeFiles/net.dir/query.c.o   -c /Users/alchemystar/mycode/hero/net/query.c
 
 net/CMakeFiles/net.dir/query.c.i: cmake_force
@@ -203,7 +251,7 @@ net/CMakeFiles/net.dir/query.c.o.provides.build: net/CMakeFiles/net.dir/query.c.
 
 net/CMakeFiles/net.dir/server.c.o: net/CMakeFiles/net.dir/flags.make
 net/CMakeFiles/net.dir/server.c.o: ../net/server.c
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/Users/alchemystar/mycode/hero/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_7) "Building C object net/CMakeFiles/net.dir/server.c.o"
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/Users/alchemystar/mycode/hero/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_9) "Building C object net/CMakeFiles/net.dir/server.c.o"
 	cd /Users/alchemystar/mycode/hero/build/net && /Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/cc $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -o CMakeFiles/net.dir/server.c.o   -c /Users/alchemystar/mycode/hero/net/server.c
 
 net/CMakeFiles/net.dir/server.c.i: cmake_force
@@ -227,7 +275,7 @@ net/CMakeFiles/net.dir/server.c.o.provides.build: net/CMakeFiles/net.dir/server.
 
 net/CMakeFiles/net.dir/server_parse.c.o: net/CMakeFiles/net.dir/flags.make
 net/CMakeFiles/net.dir/server_parse.c.o: ../net/server_parse.c
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/Users/alchemystar/mycode/hero/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_8) "Building C object net/CMakeFiles/net.dir/server_parse.c.o"
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/Users/alchemystar/mycode/hero/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_10) "Building C object net/CMakeFiles/net.dir/server_parse.c.o"
 	cd /Users/alchemystar/mycode/hero/build/net && /Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/cc $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -o CMakeFiles/net.dir/server_parse.c.o   -c /Users/alchemystar/mycode/hero/net/server_parse.c
 
 net/CMakeFiles/net.dir/server_parse.c.i: cmake_force
@@ -251,7 +299,7 @@ net/CMakeFiles/net.dir/server_parse.c.o.provides.build: net/CMakeFiles/net.dir/s
 
 net/CMakeFiles/net.dir/session.c.o: net/CMakeFiles/net.dir/flags.make
 net/CMakeFiles/net.dir/session.c.o: ../net/session.c
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/Users/alchemystar/mycode/hero/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_9) "Building C object net/CMakeFiles/net.dir/session.c.o"
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/Users/alchemystar/mycode/hero/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_11) "Building C object net/CMakeFiles/net.dir/session.c.o"
 	cd /Users/alchemystar/mycode/hero/build/net && /Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/cc $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -o CMakeFiles/net.dir/session.c.o   -c /Users/alchemystar/mycode/hero/net/session.c
 
 net/CMakeFiles/net.dir/session.c.i: cmake_force
@@ -278,6 +326,8 @@ net_OBJECTS = \
 "CMakeFiles/net.dir/basic.c.o" \
 "CMakeFiles/net.dir/buffer_util.c.o" \
 "CMakeFiles/net.dir/conn.c.o" \
+"CMakeFiles/net.dir/hero_poll.c.o" \
+"CMakeFiles/net.dir/hero_worker.c.o" \
 "CMakeFiles/net.dir/network.c.o" \
 "CMakeFiles/net.dir/password.c.o" \
 "CMakeFiles/net.dir/query.c.o" \
@@ -291,6 +341,8 @@ net_EXTERNAL_OBJECTS =
 net/libnet.a: net/CMakeFiles/net.dir/basic.c.o
 net/libnet.a: net/CMakeFiles/net.dir/buffer_util.c.o
 net/libnet.a: net/CMakeFiles/net.dir/conn.c.o
+net/libnet.a: net/CMakeFiles/net.dir/hero_poll.c.o
+net/libnet.a: net/CMakeFiles/net.dir/hero_worker.c.o
 net/libnet.a: net/CMakeFiles/net.dir/network.c.o
 net/libnet.a: net/CMakeFiles/net.dir/password.c.o
 net/libnet.a: net/CMakeFiles/net.dir/query.c.o
@@ -299,7 +351,7 @@ net/libnet.a: net/CMakeFiles/net.dir/server_parse.c.o
 net/libnet.a: net/CMakeFiles/net.dir/session.c.o
 net/libnet.a: net/CMakeFiles/net.dir/build.make
 net/libnet.a: net/CMakeFiles/net.dir/link.txt
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --bold --progress-dir=/Users/alchemystar/mycode/hero/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_10) "Linking C static library libnet.a"
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --bold --progress-dir=/Users/alchemystar/mycode/hero/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_12) "Linking C static library libnet.a"
 	cd /Users/alchemystar/mycode/hero/build/net && $(CMAKE_COMMAND) -P CMakeFiles/net.dir/cmake_clean_target.cmake
 	cd /Users/alchemystar/mycode/hero/build/net && $(CMAKE_COMMAND) -E cmake_link_script CMakeFiles/net.dir/link.txt --verbose=$(VERBOSE)
 
@@ -311,6 +363,8 @@ net/CMakeFiles/net.dir/build: net/libnet.a
 net/CMakeFiles/net.dir/requires: net/CMakeFiles/net.dir/basic.c.o.requires
 net/CMakeFiles/net.dir/requires: net/CMakeFiles/net.dir/buffer_util.c.o.requires
 net/CMakeFiles/net.dir/requires: net/CMakeFiles/net.dir/conn.c.o.requires
+net/CMakeFiles/net.dir/requires: net/CMakeFiles/net.dir/hero_poll.c.o.requires
+net/CMakeFiles/net.dir/requires: net/CMakeFiles/net.dir/hero_worker.c.o.requires
 net/CMakeFiles/net.dir/requires: net/CMakeFiles/net.dir/network.c.o.requires
 net/CMakeFiles/net.dir/requires: net/CMakeFiles/net.dir/password.c.o.requires
 net/CMakeFiles/net.dir/requires: net/CMakeFiles/net.dir/query.c.o.requires

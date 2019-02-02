@@ -11,6 +11,8 @@ include_directories(${GLIB_INCLUDE_DIRS})
 link_directories(${GLIB_LIBRARY_DIRS})
 # for tc malloc
 find_library(TCMALLOC_LIB NAMES libtcmalloc_minimal.a tcmalloc_minimal)
+# for libunwind
+find_library(UNWIND_LIB NAMES libunwind.a)
 #代码路径 main路径
 aux_source_directory(. source_list)
 # 子目录net路径
@@ -22,4 +24,4 @@ set(CMAKE_VERBOSE_MAKEFILE ON)
 #生成可执行的文件
 add_executable(hero ${source_list}) 
 #link对应net lib
-target_link_libraries(hero net ${GLIB_LIBRARIES} ${TCMALLOC_LIB})
+target_link_libraries(hero net ${GLIB_LIBRARIES} ${TCMALLOC_LIB} pthread stdc++ m)
