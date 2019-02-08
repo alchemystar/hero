@@ -25,8 +25,8 @@ int select_2_check(char* sql,int offset,int length);
 int write_version_comment(front_conn* front);
 
 int handle_select(front_conn* front,char* sql,int offset){
-    int sockfd = front->conn.sockfd;
-    mem_pool* pool = front->conn.pool;
+    int sockfd = front->conn->sockfd;
+    mem_pool* pool = front->conn->request_pool;
     int type = select_parse_sql(sql,offset,strlen(sql));
     switch(type){
         case VERSION_COMMENT:
@@ -122,9 +122,9 @@ int verion_comment_check(char* sql,int offset,int length){
 
 
 int write_version_comment(front_conn* front){
-    int sockfd = front->conn.sockfd;
-    mem_pool* pool = front->conn.pool;
-    packet_buffer* pb = get_conn_write_buffer(&(front->conn));
+    int sockfd = front->conn->sockfd;
+    mem_pool* pool = front->conn->request_pool;
+    packet_buffer* pb = get_conn_write_buffer(front->conn);
     if(pb == NULL){
         return NULL;
     }
@@ -178,10 +178,10 @@ int write_version_comment(front_conn* front){
     if(!write_eof(pb,eof)){
         goto error_process;
     }
-    writen(sockfd,pb->pos,pb->buffer);
-    reset_packet_buffer(pb);
+    write_nonblock(front->conn);
     return TRUE;
 error_process:
+    // 错误后提前清空buffer
     reset_packet_buffer(pb);
     return FALSE;    
 }

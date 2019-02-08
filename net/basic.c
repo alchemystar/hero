@@ -27,6 +27,7 @@ mem_pool* mem_pool_create(int size){
     unsigned char* buffer = (void*)malloc(mem_size);
     if(buffer == NULL){
         printf("mem exhausted");
+        free(pool);
         return NULL;
     }
     pool->buffer = buffer;
@@ -89,6 +90,9 @@ void* mem_pool_alloc_ignore_check(int size,mem_pool* pool){
 }
 
 void mem_pool_free(mem_pool* pool){
+    if(pool == NULL){
+        return;
+    }
     mem_pool* entry = pool;
     mem_pool* to_free = pool;
     while(entry != NULL){
@@ -97,6 +101,18 @@ void mem_pool_free(mem_pool* pool){
         free(to_free->buffer);
         free(to_free);
     }
+}
+
+// 重置内存池回初始状态
+void mem_pool_reset(mem_pool* pool){
+    // 取出pool的next
+    mem_pool* to_free = pool->next;
+    // 删除之后的内存池
+    if(to_free != NULL){
+        mem_pool_free(to_free);
+    }
+    pool->next = NULL;
+    pool->pos = 0;
 }
 
 // for 预留内存池实现,返回是指针类型

@@ -21,6 +21,10 @@ sys/time.h
 -
 stdio.h
 -
+sys/errno.h
+-
+unistd.h
+-
 
 /Users/alchemystar/mycode/hero/net/buffer_util.c
 buffer_util.h
@@ -79,6 +83,12 @@ sys/socket.h
 -
 netinet/in.h
 -
+fcntl.h
+-
+netinet/tcp.h
+-
+memory.h
+-
 
 /Users/alchemystar/mycode/hero/net/hero_poll.c
 hero_poll.h
@@ -107,10 +117,14 @@ hero_poll.h
 /Users/alchemystar/mycode/hero/net/hero_poll.h
 sys/epoll.h
 -
+network.h
+/Users/alchemystar/mycode/hero/net/network.h
 
 /Users/alchemystar/mycode/hero/net/hero_worker.h
 basic.h
 /Users/alchemystar/mycode/hero/net/basic.h
+conn.h
+/Users/alchemystar/mycode/hero/net/conn.h
 
 /Users/alchemystar/mycode/hero/net/network.c
 sys/socket.h

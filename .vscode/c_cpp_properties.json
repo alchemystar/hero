@@ -5,6 +5,7 @@
             "includePath": [
                 "${workspaceFolder}/**",
                 "/usr/local/include/**",
+                "/Users/alchemystar/cross-share/linux-include/include/**",
                 "/usr/local/include/glib-2.0/glib/**"
             ],
             "defines": [],

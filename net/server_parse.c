@@ -5,6 +5,7 @@ int s_check(char* sql,int offset,int length);
 int se_check(char* sql,int offset,int length);
 int select_check(char* sql,int offset,int length);
 int show_check(char* sql,int offset,int length);
+int kill_check(char* sql,int offset,int length);
 
 int server_parse_sql(char* sql){
     printf("sql = %s\n",sql);
@@ -54,11 +55,29 @@ int server_parse_sql(char* sql){
                 return -1;
             case 'K':
             case 'k':
-                return -1;
+                return k_check(sql,i,length);
             default:
                 return -1;                
         }
     }
+}
+
+int k_check(char* sql,int offset,int length){
+    return kill_check(sql,offset,length);
+}
+
+int kill_check(char* sql,int offset,int length){
+    printf("go into kill check\n");
+    if(length > offset + 4){
+        char c1 = sql[++offset];
+        char c2 = sql[++offset];
+        char c3 = sql[++offset];
+        char c4 = sql[++offset];
+        if ((c1 == 'i' || c1 == 'I') && (c2 == 'l' || c2 == 'L') && (c3=='l' || c3 == 'L') && (c4 == ' ' || c4 == '\t' || c4 == '\r' || c4 == '\n')) {
+            return (offset << 8) | KILL_QUERY;
+        }
+    }
+    return OTHER;
 }
 
 int s_check(char* sql,int offset,int length){

@@ -13,6 +13,8 @@ stdio.h
 -
 sys/errno.h
 -
+unistd.h
+-
 
 /Users/alchemystar/mycode/hero/net/buffer_util.h
 basic.h
@@ -76,6 +78,14 @@ stdatomic.h
 sys/socket.h
 -
 netinet/in.h
+-
+fcntl.h
+-
+netinet/tcp.h
+-
+memory.h
+-
+sys/epoll.h
 -
 
 /Users/alchemystar/mycode/hero/net/network.h

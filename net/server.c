@@ -1,7 +1,9 @@
 #include "server.h"
 #include "basic.h"
 #include "network.h"
+#ifdef HERO_USE_EPOLL
 #include <sys/sysinfo.h>
+#endif
 
 void process_connection(int sockfd,struct sockaddr_in* sockaddr_ptr);
 
@@ -34,19 +36,23 @@ void start_server(){
         fprintf(stdout,"listen error!\n");
         exit(1);
     }
-    init_reactor(sockfd_server,get_nprocs());
-    // while(1){
-    //     printf("waiting for new connection...");
-    //     struct sockaddr_in* s_addr_client = mem_alloc(sizeof(struct sockaddr_in));
-    //           int client_length = sizeof(*s_addr_client);
-    //     sockfd = accept(sockfd_server,(struct sockaddr_ *)(s_addr_client),(socklen_t *)&(client_length));
-    //     if(sockfd == -1){
-    //         printf("Accept error!\n");
-    //         continue;
-    //     }
-    //     printf("A new connection occurs\n");
-    //     process_connection(sockfd,(struct sockaddr_in*)(&s_addr_client));
-    // }
+    #ifdef HERO_USE_EPOLL
+        init_reactor(sockfd_server,get_nprocs());
+    #endif
+    #ifndef HERO_USE_EPOLL
+    while(1){
+        printf("waiting for new connection...");
+        struct sockaddr_in* s_addr_client = mem_alloc(sizeof(struct sockaddr_in));
+              int client_length = sizeof(*s_addr_client);
+        sockfd = accept(sockfd_server,(struct sockaddr_ *)(s_addr_client),(socklen_t *)&(client_length));
+        if(sockfd == -1){
+            printf("Accept error!\n");
+            continue;
+        }
+        printf("A new connection occurs\n");
+        process_connection(sockfd,(struct sockaddr_in*)(&s_addr_client));
+    }
+     #endif
 }
 
 

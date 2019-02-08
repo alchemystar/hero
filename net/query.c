@@ -7,14 +7,10 @@
 #include "network.h"
 #include "sql_error_code.h"
 
-int handle_com_query(front_conn* front);
-
-int write_unkown_error_message(front_conn* front);
-
-int handle_command(front_conn* front){
-    unsigned char* header_buffer = front->conn.header;
-    int sockfd = front->conn.sockfd;
-    mem_pool* pool = front->conn.pool;
+int handle_mysql_command(front_conn* front){
+    unsigned char* header_buffer = front->conn->header;
+    int sockfd = front->conn->sockfd;
+    mem_pool* pool = front->conn->request_pool;
     // 读取4个字节(MySQL Header Len)
     if(!readn(sockfd,MYSQL_HEADER_LEN,header_buffer)){
         printf("read handshake error");
@@ -28,9 +24,9 @@ int handle_command(front_conn* front){
         return FALSE;
     }
     // 读取packet_id
-    front->conn.packet_id = header_buffer[PACKET_ID_POS];
+    front->conn->packet_id = header_buffer[PACKET_ID_POS];
     // 使用front conn的buffer
-    packet_buffer* pb = get_conn_read_buffer(&(front->conn),length);
+    packet_buffer* pb = get_conn_read_buffer_with_size(front->conn,length);
     if( pb == NULL) {
         return FALSE;
     }
@@ -58,7 +54,7 @@ int handle_command(front_conn* front){
 }
 
 int handle_com_query(front_conn* front){
-    char* sql = read_string(front->conn.read_buffer,front->conn.pool);
+    char* sql = read_string(front->conn->read_buffer,front->conn->request_pool);
     int rs = server_parse_sql(sql);
     switch(rs & 0xff){
         case SHOW:
@@ -66,6 +62,11 @@ int handle_com_query(front_conn* front){
         case SELECT:
             printf("it's select\n");
             return handle_select(front,sql,rs >> 8);    
+        case KILL_QUERY:
+            printf("it's kill\n");
+            // todo kill backend的连接
+            // return false,上层关闭连接
+            return FALSE;    
         default:
             break;    
     }
@@ -74,15 +75,15 @@ int handle_com_query(front_conn* front){
 
 // todo default error packet 不再n申请内存
 int write_unkown_error_message(front_conn* front){
-    int sockfd = front->conn.sockfd;
-    mem_pool* pool = front->conn.pool;
+    int sockfd = front->conn->sockfd;
+    mem_pool* pool = front->conn->request_pool;
     printf("unknown command\n");
     error_packet* error = get_error_packet(pool);
     error->message = "Unknown command";
     error->header.packet_length=caculate_error_packet_size(error);
-    error->header.packet_id = front->conn.packet_id+1;
+    error->header.packet_id = front->conn->packet_id+1;
     error->error = ER_UNKNOWN_COM_ERROR;
-    packet_buffer* pb = get_conn_write_buffer(&front->conn);
+    packet_buffer* pb = get_conn_write_buffer(front->conn);
     if(pb == NULL){
         return NULL;
     }

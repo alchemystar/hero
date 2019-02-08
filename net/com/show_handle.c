@@ -18,7 +18,6 @@
 #define DEFAULT_DATABASE "hero";
 #define SHOW_DATA_BASE_FIELDS_LENGTH 1
 
-
 int show_parse_sql(char* sql,int offset,int length);
 
 int show_database_check(char* sql,int offset,int length);
@@ -123,9 +122,9 @@ int show_tables_check(char* sql,int offset,int length){
 }
 
 int write_databases(front_conn* front){
-    int sockfd = front->conn.sockfd;
-    mem_pool* pool = front->conn.pool;
-    packet_buffer* pb = get_conn_write_buffer(&(front->conn));
+    int sockfd = front->conn->sockfd;
+    mem_pool* pool = front->conn->request_pool;
+    packet_buffer* pb = get_conn_write_buffer(front->conn);
     if(pb == NULL){
         return NULL;
     }
@@ -179,8 +178,7 @@ int write_databases(front_conn* front){
     if(!write_eof(pb,eof)){
         goto error_process;
     }
-    writen(sockfd,pb->pos,pb->buffer);
-    reset_packet_buffer(pb);
+    write_nonblock(front->conn);
     return TRUE;
 error_process:
     reset_packet_buffer(pb);
@@ -188,9 +186,9 @@ error_process:
 }
 
 int write_tables(front_conn* front){
-    int sockfd = front->conn.sockfd;
-    mem_pool* pool = front->conn.pool;
-    packet_buffer* pb = get_conn_write_buffer(&(front->conn));
+    int sockfd = front->conn->sockfd;
+    mem_pool* pool = front->conn->request_pool;
+    packet_buffer* pb = get_conn_write_buffer(front->conn);
     if(pb == NULL){
         return NULL;
     }
@@ -245,8 +243,7 @@ int write_tables(front_conn* front){
     if(!write_eof(pb,eof)){
         goto error_process;
     }
-    writen(sockfd,pb->pos,pb->buffer);
-    reset_packet_buffer(pb);
+    write_nonblock(front->conn);
     return TRUE;
 error_process:
     reset_packet_buffer(pb);

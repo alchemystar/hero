@@ -1,11 +1,9 @@
 #include "hero_poll.h"
-#include <sys/epoll.h>
 #include <sys/errno.h>
 #include "hero_worker.h"
 
 // reactor模式创建
 // reactor的内存一直存在，暂时没必要删除,只有在出错时刻删除
-// worker_count用linux proc文件读取获得
 int init_reactor(int listen_fd,int worker_count){
     mem_pool* pool = (mem_pool*)mem_pool_create(DEFAULT_MEM_POOL_SIZE);
     Reactor *reactor = mem_alloc(sizeof(Reactor));
@@ -47,14 +45,16 @@ int init_reactor(int listen_fd,int worker_count){
                     if (0 > (client_fd = accept(listen_fd, (struct sockaddr *) &client_addr, &client_len))) {
                         continue;
                     }
-                    connection *conn = init_conn_ and_mempoll(client_fd,&client_addr);
+                    connection *conn = init_conn_and_mempool(client_fd,&client_addr,IS_FRONT_CONN);
                     if(conn == NULL){
+                        // 关闭对应的client_fd
+                        close(client_fd);
                         continue;
                     }
                     // 首先是触发可写事件,因为是三次握手之后，主动发起请求
                     if(-1 == poll_add_event(reactor->worker_fd_arrays[(current_worker++)%(reactor->worker_count)],conn->sockfd,EPOLLOUT,conn)){
                         // 添加失败，则close掉连接
-                        release_conn_and_mempoll(conn);
+                        release_conn_and_mempool(conn);
                     }
                 }
             }
@@ -78,20 +78,4 @@ error_process:
     mem_free(reactor);
     mem_pool_free(pool);
     return FALSE;
-}
-
-// todo epoll add event function
-int poll_add_event(int epfd,int epifd,int mask,void* ptr){
-    // 栈上变量，传递给kernel,会复制
-    struct epoll_event event = {0};
-    // 不需要加EPOLLHUP或EPOLLERR,因为kernel会自动加上
-    event.events = mask;
-    if(ptr == NULL){
-        // 此种情况在listen fd时候出现
-        event.data.fd = epifd;
-    }else{
-        event.data.ptr = ptr; 
-    }
-    printf("get one connection,epifd=%d\n",epifd);
-    return epoll_ctl(epfd,EPOLL_CTL_ADD,epifd,&event);
 }

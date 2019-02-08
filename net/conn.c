@@ -9,32 +9,52 @@
 atomic_int front_conn_id = 0 ;
 atomic_int back_conn_id = 0;
 
-connection* init_conn_and_mempoll(int sockfd,struct sockaddr_in* addr){
+connection* init_conn_and_mempool(int sockfd,struct sockaddr_in* addr,int front_or_back){
     if(FALSE == set_fd_flags(sockfd)){
         return NULL;
     }
     mem_pool* pool = mem_pool_create(DEFAULT_MEM_POOL_SIZE);
-    connection *conn_addr = (connection*)mem_pool_alloc(sizeof(connection),pool);
-    if(FALSE == init_conn(conn_addr,sockfd,addr,pool)){
-        return NULL;    
+    if(pool == NULL){
+        return NULL;
     }
+    connection *conn_addr = (connection*)mem_pool_alloc(sizeof(connection),pool);
+    if(conn_addr == NULL){
+        goto error_process;
+    }
+    if(FALSE == init_conn(conn_addr,sockfd,addr,pool)){
+        goto error_process;
+    }
+    conn_addr->is_front_or_back = IS_FRONT_CONN;
     return conn_addr;
+error_process:
+    mem_pool_free(pool);
+    return NULL;
 }
 
 // release conn 直接就release其对应的内存池以及不从mem_poll分配的buffer
-void release_conn_and_mempoll(connection* conn){
+void release_conn_and_mempool(connection* conn){
+    printf("connection close,sockfd=%d\n",conn->sockfd);
     close(conn->sockfd);
     free_packet_buffer(conn->read_buffer);
     free_packet_buffer(conn->write_buffer);
-    mem_pool_free(conn->pool);
+    if(conn->request_pool != NULL){
+        mem_pool_free(conn->request_pool);
+    }
+    // meta_pool必须在最后释放
+    if(conn->meta_pool != NULL){
+        mem_pool_free(conn->meta_pool);
+    }
 }
-
-
 
 int init_conn(connection* conn,int sockfd,struct sockaddr_in* addr,mem_pool* pool) {
     conn->sockfd = sockfd;
     conn->addr = addr;
-    conn->pool = pool;
+    conn->meta_pool = pool;
+    // 请求内存池，在每次请求过后，重置
+    conn->request_pool = mem_pool_create(DEFAULT_MEM_POOL_SIZE);
+    if(conn->request_pool == NULL){
+        return FALSE;
+    }
     socklen_t sock_len = (socklen_t)sizeof(*addr);
     int sock_ret = getsockname(sockfd,addr,&sock_len);
     if(sock_ret != 0){
@@ -74,12 +94,21 @@ int init_conn(connection* conn,int sockfd,struct sockaddr_in* addr,mem_pool* poo
         printf("get time of day error");
         goto error_process;
     }   
+    conn->packet_id = 0;
+    conn->packet_length = 0;
     conn->query_count = 0;
+    conn->front = NULL;
+    conn->back = NULL;
+    conn->header_read_len = 0;
+    conn->body_read_len = 0;
+    conn->epfd = 0;
+    conn->reading_or_writing = CONN_WRITING;
     return TRUE;
 error_process:
     if(close(sockfd) != 0){
         printf("close sockfd error,sockfd=%d",sockfd);
     }
+    mem_pool_free(conn->request_pool); 
     free_packet_buffer(conn->read_buffer);
     free_packet_buffer(conn->write_buffer);
     return FALSE;
@@ -87,8 +116,19 @@ error_process:
 }
 
 // todo 在适当时机调整一下read_buffer,不至于过大
-packet_buffer* get_conn_read_buffer(connection* conn,int size){
+packet_buffer* get_conn_read_buffer_with_size(connection* conn,int size){
     packet_buffer* pb = conn->read_buffer;
+    if(size > pb->length) {
+        if(!expand(pb,size)){
+            return NULL;
+        }
+    }
+    return pb;
+}
+
+// todo 在适当时机调整一下write_buffer,不至于过大
+packet_buffer* get_conn_write_buffer_with_size(connection* conn,int size){
+    packet_buffer* pb = conn->write_buffer;
     if(size > pb->length) {
         if(!expand(pb,size)){
             return NULL;
@@ -99,37 +139,77 @@ packet_buffer* get_conn_read_buffer(connection* conn,int size){
 
 
 void free_front_conn(front_conn* front){
-    free_packet_buffer(front->conn.read_buffer);
-    free_packet_buffer(front->conn.write_buffer);
+    free_packet_buffer(front->conn->read_buffer);
+    free_packet_buffer(front->conn->write_buffer);
     // front_conn本身由mem_pool free
 }
 
-inline int set_fd_flags(int fd) {
 
-    if (fd < 0) {
-        return FALSE;
-    }
-    int opts;
-    if (0 > (opts = fcntl(fd, F_GETFL))) {
-        return FALSE;
-    }
-    // 这边置为非阻塞
-    opts = opts | O_NONBLOCK;
-    if (0 > fcntl(fd, F_SETFL, opts)) {
-        return FALSE;
-    }
-    struct linger li;
-    memset(&li, 0, sizeof(li));
-    // close时候丢弃buffer,同时发送rst,避免time_wait状态
-    li.l_onoff = 1;
-    li.l_linger = 0;
+void reset_conn_from_one_request(connection* conn){
+    // 重置connection的request_pool
+    mem_pool_reset(conn->request_pool);
+    // 重置connection的read_buffer
+    reset_packet_buffer(conn->read_buffer);
+    // 重置connection的write_buffer
+    reset_packet_buffer(conn->write_buffer);
+    // 重置connection的读取属性
+    conn->packet_id = 0;
+    conn->packet_length = 0;
+    conn->header_read_len = 0;
+    conn->body_read_len = 0;
+}
 
-    if (0 != setsockopt(fd, SOL_SOCKET, SO_LINGER, (const char*) &li, sizeof(li))) {
+// todo epoll add event function
+int poll_add_event(int epfd,int epifd,int mask,void* ptr){
+    // 栈上变量，传递给kernel,会复制
+    struct epoll_event event = {0};
+    // 不需要加EPOLLHUP或EPOLLERR,因为kernel会自动加上
+    event.events = mask;
+    if(ptr == NULL){
+        // 此种情况在listen fd时候出现
+        event.data.fd = epifd;
+    }else{
+        // ptr 其实是connection
+        ((connection*)ptr)->epfd = epfd;
+        event.data.ptr = ptr; 
+    }
+    return epoll_ctl(epfd,EPOLL_CTL_ADD,epifd,&event);
+}
+
+int poll_mod_event(int epfd,int epifd,int mask,void* ptr){
+    // 栈上变量，传递给kernel,会复制
+    struct epoll_event event = {0};
+    // 不需要加EPOLLHUP或EPOLLERR,因为kernel会自动加上
+    event.events = mask;
+    if(ptr == NULL){
+        // 此种情况在listen fd时候出现
+        event.data.fd = epifd;
+    }else{
+        event.data.ptr = ptr; 
+    }
+    return epoll_ctl(epfd,EPOLL_CTL_MOD,epifd,&event);
+}
+
+int enable_conn_write_and_disable_read(connection* conn){
+    if(CONN_WRITING == conn->reading_or_writing){
+        return TRUE;
+    }
+    printf("enable_conn_write_and_disable_read\n");
+    if(-1 == poll_mod_event(conn->epfd,conn->sockfd,EPOLLOUT,conn)){
         return FALSE;
     }
-    int var = 1;
-    if (0 != setsockopt(fd, IPPROTO_TCP, TCP_NODELAY, &var, sizeof(var))) {
-        return FALSE;
-    }
+    conn->reading_or_writing = CONN_WRITING;
     return TRUE;
+}
+
+int enable_conn_read_and_disable_write(connection* conn){
+    if(CONN_READING == conn->reading_or_writing){
+        return TRUE;
+    }
+    printf("enable_conn_read_and_disable_write\n");
+    if(-1 == poll_mod_event(conn->epfd,conn->sockfd,EPOLLIN,conn)){
+        return FALSE;
+    }
+    conn->reading_or_writing = CONN_READING;
+    return TRUE;    
 }

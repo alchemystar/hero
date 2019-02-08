@@ -31,6 +31,7 @@ net/CMakeFiles/net.dir/hero_worker.c.o: ../net/conn.h
 net/CMakeFiles/net.dir/hero_worker.c.o: ../net/hero_poll.h
 net/CMakeFiles/net.dir/hero_worker.c.o: ../net/hero_worker.c
 net/CMakeFiles/net.dir/hero_worker.c.o: ../net/hero_worker.h
+net/CMakeFiles/net.dir/hero_worker.c.o: ../net/network.h
 net/CMakeFiles/net.dir/hero_worker.c.o: ../net/proto/list.h
 net/CMakeFiles/net.dir/hero_worker.c.o: ../net/proto/packet.h
 

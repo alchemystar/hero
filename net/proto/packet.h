@@ -8,6 +8,8 @@
 #define SQL_STATE_MARKER '#'
 
 #define MYSQL_HEADER_LEN 4
+// 最大长度1M
+#define MYSQL_PACKET_MAX_LENGTH 1024 * 1024
 #define MYSQL_HEADER_END_POS 3
 #define PACKET_ID_POS 3
 #define UTF8_CHAR_INDEX 83
@@ -18,11 +20,6 @@
 #define COM_QUERY 3
 
 #define DEFAULT_PB_SIZE 512
-
-// 定义to_string的函数指针
-typedef char*(*to_string)();
-// 定义读取内存的操作
-typedef void(*read)(unsigned char* data);
 
 // todo以后考虑对齐(align)问题
 // 这边typedef就可以不用写成struct mysql_packet的形式

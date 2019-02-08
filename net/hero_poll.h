@@ -6,6 +6,7 @@
 #define EPOLL_MAX_EVENTS 1024
 #define DEFAULT_EPOLL_WAIT_TIMEOUT 500
 
+#ifdef HERO_USE_EPOLL
 typedef struct Reactor{
     // accept fd
     int master_fd;
@@ -17,7 +18,7 @@ typedef struct Reactor{
     struct epoll_event *events;
 }Reactor;
 
-connection* init_conn_and_mempoll(int sockfd,struct sockaddr_in* addr);
 int init_reactor(int listen_fd,int worker_count);
-int poll_add_event(int epfd,int epifd,int mask,void* ptr);
+
+#endif
 #endif

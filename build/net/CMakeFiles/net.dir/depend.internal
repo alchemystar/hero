@@ -32,6 +32,7 @@ net/CMakeFiles/net.dir/hero_worker.c.o
  /Users/alchemystar/mycode/hero/net/hero_poll.h
  /Users/alchemystar/mycode/hero/net/hero_worker.c
  /Users/alchemystar/mycode/hero/net/hero_worker.h
+ /Users/alchemystar/mycode/hero/net/network.h
  /Users/alchemystar/mycode/hero/net/proto/list.h
  /Users/alchemystar/mycode/hero/net/proto/packet.h
 net/CMakeFiles/net.dir/network.c.o

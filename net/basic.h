@@ -3,9 +3,12 @@
 #include <sys/time.h>
 #include <stdio.h>
 #include <sys/errno.h>
+#include <unistd.h>
 
 #define DEFAULT_MEM_POOL_SIZE 512
 #define HERO_DEBUG
+// 是否使用epoll进行编译
+#define HERO_USE_EPOLL
 #define TRUE 1
 #define FALSE 0
 
@@ -43,5 +46,6 @@ void* mem_alloc(int size);
 void mem_free(void* address);
 void* mem_realloc(void* ptr ,int size);
 void init_signal_handlers();
+void mem_pool_reset(mem_pool* pool);
 
 #endif

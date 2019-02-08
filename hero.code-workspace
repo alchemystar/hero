@@ -42,7 +42,10 @@
 			"errno.h": "c",
 			"hero_worker.h": "c",
 			"stdlib.h": "c",
-			"pthread.h": "c"
+			"pthread.h": "c",
+			"fcntl.h": "c",
+			"unistd.h": "c",
+			"memory.h": "c"
 		}
 	}
 }

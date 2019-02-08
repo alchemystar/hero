@@ -60,15 +60,15 @@ include net/com/CMakeFiles/com.dir/flags.make
 net/com/CMakeFiles/com.dir/handle_util.c.o: net/com/CMakeFiles/com.dir/flags.make
 net/com/CMakeFiles/com.dir/handle_util.c.o: ../net/com/handle_util.c
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/Users/alchemystar/mycode/hero/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_1) "Building C object net/com/CMakeFiles/com.dir/handle_util.c.o"
-	cd /Users/alchemystar/mycode/hero/build/net/com && /Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/cc $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -o CMakeFiles/com.dir/handle_util.c.o   -c /Users/alchemystar/mycode/hero/net/com/handle_util.c
+	cd /Users/alchemystar/mycode/hero/build/net/com && /usr/bin/clang $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -o CMakeFiles/com.dir/handle_util.c.o   -c /Users/alchemystar/mycode/hero/net/com/handle_util.c
 
 net/com/CMakeFiles/com.dir/handle_util.c.i: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing C source to CMakeFiles/com.dir/handle_util.c.i"
-	cd /Users/alchemystar/mycode/hero/build/net/com && /Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/cc $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -E /Users/alchemystar/mycode/hero/net/com/handle_util.c > CMakeFiles/com.dir/handle_util.c.i
+	cd /Users/alchemystar/mycode/hero/build/net/com && /usr/bin/clang $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -E /Users/alchemystar/mycode/hero/net/com/handle_util.c > CMakeFiles/com.dir/handle_util.c.i
 
 net/com/CMakeFiles/com.dir/handle_util.c.s: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling C source to assembly CMakeFiles/com.dir/handle_util.c.s"
-	cd /Users/alchemystar/mycode/hero/build/net/com && /Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/cc $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -S /Users/alchemystar/mycode/hero/net/com/handle_util.c -o CMakeFiles/com.dir/handle_util.c.s
+	cd /Users/alchemystar/mycode/hero/build/net/com && /usr/bin/clang $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -S /Users/alchemystar/mycode/hero/net/com/handle_util.c -o CMakeFiles/com.dir/handle_util.c.s
 
 net/com/CMakeFiles/com.dir/handle_util.c.o.requires:
 
@@ -84,15 +84,15 @@ net/com/CMakeFiles/com.dir/handle_util.c.o.provides.build: net/com/CMakeFiles/co
 net/com/CMakeFiles/com.dir/select_handle.c.o: net/com/CMakeFiles/com.dir/flags.make
 net/com/CMakeFiles/com.dir/select_handle.c.o: ../net/com/select_handle.c
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/Users/alchemystar/mycode/hero/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_2) "Building C object net/com/CMakeFiles/com.dir/select_handle.c.o"
-	cd /Users/alchemystar/mycode/hero/build/net/com && /Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/cc $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -o CMakeFiles/com.dir/select_handle.c.o   -c /Users/alchemystar/mycode/hero/net/com/select_handle.c
+	cd /Users/alchemystar/mycode/hero/build/net/com && /usr/bin/clang $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -o CMakeFiles/com.dir/select_handle.c.o   -c /Users/alchemystar/mycode/hero/net/com/select_handle.c
 
 net/com/CMakeFiles/com.dir/select_handle.c.i: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing C source to CMakeFiles/com.dir/select_handle.c.i"
-	cd /Users/alchemystar/mycode/hero/build/net/com && /Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/cc $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -E /Users/alchemystar/mycode/hero/net/com/select_handle.c > CMakeFiles/com.dir/select_handle.c.i
+	cd /Users/alchemystar/mycode/hero/build/net/com && /usr/bin/clang $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -E /Users/alchemystar/mycode/hero/net/com/select_handle.c > CMakeFiles/com.dir/select_handle.c.i
 
 net/com/CMakeFiles/com.dir/select_handle.c.s: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling C source to assembly CMakeFiles/com.dir/select_handle.c.s"
-	cd /Users/alchemystar/mycode/hero/build/net/com && /Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/cc $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -S /Users/alchemystar/mycode/hero/net/com/select_handle.c -o CMakeFiles/com.dir/select_handle.c.s
+	cd /Users/alchemystar/mycode/hero/build/net/com && /usr/bin/clang $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -S /Users/alchemystar/mycode/hero/net/com/select_handle.c -o CMakeFiles/com.dir/select_handle.c.s
 
 net/com/CMakeFiles/com.dir/select_handle.c.o.requires:
 
@@ -108,15 +108,15 @@ net/com/CMakeFiles/com.dir/select_handle.c.o.provides.build: net/com/CMakeFiles/
 net/com/CMakeFiles/com.dir/show_handle.c.o: net/com/CMakeFiles/com.dir/flags.make
 net/com/CMakeFiles/com.dir/show_handle.c.o: ../net/com/show_handle.c
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/Users/alchemystar/mycode/hero/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_3) "Building C object net/com/CMakeFiles/com.dir/show_handle.c.o"
-	cd /Users/alchemystar/mycode/hero/build/net/com && /Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/cc $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -o CMakeFiles/com.dir/show_handle.c.o   -c /Users/alchemystar/mycode/hero/net/com/show_handle.c
+	cd /Users/alchemystar/mycode/hero/build/net/com && /usr/bin/clang $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -o CMakeFiles/com.dir/show_handle.c.o   -c /Users/alchemystar/mycode/hero/net/com/show_handle.c
 
 net/com/CMakeFiles/com.dir/show_handle.c.i: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing C source to CMakeFiles/com.dir/show_handle.c.i"
-	cd /Users/alchemystar/mycode/hero/build/net/com && /Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/cc $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -E /Users/alchemystar/mycode/hero/net/com/show_handle.c > CMakeFiles/com.dir/show_handle.c.i
+	cd /Users/alchemystar/mycode/hero/build/net/com && /usr/bin/clang $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -E /Users/alchemystar/mycode/hero/net/com/show_handle.c > CMakeFiles/com.dir/show_handle.c.i
 
 net/com/CMakeFiles/com.dir/show_handle.c.s: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling C source to assembly CMakeFiles/com.dir/show_handle.c.s"
-	cd /Users/alchemystar/mycode/hero/build/net/com && /Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/cc $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -S /Users/alchemystar/mycode/hero/net/com/show_handle.c -o CMakeFiles/com.dir/show_handle.c.s
+	cd /Users/alchemystar/mycode/hero/build/net/com && /usr/bin/clang $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -S /Users/alchemystar/mycode/hero/net/com/show_handle.c -o CMakeFiles/com.dir/show_handle.c.s
 
 net/com/CMakeFiles/com.dir/show_handle.c.o.requires:
 

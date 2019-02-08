@@ -5,12 +5,13 @@
 typedef struct _packet_buffer{
     int pos;
     int read_limit; // for read,write则无此限制
+    int write_index; // for write
     int length;
     unsigned char* buffer;
 }packet_buffer;
 
 // 当前所有函数都是以buffer开头进行读取
-
+int read_byte(packet_buffer* pb);
 int read_ub2(packet_buffer* pb);
 int read_ub3(packet_buffer* pb);
 int read_packet_length(unsigned char* buffer);
