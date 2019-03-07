@@ -1,2 +1,30 @@
 用C语言写的dbproxy
 追求极致的性能
+用作对比的两个server的代码IO模型
+hero(c):epoll 水平触发
+proxy(java):java nio(内部也是epoll 水平触发)
+
+benchMark:
+服务器机器
+4核8G
+CPU主屏2399.996MHZ
+cache size:4096KB
+
+压测机器:
+16核64G,jmeter
+
+同样配置下,压测同一个简单的sql
+hero(c):3.6Wtps/s
+proxy(java):3.6Wtps/s
+tps基本没有差别,因为瓶颈是在网络上
+
+CPU消耗:
+hero(c):15% cpu
+proxy(java):10% cpu
+
+内存消耗:
+hero(c):48.3% * 8G 
+proxy(java):0.2% * 8G
+
+结论:
+对于IO瓶颈的情况,用java和C分别处理简单的组帧/解帧逻辑，C语言带来的微小收益并不能大幅度影响tps。
