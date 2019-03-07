@@ -19,12 +19,12 @@ proxy(java):3.6Wtps/s
 tps基本没有差别,因为瓶颈是在网络上
 
 CPU消耗:
-hero(c):15% cpu
-proxy(java):10% cpu
+hero(c):10% cpu
+proxy(java):15% cpu
 
 内存消耗:
-hero(c):48.3% * 8G 
-proxy(java):0.2% * 8G
+hero(c):0.2% * 8G
+proxy(java):48.3% * 8G 
 
 结论:
-对于IO瓶颈的情况,用java和C分别处理简单的组帧/解帧逻辑，C语言带来的微小收益并不能大幅度影响tps。
+对于IO瓶颈的情况,用java和C分别处理简单的组帧/解帧逻辑，C语言带来的微小收益并不能让tps有显著改善。
