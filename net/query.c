@@ -66,9 +66,10 @@ int handle_com_query(front_conn* front){
             printf("it's kill\n");
             // todo kill backend的连接
             // return false,上层关闭连接
-            return FALSE;    
+            return FALSE;       
         default:
-            break;    
+            printf("default return okay");
+            return write_okay(front->conn);
     }
     return TRUE;
 }

@@ -37,7 +37,9 @@ void start_server(){
         exit(1);
     }
     #ifdef HERO_USE_EPOLL
-        init_reactor(sockfd_server,get_nprocs());
+        // for docker 
+        // init_reactor(sockfd_server,8);
+       init_reactor(sockfd_server,get_nprocs());
     #endif
     #ifndef HERO_USE_EPOLL
     while(1){

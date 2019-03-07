@@ -24,6 +24,8 @@ int select_2_check(char* sql,int offset,int length);
 
 int write_version_comment(front_conn* front);
 
+int write_auto_increment(front_conn* front);
+
 int handle_select(front_conn* front,char* sql,int offset){
     int sockfd = front->conn->sockfd;
     mem_pool* pool = front->conn->request_pool;
@@ -32,6 +34,9 @@ int handle_select(front_conn* front,char* sql,int offset){
         case VERSION_COMMENT:
             printf("it's version_comment\n");
             return write_version_comment(front);
+        case AUTO_INCREMENT:
+            printf("it's auto increment\n");
+            return write_auto_increment(front);    
         default:
             return TRUE;   
     }
@@ -48,8 +53,9 @@ int select_parse_sql(char* sql,int offset,int length){
                 continue;
             case '/':
             case '#':
-                // i = parse comment
-                return OTHER;
+                printf("skip comment");
+                i = skip_comment(sql,i);
+                continue;
             case '@':
                 return select_2_check(sql,i,length);
             default:
@@ -71,6 +77,10 @@ int select_2_check(char* sql,int offset,int length){
                 case 'i':
                     // identify check
                     return OTHER;    
+                case 'S':
+                case 's':
+                    // todo session comment
+                    return AUTO_INCREMENT;    
                 default:
                     return OTHER;
             }
@@ -185,6 +195,73 @@ error_process:
     reset_packet_buffer(pb);
     return FALSE;    
 }
+
+// todo 这个auto increment应该交由后面的mysql去路由
+int write_auto_increment(front_conn* front){
+    int sockfd = front->conn->sockfd;
+    mem_pool* pool = front->conn->request_pool;
+    packet_buffer* pb = get_conn_write_buffer(front->conn);
+    if(pb == NULL){
+        return NULL;
+    }
+    int packet_id = 1;
+    // 发送result set header
+    result_set_header* header = get_result_set_header(pool);     
+    header->field_count = 1;
+    header->extra = 0;
+    int size = caculate_result_set_header_size(header);
+    if(header == NULL){
+        return NULL;
+    }     
+    header->header.packet_length = size;
+    header->header.packet_id = packet_id++;
+    // 参照kernel的错误处理方法
+    if(!write_result_set_header(pb,header)){
+        goto error_process;
+    }
+    // 发送fields
+    field_packet* field = get_field_packet(pool);
+    if(field == NULL){
+        goto error_process;
+    }
+    field->name = "@@session.auto_increment_increment";
+    field->header.packet_length = caculate_field_size(field);
+    field->header.packet_id = packet_id++;
+    if(!write_field(pb,field)){
+        goto error_process;
+    }
+    // 发送 eof
+    eof_packet* eof = get_eof_packet(pool);
+    if(eof == NULL){
+        goto error_process;
+    }
+    eof->header.packet_length = caculate_eof_size();
+    eof->header.packet_id = packet_id++;
+    if(!write_eof(pb,eof)){
+        goto error_process;
+    }
+    // 发送 row
+    row_packet* row = get_row_packet(pool);
+    row->field_count=1;
+    add_field_value_to_row(pool,row,"1",strlen("1"));
+    row->header.packet_length = caculate_row_size(row);
+    row->header.packet_id = packet_id++;
+    if(!write_row(pb,row)){
+        goto error_process;
+    }
+    // 发送last eof,只需要修改下packet_id
+    eof->header.packet_id = packet_id++;
+    if(!write_eof(pb,eof)){
+        goto error_process;
+    }
+    write_nonblock(front->conn);
+    return TRUE;
+error_process:
+    // 错误后提前清空buffer
+    reset_packet_buffer(pb);
+    return FALSE;      
+}
+
 
 int default_execute(int sockfd,char* sql,int offset,mem_pool* pool){
     

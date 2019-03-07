@@ -11,4 +11,8 @@ void hanlde_ready_write_connection(connection* conn);
 
 int write_nonblock(connection* conn);
 
+int write_auth_okay(connection* conn);
+
+int write_okay(connection* conn);
+
 #endif

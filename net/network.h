@@ -13,12 +13,14 @@
 #define MEMORY_EXHAUSTED 5
 
 #define AUTH_OKAY_SIZE 11
+#define OKAY_SIZE 11
 #define FILLER_SIZE 23
 
 // 全局变量extern
 extern unsigned char FILLER_HAND_SHAKE[];
 extern unsigned char AUTH_OKAY[];
 extern unsigned char FILLER[];
+extern unsigned char OKAY[];
 
 // 这边由于需要修改指针类型的result，所以需要双重指针
 int send_handshake(front_conn* front,hand_shake_packet** result);

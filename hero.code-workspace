@@ -45,7 +45,8 @@
 			"pthread.h": "c",
 			"fcntl.h": "c",
 			"unistd.h": "c",
-			"memory.h": "c"
+			"memory.h": "c",
+			"server_parse.h": "c"
 		}
 	}
 }

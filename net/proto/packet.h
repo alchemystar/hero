@@ -19,7 +19,37 @@
 #define COM_INIT_DB  2
 #define COM_QUERY 3
 
-#define DEFAULT_PB_SIZE 512
+// field type
+#define FIELD_TYPE_DECIMAL 0
+#define FIELD_TYPE_TINY 1
+#define FIELD_TYPE_SHORT 2
+#define FIELD_TYPE_LONG 3
+#define FIELD_TYPE_FLOAT 4
+#define FIELD_TYPE_DOUBLE 5
+#define FIELD_TYPE_NULL 6
+#define FIELD_TYPE_TIMESTAMP 7
+#define FIELD_TYPE_LONGLONG 8
+#define FIELD_TYPE_INT24 9
+#define FIELD_TYPE_DATE 10
+#define FIELD_TYPE_TIME 11
+#define FIELD_TYPE_DATETIME 12
+#define FIELD_TYPE_YEAR 13
+#define FIELD_TYPE_NEWDATE 14
+#define FIELD_TYPE_VARCHAR 15
+#define FIELD_TYPE_BIT 16
+#define FIELD_TYPE_NEW_DECIMAL 246
+#define FIELD_TYPE_ENUM 247
+#define FIELD_TYPE_SET 248
+#define FIELD_TYPE_TINY_BLOB 249
+#define FIELD_TYPE_MEDIUM_BLOB 250
+#define FIELD_TYPE_LONG_BLOB 251
+#define FIELD_TYPE_BLOB 252
+#define FIELD_TYPE_VAR_STRING 253
+#define FIELD_TYPE_STRING 254
+#define FIELD_TYPE_GEOMETRY 255
+
+// todo 改小点
+#define DEFAULT_PB_SIZE 4096
 
 // todo以后考虑对齐(align)问题
 // 这边typedef就可以不用写成struct mysql_packet的形式
@@ -143,6 +173,7 @@ hand_shake_packet* get_handshake_packet(mem_pool* pool);
 ok_packet* get_ok_packet(mem_pool* pool);
 result_set_header* get_result_set_header(mem_pool* pool);
 field_packet* get_field_packet(mem_pool* pool);
+field_packet* get_field_packet_with_type(mem_pool* pool,int type);
 eof_packet* get_eof_packet(mem_pool* pool);
 row_packet* get_row_packet(mem_pool* pool);
 error_packet* get_error_packet(mem_pool* pool);

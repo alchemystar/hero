@@ -4,6 +4,7 @@
 // 现在cmake里面link了tcmalloc=>底层非ptmalloc而是tcmalloc
 #include <stdlib.h>
 #include <signal.h>
+#include <memory.h>
 // if use ctime,use ctime_r!
 
 // todo 需要参照<<c interface and implement>> 将mem_pool自身内存也纳入其buffer中
@@ -70,6 +71,8 @@ void* mem_pool_alloc_ignore_check(int size,mem_pool* pool){
              // 有,直接返回
              void* ptr = entry->buffer + entry->pos;
              entry->pos +=size;
+            // 以0填充
+             memset(ptr, 0, size);
              return ptr;
         }
     }
@@ -85,6 +88,8 @@ void* mem_pool_alloc_ignore_check(int size,mem_pool* pool){
         last_entry->next = mem_pool;
         void* ptr = mem_pool->buffer + mem_pool->pos;
         mem_pool->pos += size;
+        // 以0填充
+        memset(ptr, 0, size);
         return ptr;
     }
 }

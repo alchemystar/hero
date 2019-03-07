@@ -20,7 +20,9 @@
 #define KILL_QUERY 16
 #define CREATE_DATABASE 17
 #define RELOAD 18
+#define AUTO_INCREMENT 19
 
 int server_parse_sql(char* sql);
+int skip_comment(char* sql,int offset);
 
 #endif

@@ -45,6 +45,7 @@ int init_reactor(int listen_fd,int worker_count){
                     if (0 > (client_fd = accept(listen_fd, (struct sockaddr *) &client_addr, &client_len))) {
                         continue;
                     }
+                    printf("created one new connection\n");
                     connection *conn = init_conn_and_mempool(client_fd,&client_addr,IS_FRONT_CONN);
                     if(conn == NULL){
                         // 关闭对应的client_fd

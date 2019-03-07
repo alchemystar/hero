@@ -5,7 +5,7 @@
 #include <sys/errno.h>
 #include <unistd.h>
 
-#define DEFAULT_MEM_POOL_SIZE 512
+#define DEFAULT_MEM_POOL_SIZE 4096
 #define HERO_DEBUG
 // 是否使用epoll进行编译
 #define HERO_USE_EPOLL

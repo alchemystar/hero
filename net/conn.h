@@ -157,7 +157,15 @@ inline static int set_fd_flags(int fd) {
     // close时候丢弃buffer,同时发送rst,避免time_wait状态
     li.l_onoff = 1;
     li.l_linger = 0;
-
+    int snd_size = 1024 * 16 * 2;  
+    int recv_size = 1024 * 16 * 2; 
+    // 设置读写buffer
+    if (0 != setsockopt(fd, SOL_SOCKET, SO_SNDBUF, &snd_size, sizeof(snd_size))){
+        return FALSE;
+    }
+    if(0 !=  setsockopt(fd, SOL_SOCKET, SO_RCVBUF, &recv_size, sizeof(recv_size))){
+        return FALSE;
+    }
     if (0 != setsockopt(fd, SOL_SOCKET, SO_LINGER, (const char*) &li, sizeof(li))) {
         return FALSE;
     }

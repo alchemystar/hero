@@ -8,6 +8,8 @@
 #include "query.h"
 
 // 多进程方案待完善，当前先用多线程
+// linux kernerl 2.6.32已经在epoll_wait里面加入了WQ_FLAG_EXCLUSIVE选项，同时，我们这边使用了reuseport
+// 所以不必担心惊群问题，但是可能会出现进程负载不均衡问题,多进程待调研负载均衡
 
 typedef struct _hero_thread_info {
     int worker_fd;
@@ -115,18 +117,22 @@ void handle_command(connection* conn) {
         release_conn_and_mempool(conn);
         return;  
     }
-    printf("command_type=%d\n",command_type);
+    // printf("command_type=%d\n",command_type);
     switch(command_type){
         case COM_QUIT:
             release_conn_and_mempool(conn);
             break;
-        case COM_QUERY:    
+        case COM_QUERY:  
 	        if(FALSE == handle_com_query(conn->front)){
 	            release_conn_and_mempool(conn);
 	            return;                        
 	        }
             break;
         default:
+            if(FALSE == write_okay(conn)){
+                release_conn_and_mempool(conn);
+	            return;
+            }
             break;    
     }
 }
@@ -149,10 +155,20 @@ int handle_front_auth(connection* conn){
     return write_nonblock(conn);
 }
 
+int write_auth_okay(connection* conn){
+    write_bytes(conn->write_buffer,AUTH_OKAY,AUTH_OKAY_SIZE);
+    return write_nonblock(conn);
+}
+
+int write_okay(connection* conn){
+    write_bytes(conn->write_buffer,OKAY,OKAY_SIZE);
+    return write_nonblock(conn);
+}
+
 void hanlde_ready_write_connection(connection* conn){
     if(conn->is_front_or_back == IS_FRONT_CONN){
         if(conn->front == NULL){
-            // 初始化front connection,以0填充
+            // 初始化front connection,注意这边并不是以0填充的
             front_conn* front = (front_conn*) mem_pool_alloc(sizeof(front_conn),conn->meta_pool);
             front->conn = conn;
             conn->front = front;
@@ -173,7 +189,7 @@ void hanlde_ready_write_connection(connection* conn){
                 printf("state is %d \n",front->auth_state);
             }
         }else{
-           printf("write something\b");
+           printf("write something \b");
            if(FALSE == write_nonblock(conn)){
                release_conn_and_mempool(conn);
            }
@@ -215,7 +231,7 @@ int write_nonblock(connection* conn){
     int epfd = conn->epfd;
     // 剩余数据量
     size_t nleft=conn->write_buffer->pos - conn->write_buffer->write_index;
-    printf("nleft = %d\n",nleft);
+    // printf("nleft = %d\n",nleft);
     ssize_t nwritten=0;
     unsigned char* ptr = conn->write_buffer->buffer;
     if((nwritten = write(conn->sockfd,ptr,nleft)) <= 0){
@@ -226,7 +242,7 @@ int write_nonblock(connection* conn){
             return FALSE;
         }        
     }
-    printf("write bytes = %d\n",nwritten);
+    // printf("write bytes = %d\n",nwritten);
     conn->write_buffer->write_index += nwritten;
     nleft -= nwritten;
     if(nleft == 0){

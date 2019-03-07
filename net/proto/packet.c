@@ -94,6 +94,10 @@ unsigned char* random_seed(int size,mem_pool* pool){
 }
 
 field_packet* get_field_packet(mem_pool* pool){
+    return get_field_packet_with_type(pool,FIELD_TYPE_VAR_STRING);
+}
+
+field_packet* get_field_packet_with_type(mem_pool* pool,int type){
     field_packet* field = (field_packet*)mem_pool_alloc(sizeof(field_packet),pool);
     if(field == NULL){
         return NULL;
@@ -106,7 +110,7 @@ field_packet* get_field_packet(mem_pool* pool){
 	field->org_name=NULL;
     field->charset_index=0;
     field->length=0;
-    field->type=0;
+    field->type=type;
     field->flags=0;
     field->decimals=0;
     field->definition=NULL;
@@ -291,6 +295,9 @@ int write_eof(packet_buffer* pb,eof_packet* eof){
 }
 
 int write_row(packet_buffer* pb,row_packet* row){
+    if(row == NULL){
+        return FALSE;
+    }
     if(!write_UB3(pb,row->header.packet_length)){
         return FALSE;
     }

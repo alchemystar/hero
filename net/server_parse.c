@@ -1,5 +1,6 @@
 #include "server_parse.h"
 #include <string.h>
+#include <stdio.h>
 
 int s_check(char* sql,int offset,int length);
 int se_check(char* sql,int offset,int length);
@@ -8,7 +9,7 @@ int show_check(char* sql,int offset,int length);
 int kill_check(char* sql,int offset,int length);
 
 int server_parse_sql(char* sql){
-    printf("sql = %s\n",sql);
+    // printf("sql = %s\n",sql);
     int length = strlen(sql);
     for(int i=0 ; i < length ; i++){
         switch(sql[i]){
@@ -20,6 +21,7 @@ int server_parse_sql(char* sql){
             case '/':
             case '#':
                 // parse comment
+                i = skip_comment(sql,i);
                 continue;
             case 'B':
             case 'b':
@@ -55,11 +57,38 @@ int server_parse_sql(char* sql){
                 return -1;
             case 'K':
             case 'k':
-                return k_check(sql,i,length);
+                return k_check(sql,i,length);  
             default:
                 return -1;                
         }
     }
+}
+
+int skip_comment(char* sql,int offset){
+    int len = strlen(sql);
+    int n = offset;
+    switch(sql[n]){
+        case '/':
+            if(len > ++n && sql[n++] == '*' && (len > n + 1) && sql[n] != '!') {
+                for(int i=n;i<len;++i){
+                    if(sql[i] == '*'){
+                        int m=i+1;
+                        if(len > m && sql[m] == '/'){
+                            return m;
+                        }
+                    }
+                }
+            }
+            break;
+        case '#':
+            for(int i=n+1;i<len;++i){
+                if(sql[i] == '\n'){
+                    return i;
+                }
+                break;
+            }
+    }
+    return offset;
 }
 
 int k_check(char* sql,int offset,int length){
@@ -142,7 +171,7 @@ int select_check(char* sql,int offset,int length){
         char c3 = sql[++offset];
         char c4 = sql[++offset];
         if ((c1 == 'E' || c1 == 'e') && (c2 == 'C' || c2 == 'c') && (c3 == 'T' || c3 == 't')
-                    && (c4 == ' ' || c4 == '\t' || c4 == '\r' || c4 == '\n' || c4 == '/' || c4 == '#')) {
+                    && (c4 == ' ' || c4 == '\t' || c4 == '\r' || c4 == '\n' || c4 == '/' || c4 == '#')) {            
             return (offset << 8) | SELECT;   
         }     
     }

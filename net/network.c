@@ -15,6 +15,8 @@ unsigned char FILLER_HAND_SHAKE[] = {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0};
 
 unsigned char AUTH_OKAY[] = {7, 0, 0, 2, 0, 0, 0, 2, 0, 0, 0};
 
+unsigned char OKAY[] = { 7, 0, 0, 1, 0, 0, 0, 2, 0, 0, 0 };
+
 unsigned char FILLER[] = {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,0, 0, 0, 0, 0, 0, 0, 0, 0, 0};
 
 
@@ -155,13 +157,13 @@ int read_packet(connection* conn){
         // 到此处已经达到了4字节
         // 开始读取包长度
         conn->packet_length = read_ub3(conn->read_buffer);
-        printf("packet_length = %d\n",conn->packet_length);
+        // printf("packet_length = %d\n",conn->packet_length);
         if(conn->packet_length == -1){
             return READ_PACKET_ERROR;
         }
         // 读取packet_id
         conn->packet_id = read_byte(conn->read_buffer);
-        printf("packet_id = %d\n",conn->packet_id);
+        // printf("packet_id = %d\n",conn->packet_id);
         if(conn->packet_id == -1){
             return READ_PACKET_ERROR;
         }
@@ -172,8 +174,12 @@ int read_packet(connection* conn){
         // 如果包长度过大，则expand read_buffer,todo 需要考虑connection的buffer收敛
         int all_size = conn->packet_length + MYSQL_HEADER_LEN;
         if(all_size> conn->read_buffer->length){
+            printf("expand realloc\n");
             if(FALSE == expand(conn->read_buffer,all_size)){
                 return MEMORY_EXHAUSTED;
+            }else{
+                // 由于前面expand了buffer,所以引用变换，这边重新设置read_buffer
+                read_buffer = conn->read_buffer->buffer + conn->read_buffer->read_limit;
             }
         }
     }
