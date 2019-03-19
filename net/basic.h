@@ -4,6 +4,7 @@
 #include <stdio.h>
 #include <sys/errno.h>
 #include <unistd.h>
+#include "config.h"
 
 #define DEFAULT_MEM_POOL_SIZE 4096
 #define HERO_DEBUG

@@ -206,6 +206,33 @@ conn.c.s:
 	cd /Users/alchemystar/mycode/hero/build && $(MAKE) -f net/CMakeFiles/net.dir/build.make net/CMakeFiles/net.dir/conn.c.s
 .PHONY : conn.c.s
 
+datasource.o: datasource.c.o
+
+.PHONY : datasource.o
+
+# target to build an object file
+datasource.c.o:
+	cd /Users/alchemystar/mycode/hero/build && $(MAKE) -f net/CMakeFiles/net.dir/build.make net/CMakeFiles/net.dir/datasource.c.o
+.PHONY : datasource.c.o
+
+datasource.i: datasource.c.i
+
+.PHONY : datasource.i
+
+# target to preprocess a source file
+datasource.c.i:
+	cd /Users/alchemystar/mycode/hero/build && $(MAKE) -f net/CMakeFiles/net.dir/build.make net/CMakeFiles/net.dir/datasource.c.i
+.PHONY : datasource.c.i
+
+datasource.s: datasource.c.s
+
+.PHONY : datasource.s
+
+# target to generate assembly for a file
+datasource.c.s:
+	cd /Users/alchemystar/mycode/hero/build && $(MAKE) -f net/CMakeFiles/net.dir/build.make net/CMakeFiles/net.dir/datasource.c.s
+.PHONY : datasource.c.s
+
 hero_poll.o: hero_poll.c.o
 
 .PHONY : hero_poll.o
@@ -440,6 +467,9 @@ help:
 	@echo "... conn.o"
 	@echo "... conn.i"
 	@echo "... conn.s"
+	@echo "... datasource.o"
+	@echo "... datasource.i"
+	@echo "... datasource.s"
 	@echo "... hero_poll.o"
 	@echo "... hero_poll.i"
 	@echo "... hero_poll.s"

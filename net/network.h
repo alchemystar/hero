@@ -27,6 +27,8 @@ int send_handshake(front_conn* front,hand_shake_packet** result);
 
 int read_auth(front_conn* front,auth_packet** result);
 
+int read_error_packet(connection* conn);
+
 void send_auth_okay(int sockfd);
 
 int check_auth(auth_packet* auth,hand_shake_packet* handshake);

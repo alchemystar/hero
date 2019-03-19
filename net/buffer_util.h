@@ -21,6 +21,7 @@ long read_length(packet_buffer* pb);
 char* read_string(packet_buffer* pb,mem_pool* pool);
 char* read_string_with_null(packet_buffer* pb,mem_pool* pool);
 char* read_bytes_with_length(packet_buffer* pb,mem_pool* pool,int* bytes_length);
+unsigned char* read_bytes_with_null(packet_buffer* pb,mem_pool* pool);
 
 int write_byte(packet_buffer* pb ,unsigned char c);
 int write_UB2(packet_buffer* pb,int i);

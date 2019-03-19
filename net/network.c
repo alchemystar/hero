@@ -56,17 +56,46 @@ int handle_one_connection(int sockfd,struct sockaddr_in* sockaddr,mem_pool* pool
     return TRUE;
 }
 
+int read_handshake(connection* conn){
+    int sockfd = conn->sockfd;
+    mem_pool* pool = conn->meta_pool;
+    packet_buffer* pb = conn->read_buffer;
+    // 因为要保留，所以在池中分配
+    hand_shake_packet* hand_shake  = get_handshake_packet(pool);
+    if(hand_shake == NULL){
+        return FALSE;
+    }
+    conn->back->hand_shake = hand_shake;
+    hand_shake->protocol_version = read_byte(pb);
+    hand_shake->server_version = read_string_with_null(pb,conn->meta_pool);
+    hand_shake->thread_id = read_ub4(pb);
+    hand_shake->seed = read_bytes_with_null(pb,conn->meta_pool);
+    hand_shake->server_capabilities = read_ub2(pb);
+    hand_shake->server_charset_index = read_byte(pb);
+    hand_shake->server_status = read_ub2(pb);
+    // skip filter
+    // 当前不用filter,哪天要保存的时候，需要使用meta_pool
+    skip_bytes(pb,13);
+    hand_shake->rest_of_scramble_buff = read_bytes_with_null(pb,conn->meta_pool);
+    // skip auth plugin
+    skip_bytes(pb,20);
+    hand_shake->scramble = mem_pool_alloc(20,conn->meta_pool);
+    memcpy(hand_shake->scramble,hand_shake->seed,8);
+    memcpy(hand_shake->scramble+8,hand_shake->rest_of_scramble_buff,12);
+    return TRUE;  
+}
+
 int write_handshake_to_buffer(connection* conn){
     int sockfd = conn->sockfd;
     mem_pool* pool = conn->meta_pool;
     // 因为要保留，所以在池中分配
     hand_shake_packet* hand_shake  = get_handshake_packet(pool);
-    conn->front->hand_shake_packet = hand_shake;
+    conn->front->hand_shake = hand_shake;
     if(hand_shake == NULL){
         return FALSE;
     }
     // 在write_buffer中分配，最后在write完的时候，write_buffer会重置
-    packet_buffer* pb = get_conn_write_buffer_with_size(conn,caculate_handshake_size()+MYSQL_HEADER_LEN);
+    packet_buffer* pb = get_conn_write_buffer_with_size(conn,caculate_handshake_size());
     if(pb == NULL){
         return FALSE;
     }
@@ -75,7 +104,7 @@ int write_handshake_to_buffer(connection* conn){
     // 由于这边申请的是确定的buffer size,所以下面应该不会进行expand=>无需进行内存分配检查
     write_UB3(pb,handshake_size);
     write_byte(pb,hand_shake->header.packet_id);
-    write_byte(pb,hand_shake->protol_version);
+    write_byte(pb,hand_shake->protocol_version);
     // 因为server_version是个字符串，最后一位为0,所以可以如此操作
     write_with_null(pb,hand_shake->server_version,strlen(hand_shake->server_version));
     write_UB4(pb,hand_shake->thread_id);
@@ -108,7 +137,7 @@ int send_handshake(front_conn* front,hand_shake_packet** result){
     // 由于这边申请的是确定的buffer size,所以下面应该不会进行expand=>无需进行内存分配检查
     write_UB3(pb,handshake_size);
     write_byte(pb,hand_shake->header.packet_id);
-    write_byte(pb,hand_shake->protol_version);
+    write_byte(pb,hand_shake->protocol_version);
     // 因为server_version是个字符串，最后一位为0,所以可以如此操作
     write_with_null(pb,hand_shake->server_version,strlen(hand_shake->server_version));
     write_UB4(pb,hand_shake->thread_id);
@@ -129,7 +158,7 @@ int send_handshake(front_conn* front,hand_shake_packet** result){
 }
 
 // 用完packet之后得重置buffer
-// todo 用random读取很少的一段数据 来测试一下粘包问题！！！！！！！！
+// todo 用random读取很少的一段数据 来测试一下"粘包"问题！！！！！！！！
 // 包装一些recv ^_^
 int read_packet(connection* conn){
     int sockfd = conn->sockfd;
@@ -157,13 +186,13 @@ int read_packet(connection* conn){
         // 到此处已经达到了4字节
         // 开始读取包长度
         conn->packet_length = read_ub3(conn->read_buffer);
-        // printf("packet_length = %d\n",conn->packet_length);
+        printf("packet_length = %d\n",conn->packet_length);
         if(conn->packet_length == -1){
             return READ_PACKET_ERROR;
         }
         // 读取packet_id
         conn->packet_id = read_byte(conn->read_buffer);
-        // printf("packet_id = %d\n",conn->packet_id);
+        printf("packet_id = %d\n",conn->packet_id);
         if(conn->packet_id == -1){
             return READ_PACKET_ERROR;
         }
@@ -206,6 +235,41 @@ int read_packet(connection* conn){
     }
 }
 
+int send_auth_packet(connection* conn){
+    // 栈上变量，无需手动销毁
+    unsigned char password_buffer[20];
+    scramble(password_buffer,conn->back->hand_shake->scramble,BACKEND_PASS_WORD);
+    int packet_size = caculate_auth_packet_size(BACKEND_USER_NAME,20,BACKEND_DATA_BASE);
+    int packet_id=1;
+    packet_buffer* pb = get_conn_write_buffer_with_size(conn,packet_size);
+    write_UB3(pb,packet_size);
+    write_byte(pb,packet_id);
+    write_UB4(pb,get_server_capacities());
+    write_UB4(pb,MAX_PACKET_SIZE);
+    write_byte(pb,UTF8_CHAR_INDEX);
+    write_bytes(pb,FILLER,23);
+    write_with_null(pb,BACKEND_USER_NAME,strlen(BACKEND_USER_NAME));
+    write_with_length(pb,password_buffer,20);
+    write_with_null(pb,BACKEND_DATA_BASE,strlen(BACKEND_DATA_BASE));
+    return TRUE;
+}
+
+int read_error_packet(connection* conn){
+    // just printf
+    int sql_errorno = read_ub2(conn->read_buffer);
+    printf("sql_errorno=%d\n",sql_errorno);
+    if(!packet_has_read_remaining(conn->read_buffer)){
+        return FALSE;
+    }
+    if((conn->read_buffer->buffer+conn->read_buffer->pos) == '#'){
+        // skip sql state
+        skip_bytes(conn->read_buffer,6);
+    }
+    unsigned char* message = read_string(conn->read_buffer,conn->request_pool);
+    printf("message = %s\n",message);
+    return TRUE;
+}
+
 int read_and_check_auth(connection* conn){
     packet_buffer* pb = conn->read_buffer;
     // 栈上变量分配
@@ -245,7 +309,7 @@ int read_and_check_auth(connection* conn){
     }else{
         auth.database = NULL;
     }
-    if(FALSE == check_auth(&auth,conn->front->hand_shake_packet)){
+    if(FALSE == check_auth(&auth,conn->front->hand_shake)){
         printf("check pass error\n");
         // 而后connection close后回收内存
         return FALSE;

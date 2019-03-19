@@ -21,10 +21,11 @@ connection* init_conn_and_mempool(int sockfd,struct sockaddr_in* addr,int front_
     if(conn_addr == NULL){
         goto error_process;
     }
+    // 对backend做处理，因为其addr是公用的server addr
     if(FALSE == init_conn(conn_addr,sockfd,addr,pool)){
         goto error_process;
     }
-    conn_addr->is_front_or_back = IS_FRONT_CONN;
+    conn_addr->is_front_or_back = front_or_back;
     return conn_addr;
 error_process:
     mem_pool_free(pool);
@@ -55,12 +56,7 @@ int init_conn(connection* conn,int sockfd,struct sockaddr_in* addr,mem_pool* poo
     if(conn->request_pool == NULL){
         return FALSE;
     }
-    socklen_t sock_len = (socklen_t)sizeof(*addr);
-    int sock_ret = getsockname(sockfd,addr,&sock_len);
-    if(sock_ret != 0){
-        printf("get sock name error,sock_ret=%d",sock_ret);
-        goto error_process;
-    }
+    // addr must be initialized
     // Each call to inet_ntoa() in your application will override this area
     // so copy it
     char* ip = (char*)inet_ntoa((*addr).sin_addr);
@@ -69,7 +65,8 @@ int init_conn(connection* conn,int sockfd,struct sockaddr_in* addr,mem_pool* poo
     }else{
         conn->ip[0] = "\0";
     }
-    conn->port = (*addr).sin_port;
+    // here must use htons
+    conn->port = htons((*addr).sin_port);
     // 初始化读buffer
     conn->read_buffer = get_packet_buffer(DEFAULT_PB_SIZE);
     if(conn->read_buffer == NULL){
@@ -99,6 +96,7 @@ int init_conn(connection* conn,int sockfd,struct sockaddr_in* addr,mem_pool* poo
     conn->query_count = 0;
     conn->front = NULL;
     conn->back = NULL;
+    conn->datasource = NULL;
     conn->header_read_len = 0;
     conn->body_read_len = 0;
     conn->epfd = 0;

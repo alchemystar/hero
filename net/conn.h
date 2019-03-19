@@ -14,8 +14,15 @@
 #define IS_BACK_CONN 0
 // front status
 #define NOT_SEND_HANDSHAKE 0
+#define NOT_GET_HANDSHAKE 0
 #define NOT_AUTHED 1
 #define AUTHED 2
+
+#define RESULT_SET_FIELD_COUNT 1
+#define RESULT_SET_FIELDS 2
+#define RESULT_SET_EOF 3
+#define RESULT_SET_ROW 4
+#define RESULT_SET_LAST_EOF 5
 
 #define CONN_WRITING 0
 #define CONN_READING 1
@@ -24,6 +31,7 @@
 // for function pointer
 struct _front_conn;
 struct _back_conn;
+struct _Datasource;
 
 typedef int (*handle_fun)(struct _front_conn* conn,char* sql);
 
@@ -58,6 +66,8 @@ typedef struct _connection{
     // 标识当前packet_id
     // 状态信息=>atomic
     atomic_int is_closed;
+    // 如果是backend,则指向其datasource
+    struct _Datasource* datasource;
     // 统计信息
     struct timeval start_time;
     struct timeval last_read_time;
@@ -91,8 +101,10 @@ typedef struct _front_conn{
     char* sql;
     // 当前的database
     char* database;
+    // 对应的后端连接
+    struct _back_conn* back;
     // 对应的握手包
-    hand_shake_packet* hand_shake_packet;
+    hand_shake_packet* hand_shake;
 }front_conn;
 
 typedef struct _back_conn{
@@ -104,11 +116,21 @@ typedef struct _back_conn{
     char* schema;
     // 密码
     char* password;
+    // 后端认证状态
+    int auth_state;
+    // 当前sql是否使用select
+    int selecting;
+    // select状态
+    int select_status;
     // 是否正在使用
     volatile int borrowed;
+    // 对应的前端连接
+    struct _front_conn* front;
     // 对应的处理器
     resp_fun handle;
-    // 数据源 todo 
+    // 对端发过来的hand_shake_packet
+    hand_shake_packet* hand_shake;
+
 }back_conn;
 
 int init_conn(connection* conn,int sockfd,struct sockaddr_in* addr,mem_pool* pool);

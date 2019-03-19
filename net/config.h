@@ -9,4 +9,13 @@
 #define USER_NAME "pay"
 #define PASS_WORD "MiraCle"
 #define MAX_FRAME_SIZE (RECV_MAX_BUFFER_SIZE-MYSQL_HEADER_LEN)
+
+#define BACKEND_SERVER_PORT 3306
+// 这边得时常修改！！！todo
+#define BACKEND_INET_ADDR "192.168.1.11"
+#define BACKEND_USER_NAME "lzy"
+#define BACKEND_PASS_WORD "123123123"
+#define BACKEND_DATA_BASE "temp_db"
+#define MAX_PACKET_SIZE 1024 * 1024 * 16
+#define DATASOUCE_LENGTH 1
 #endif

@@ -60,15 +60,15 @@ include net/proto/CMakeFiles/proto.dir/flags.make
 net/proto/CMakeFiles/proto.dir/list_test.c.o: net/proto/CMakeFiles/proto.dir/flags.make
 net/proto/CMakeFiles/proto.dir/list_test.c.o: ../net/proto/list_test.c
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/Users/alchemystar/mycode/hero/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_1) "Building C object net/proto/CMakeFiles/proto.dir/list_test.c.o"
-	cd /Users/alchemystar/mycode/hero/build/net/proto && /usr/bin/clang $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -o CMakeFiles/proto.dir/list_test.c.o   -c /Users/alchemystar/mycode/hero/net/proto/list_test.c
+	cd /Users/alchemystar/mycode/hero/build/net/proto && /Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/cc $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -o CMakeFiles/proto.dir/list_test.c.o   -c /Users/alchemystar/mycode/hero/net/proto/list_test.c
 
 net/proto/CMakeFiles/proto.dir/list_test.c.i: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing C source to CMakeFiles/proto.dir/list_test.c.i"
-	cd /Users/alchemystar/mycode/hero/build/net/proto && /usr/bin/clang $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -E /Users/alchemystar/mycode/hero/net/proto/list_test.c > CMakeFiles/proto.dir/list_test.c.i
+	cd /Users/alchemystar/mycode/hero/build/net/proto && /Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/cc $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -E /Users/alchemystar/mycode/hero/net/proto/list_test.c > CMakeFiles/proto.dir/list_test.c.i
 
 net/proto/CMakeFiles/proto.dir/list_test.c.s: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling C source to assembly CMakeFiles/proto.dir/list_test.c.s"
-	cd /Users/alchemystar/mycode/hero/build/net/proto && /usr/bin/clang $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -S /Users/alchemystar/mycode/hero/net/proto/list_test.c -o CMakeFiles/proto.dir/list_test.c.s
+	cd /Users/alchemystar/mycode/hero/build/net/proto && /Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/cc $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -S /Users/alchemystar/mycode/hero/net/proto/list_test.c -o CMakeFiles/proto.dir/list_test.c.s
 
 net/proto/CMakeFiles/proto.dir/list_test.c.o.requires:
 
@@ -84,15 +84,15 @@ net/proto/CMakeFiles/proto.dir/list_test.c.o.provides.build: net/proto/CMakeFile
 net/proto/CMakeFiles/proto.dir/packet.c.o: net/proto/CMakeFiles/proto.dir/flags.make
 net/proto/CMakeFiles/proto.dir/packet.c.o: ../net/proto/packet.c
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/Users/alchemystar/mycode/hero/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_2) "Building C object net/proto/CMakeFiles/proto.dir/packet.c.o"
-	cd /Users/alchemystar/mycode/hero/build/net/proto && /usr/bin/clang $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -o CMakeFiles/proto.dir/packet.c.o   -c /Users/alchemystar/mycode/hero/net/proto/packet.c
+	cd /Users/alchemystar/mycode/hero/build/net/proto && /Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/cc $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -o CMakeFiles/proto.dir/packet.c.o   -c /Users/alchemystar/mycode/hero/net/proto/packet.c
 
 net/proto/CMakeFiles/proto.dir/packet.c.i: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing C source to CMakeFiles/proto.dir/packet.c.i"
-	cd /Users/alchemystar/mycode/hero/build/net/proto && /usr/bin/clang $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -E /Users/alchemystar/mycode/hero/net/proto/packet.c > CMakeFiles/proto.dir/packet.c.i
+	cd /Users/alchemystar/mycode/hero/build/net/proto && /Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/cc $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -E /Users/alchemystar/mycode/hero/net/proto/packet.c > CMakeFiles/proto.dir/packet.c.i
 
 net/proto/CMakeFiles/proto.dir/packet.c.s: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling C source to assembly CMakeFiles/proto.dir/packet.c.s"
-	cd /Users/alchemystar/mycode/hero/build/net/proto && /usr/bin/clang $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -S /Users/alchemystar/mycode/hero/net/proto/packet.c -o CMakeFiles/proto.dir/packet.c.s
+	cd /Users/alchemystar/mycode/hero/build/net/proto && /Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/cc $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -S /Users/alchemystar/mycode/hero/net/proto/packet.c -o CMakeFiles/proto.dir/packet.c.s
 
 net/proto/CMakeFiles/proto.dir/packet.c.o.requires:
 

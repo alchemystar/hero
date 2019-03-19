@@ -35,13 +35,21 @@ int caculate_handshake_size(){
     return size;
 }
 
+int caculate_auth_packet_size(char* user,int password_len,char* database){
+    int size=32;
+    size += (user == NULL)?1:strlen(BACKEND_USER_NAME) + 1;
+    size += password_len + 1;
+    size += (database == NULL)?1:strlen(database)+1;
+    return size;
+}
+
 hand_shake_packet* get_handshake_packet(mem_pool* pool){
     hand_shake_packet* hand_shake = (hand_shake_packet*)mem_pool_alloc(sizeof(hand_shake_packet),pool);
     if(hand_shake == NULL){
         return NULL;
     }
     hand_shake->header.packet_id=0;
-    hand_shake->protol_version=10;
+    hand_shake->protocol_version=10;
     hand_shake->server_version=SERVER_VERSION;
     hand_shake->thread_id=g_client_id++;
     hand_shake->server_capabilities=get_server_capacities();
@@ -377,5 +385,23 @@ int add_field_value_to_row(mem_pool* pool,row_packet* row,unsigned char* buffer,
     }
     prev->next = new_value;
     return TRUE;
-    
+}
+
+int write_query_command(packet_buffer*pb,char* sql,unsigned char* sql_type){
+    int packet_size = 1 + strlen(sql);
+    printf("write query command,packet_size=%d\n",packet_size);
+    int packet_id = 0;
+    if(!write_UB3(pb,packet_size)){
+        return FALSE;    
+    }
+    if(!write_byte(pb,packet_id)){
+        return FALSE;    
+    }
+    if(!write_byte(pb,sql_type)){
+        return FALSE;    
+    }
+    if(!write_bytes(pb,sql,strlen(sql))){
+        return FALSE;   
+    }
+    return TRUE; 
 }

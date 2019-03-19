@@ -1,6 +1,7 @@
 #include "hero_poll.h"
 #include <sys/errno.h>
 #include "hero_worker.h"
+#include "datasource.h"
 
 // reactor模式创建
 // reactor的内存一直存在，暂时没必要删除,只有在出错时刻删除
@@ -23,10 +24,15 @@ int init_reactor(int listen_fd,int worker_count){
             goto error_process;
         }
     }
+    // 创建后端连接池
+    if(FALSE == init_datasource(reactor)){
+        goto error_process;
+    }
     if(-1 == poll_add_event(reactor->master_fd,listen_fd,EPOLLIN,NULL)){
         goto error_process;
     }
-    int current_worker=0;
+    // 注意，这边需要是unsigned 防止出现负数
+    unsigned int current_worker = 0;
     for(;;){
         int numevents = 0;
         int retval = epoll_wait(reactor->master_fd,reactor->events,EPOLL_MAX_EVENTS,500);     
@@ -53,7 +59,7 @@ int init_reactor(int listen_fd,int worker_count){
                         continue;
                     }
                     // 首先是触发可写事件,因为是三次握手之后，主动发起请求
-                    if(-1 == poll_add_event(reactor->worker_fd_arrays[(current_worker++)%(reactor->worker_count)],conn->sockfd,EPOLLOUT,conn)){
+                    if(-1 == poll_add_event(reactor->worker_fd_arrays[current_worker++%reactor->worker_count],conn->sockfd,EPOLLOUT,conn)){
                         // 添加失败，则close掉连接
                         release_conn_and_mempool(conn);
                     }

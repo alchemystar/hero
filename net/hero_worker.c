@@ -18,7 +18,11 @@ typedef struct _hero_thread_info {
 
 int handle_front_auth(connection* conn);
 
-void handle_command(connection* conn);
+void handle_front_command(connection* conn);
+
+void handle_front_conn(connection* conn);
+
+back_conn* init_back_conn(connection* conn);
 
 static void* rw_thread_func(void* arg){
     printf("rw thread start\n");
@@ -65,52 +69,78 @@ static void* rw_thread_func(void* arg){
     }
 }
 
-void handle_ready_read_connection(connection* conn){
-    int retval = 0;
-    if(conn->is_front_or_back == IS_FRONT_CONN){
-        if(conn->front->auth_state == NOT_AUTHED){
-            printf("front conn not authed\n");
-            retval = read_packet(conn);
-            switch(retval){
-                case READ_WAIT_FOR_EVENT:
-                    // wait for next read event
-                    return;
-                case READ_PACKET_SUCCESS:
-                    if(FALSE == handle_front_auth(conn)){
-                        release_conn_and_mempool(conn);
-                    }
-                    return;
-                case READ_PACKET_LENGTH_MORE_THAN_MAX:
-                case MEMORY_EXHAUSTED:
-                case READ_PACKET_ERROR:    
-                default:
+void handle_front_conn(connection* conn){
+    int retval = read_packet(conn);
+    switch(retval){
+        case READ_WAIT_FOR_EVENT:
+            // wait for next read event
+            return;
+        case READ_PACKET_SUCCESS:
+            if(NOT_AUTHED == conn->front->auth_state){
+                if(FALSE == handle_front_auth(conn)){
                     release_conn_and_mempool(conn);
-                    return;
+                    return ;
+                }
+            }else{
+                handle_front_command(conn);
             }
-        }else{
-            // 已经认证状态，处理sql
-            retval = read_packet(conn);
-            switch(retval){
-                case READ_WAIT_FOR_EVENT:
-                    // wait for next read event
-                    return;
-                case READ_PACKET_SUCCESS:
-                    handle_command(conn);
-                    return;
-                case READ_PACKET_LENGTH_MORE_THAN_MAX:
-                case MEMORY_EXHAUSTED:
-                case READ_PACKET_ERROR:    
-                default:
-                    release_conn_and_mempool(conn);
-                    return;
-            }           
+            return;
+        case READ_PACKET_LENGTH_MORE_THAN_MAX:
+        case MEMORY_EXHAUSTED:
+        case READ_PACKET_ERROR:    
+        default:
+            release_conn_and_mempool(conn);
+            return;
+    }  
+}
+
+void handle_back_conn(connection* conn){
+    if(NULL == conn->back){
+        // 初始化front connection,注意这边并不是以0填充的
+        back_conn* back = init_back_conn(conn);
+        // 需设置read_limit为0
+        conn->read_buffer->read_limit=0;
+        if(NULL == back){
+            goto error_process;
         }
-    }else if(conn->is_front_or_back == IS_BACK_CONN){
-        printf("it's a backedn connon readable\n");
+    }
+    int retval = read_packet(conn);
+    switch(retval){
+        case READ_WAIT_FOR_EVENT:
+            // wait for next read event
+            return;
+        case READ_PACKET_SUCCESS:
+            printf("got one complete packet\n");
+            if(AUTHED != conn->back->auth_state){
+                if(FALSE == handle_backend_auth(conn)){
+                    release_conn_and_mempool(conn);
+                    return ;
+                }
+            }else{
+                handle_backend_command(conn);
+            }
+            return;
+        case READ_PACKET_LENGTH_MORE_THAN_MAX:
+        case MEMORY_EXHAUSTED:
+        case READ_PACKET_ERROR:    
+        default:
+            release_conn_and_mempool(conn);
+            return;
+    }  
+error_process:
+    release_conn_and_mempool(conn);
+    return;    
+}
+
+void handle_ready_read_connection(connection* conn){
+    if(IS_FRONT_CONN == conn->is_front_or_back){
+        handle_front_conn(conn);
+    }else if(IS_BACK_CONN == conn->is_front_or_back){
+        handle_back_conn(conn);
     }
 }
 
-void handle_command(connection* conn) {
+void handle_front_command(connection* conn) {
     int command_type = read_byte(conn->read_buffer);
     // 当前仅处理query
     if(-1 == command_type){
@@ -137,10 +167,86 @@ void handle_command(connection* conn) {
     }
 }
 
+// todo result set 分包以后再搞
+int handle_backend_resultset(connection* conn){
+    printf("now handling result set packet\n");
+    if(RESULT_SET_FIELD_COUNT == conn->back->select_status){
+        //
+    }
+    // reset_conn_from_one_request(conn);
+    return TRUE;
+}
+
+int handle_backend_normal(connection* conn){
+    return TRUE;
+}
+
+void handle_backend_command(connection* conn){
+    printf("read_limit size = %d\n",conn->read_buffer->read_limit);
+    // todo 有并发问题
+    front_conn* front = conn->front;
+    if(NULL == front){
+        printf("front_conn is NULL\n");
+        return ;
+    }
+    connection* to_conn = front->conn;
+    write_bytes(to_conn->write_buffer,conn->read_buffer->buffer,conn->read_buffer->read_limit);
+    // write之后则reset
+    reset_conn_from_one_request(conn);
+    write_nonblock(to_conn);
+//    if(TRUE == conn->back->selecting){
+//         if(FALSE == handle_backend_resultset(conn)){
+//           	release_conn_and_mempool(conn);
+// 	        return;    
+//         }
+//    }else{
+//        if(FALSE == handle_backend_normal(conn)){
+//           	release_conn_and_mempool(conn);
+// 	        return;             
+//        }
+//    }
+}
+
+
+int handle_backend_auth(connection* conn){
+    if(AUTHED == conn->back->auth_state){
+        printf("auth_state not right ,auth_state = %d\n",conn->back->auth_state);
+        return FALSE;
+    }
+    if(NOT_GET_HANDSHAKE == conn->back->auth_state){
+        if(!read_handshake(conn)){
+            return FALSE;
+        }else{
+            conn->back->auth_state = NOT_AUTHED;
+            if(!send_auth_packet(conn)){
+               return FALSE; 
+            }else{
+                return write_nonblock(conn);
+            }
+        }
+    }
+    if(NOT_AUTHED == conn->back->auth_state){
+        int okay = read_byte(conn->read_buffer);
+        printf("okay_type = %d\n",okay);
+        switch(okay){
+            case OKAY_PACKET_FIELD_COUNT:
+                printf("got okay packet\n");
+                conn->back->auth_state = AUTHED;
+                put_conn_to_datasource(conn,conn->datasource);
+                break;
+            case ERROR_PACKET_FIELD_COUNT:
+                printf("got error packet\n");
+                read_error_packet(conn);
+                break;
+        }
+    }
+    return TRUE;
+}
+
 int handle_front_auth(connection* conn){
     printf("handle front auth\n");
     if(conn->front->auth_state != NOT_AUTHED){
-        printf("auth_state not write ,auth_state = %d\n",conn->front->auth_state);
+        printf("auth_state not right ,auth_state = %d\n",conn->front->auth_state);
         return FALSE;
     }
     if(FALSE == read_and_check_auth(conn)){
@@ -176,7 +282,7 @@ void hanlde_ready_write_connection(connection* conn){
                 // 推进状态
                 front->auth_state = NOT_AUTHED;
                 printf("not send handshake\n");
-                if(NULL == write_handshake_to_buffer(conn)){
+                if(FALSE == write_handshake_to_buffer(conn)){
                     printf("write handshake null\n");
                     // 无需删除对应的front_conn,因为是在conn内存池中分配的
                     release_conn_and_mempool(conn);
@@ -189,13 +295,17 @@ void hanlde_ready_write_connection(connection* conn){
                 printf("state is %d \n",front->auth_state);
             }
         }else{
-           printf("write something \b");
+           printf("write something \n");
            if(FALSE == write_nonblock(conn)){
                release_conn_and_mempool(conn);
            }
         }
     }else if(conn->is_front_or_back == IS_BACK_CONN){
         printf("it's a backend connection writable\n");
+        printf("write something \n");
+        if(FALSE == write_nonblock(conn)){
+            release_conn_and_mempool(conn);
+        }
     }
 }
 
@@ -231,7 +341,6 @@ int write_nonblock(connection* conn){
     int epfd = conn->epfd;
     // 剩余数据量
     size_t nleft=conn->write_buffer->pos - conn->write_buffer->write_index;
-    // printf("nleft = %d\n",nleft);
     ssize_t nwritten=0;
     unsigned char* ptr = conn->write_buffer->buffer;
     if((nwritten = write(conn->sockfd,ptr,nleft)) <= 0){
@@ -242,9 +351,10 @@ int write_nonblock(connection* conn){
             return FALSE;
         }        
     }
-    // printf("write bytes = %d\n",nwritten);
+    printf("write bytes = %d\n",nwritten);
     conn->write_buffer->write_index += nwritten;
     nleft -= nwritten;
+    printf("nleft = %d\n",nleft);
     if(nleft == 0){
         // 重置conn,到这表示一个请求结束了，重置buffer
         reset_conn_from_one_request(conn);
@@ -254,6 +364,25 @@ int write_nonblock(connection* conn){
         // 否则打开写事件，取消读事件
         return enable_conn_write_and_disable_read(conn);
     }
+}
+
+back_conn* init_back_conn(connection* conn){
+     back_conn* back = (back_conn*) mem_pool_alloc(sizeof(back_conn),conn->meta_pool);
+     if(NULL == back){
+         return NULL;
+     }
+     back->conn = conn;
+     conn->back = back;
+     back->user = BACKEND_USER_NAME;
+     back->schema = NULL;
+     back->password = BACKEND_PASS_WORD;
+     back->auth_state = NOT_GET_HANDSHAKE;
+     back->selecting = TRUE;
+     back->select_status = RESULT_SET_FIELD_COUNT;
+     back->front = NULL;
+     // 需要设置为conn reading
+     conn->reading_or_writing = CONN_READING;
+     return back;
 }
 
 #endif

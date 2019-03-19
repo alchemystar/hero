@@ -15,6 +15,10 @@ int read_byte(packet_buffer* pb){
     return i;    
 }
 
+void skip_bytes(packet_buffer* pb,int length){
+    pb->pos +=length;  
+}
+
 int read_ub2(packet_buffer* pb){
     unsigned char* buffer = pb->buffer + pb->pos;
     if(pb->pos + 2 > pb->read_limit ){
@@ -104,6 +108,32 @@ long read_length(packet_buffer* pb){
 
 }
 
+unsigned char* read_bytes_with_null(packet_buffer* pb,mem_pool* pool){
+    if(pb->pos >= pb->read_limit){
+        return NULL;
+    }
+    int offset = -1;
+    for(int i=pb->pos;i<pb->read_limit;i++){
+        if(pb->buffer[i] == 0){
+            offset = i;
+            break;
+        }
+    }
+    if(-1 == offset){
+        return NULL;
+    }    
+    if(offset > pb->pos){
+        int content_len = offset - pb->pos;
+        unsigned char* bytes = (char*)mem_pool_alloc_ignore_check(content_len,pool);
+        memcpy(bytes,pb->buffer+pb->pos,content_len);
+        pb->pos = offset+1;
+        return bytes;
+    }else{
+        pb->pos++;
+        return NULL;
+    }
+}
+
 char* read_string_with_null(packet_buffer* pb,mem_pool* pool){
     if(pb->pos >= pb->read_limit){
         return NULL;
@@ -143,7 +173,6 @@ char* read_string_with_null(packet_buffer* pb,mem_pool* pool){
 // 同时还返回字节数量
 char* read_bytes_with_length(packet_buffer* pb,mem_pool* pool,int* bytes_length){
     int length = read_length(pb);
-    printf("length = %d\n",length);
     if(length <= 0 ){
         return NULL;
     }
@@ -331,7 +360,7 @@ packet_buffer* get_packet_buffer(int size){
     pb->pos = 0 ;
     pb->length = size;
     pb->buffer = buff;
-    pb->read_limit = read_limit;
+    pb->read_limit = 0;
     pb->write_index = 0;
     return pb;
 }

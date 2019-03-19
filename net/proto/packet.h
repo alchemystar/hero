@@ -51,6 +51,9 @@
 // todo 改小点
 #define DEFAULT_PB_SIZE 4096
 
+#define OKAY_PACKET_FIELD_COUNT 0
+#define ERROR_PACKET_FIELD_COUNT 255
+
 // todo以后考虑对齐(align)问题
 // 这边typedef就可以不用写成struct mysql_packet的形式
 typedef struct {
@@ -118,7 +121,7 @@ typedef struct _field_packet{
 
 typedef struct _hand_shake_packet{
     mysql_packet header;
-    unsigned char protol_version;
+    unsigned char* protocol_version;
     unsigned char* server_version;
     long thread_id;
     unsigned char* seed;
@@ -178,9 +181,11 @@ eof_packet* get_eof_packet(mem_pool* pool);
 row_packet* get_row_packet(mem_pool* pool);
 error_packet* get_error_packet(mem_pool* pool);
 
+
 int add_field_value_to_row(mem_pool* pool,row_packet* row,unsigned char* buffer,int length);
 
 int caculate_handshake_size();
+int caculate_auth_packet_size();
 int caculate_result_set_header_size(result_set_header* ptr);
 int caculate_field_size(field_packet* ptr);
 int caculate_eof_size();
@@ -194,5 +199,7 @@ int write_field(packet_buffer* pb,field_packet* field);
 int write_eof(packet_buffer* pb,eof_packet* eof);
 int write_row(packet_buffer* pb,row_packet* row);
 int write_error(packet_buffer* pb,error_packet* error);
+
+int write_query_command(packet_buffer*pb,char* sql,unsigned char* sql_type);
 
 #endif

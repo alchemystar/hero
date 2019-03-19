@@ -7,6 +7,7 @@ set(CMAKE_DEPENDS_CHECK_C
   "/Users/alchemystar/mycode/hero/net/basic.c" "/Users/alchemystar/mycode/hero/build/net/CMakeFiles/net.dir/basic.c.o"
   "/Users/alchemystar/mycode/hero/net/buffer_util.c" "/Users/alchemystar/mycode/hero/build/net/CMakeFiles/net.dir/buffer_util.c.o"
   "/Users/alchemystar/mycode/hero/net/conn.c" "/Users/alchemystar/mycode/hero/build/net/CMakeFiles/net.dir/conn.c.o"
+  "/Users/alchemystar/mycode/hero/net/datasource.c" "/Users/alchemystar/mycode/hero/build/net/CMakeFiles/net.dir/datasource.c.o"
   "/Users/alchemystar/mycode/hero/net/hero_poll.c" "/Users/alchemystar/mycode/hero/build/net/CMakeFiles/net.dir/hero_poll.c.o"
   "/Users/alchemystar/mycode/hero/net/hero_worker.c" "/Users/alchemystar/mycode/hero/build/net/CMakeFiles/net.dir/hero_worker.c.o"
   "/Users/alchemystar/mycode/hero/net/network.c" "/Users/alchemystar/mycode/hero/build/net/CMakeFiles/net.dir/network.c.o"

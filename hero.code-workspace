@@ -46,7 +46,11 @@
 			"fcntl.h": "c",
 			"unistd.h": "c",
 			"memory.h": "c",
-			"server_parse.h": "c"
+			"server_parse.h": "c",
+			"stdatomic.h": "c",
+			"datasource.h": "c",
+			"capacity.h": "c",
+			"handle_util.h": "c"
 		}
 	}
 }
