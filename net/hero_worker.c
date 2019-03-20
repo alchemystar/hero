@@ -159,7 +159,7 @@ void handle_front_command(connection* conn) {
 	        }
             break;
         default:
-            if(FALSE == write_okay(conn)){
+            if(FALSE == write_unkown_error_message(conn->front)){
                 release_conn_and_mempool(conn);
 	            return;
             }
@@ -167,44 +167,78 @@ void handle_front_command(connection* conn) {
     }
 }
 
-// todo result set 分包以后再搞
-int handle_backend_resultset(connection* conn){
-    printf("now handling result set packet\n");
-    if(RESULT_SET_FIELD_COUNT == conn->back->select_status){
-        //
+void handle_selecting_backend_status(connection* conn){
+    back_conn* back = conn->back;   
+    if(back == NULL){
+        return;
     }
-    // reset_conn_from_one_request(conn);
-    return TRUE;
+    int type = read_byte(conn->read_buffer); 
+    // okay or error,直接reset并detach
+    if(OKAY_PACKET_FIELD_COUNT == type || ERROR_PACKET_FIELD_COUNT == type){
+        printf("okay or error, so we detach from front and put to datasource\n");
+        reset_backend_status(conn);
+        return;
+    }
+    if(EOF_FIELD_COUNT == type){
+        if(RESULT_SET_FIELD_COUNT == back->select_status){
+            back->select_status = RESULT_SET_EOF;
+        }else if(RESULT_SET_EOF == back->select_status){
+            // last eof got,put it to datasource
+            back->select_status = RESULT_SET_EOF;
+            // 由于last_eof已经被写入到front_conn的buffer里面，所以在前端没有新命令之前
+            // write_index不会被并发的修改，所以这边可以安全的重置backend_status
+            // 这样，在另一个线程front_conn write_nonblock的时候，可以不必加锁
+            // 由于这个情况
+            // 对标识的修改要放到copy buffer下面
+            reset_backend_status(conn);
+        }
+    }
+    // else do nothing
 }
 
-int handle_backend_normal(connection* conn){
-    return TRUE;
+void reset_backend_status(connection* conn){
+    back_conn* back = conn->back;
+    back->borrowed = FALSE;
+    back->selecting = FALSE;
+    back->select_status = RESULT_SET_FIELD_COUNT;
+    conn->front = NULL;
+    // 停等式协议的好处就是不用加锁，逻辑上就能没有并发
+    // 接触back和front之间的关系
+    if(NULL != back->front){
+        back->front->back = NULL;
+        back->front = NULL;
+    }
+    printf("put conn to datasource\n");
+    put_conn_to_datasource(conn,conn->datasource);
 }
 
 void handle_backend_command(connection* conn){
     printf("read_limit size = %d\n",conn->read_buffer->read_limit);
-    // todo 有并发问题
     front_conn* front = conn->front;
     if(NULL == front){
         printf("front_conn is NULL\n");
         return ;
     }
     connection* to_conn = front->conn;
+    int need_block = is_need_lock(conn);
+    if(need_block){
+        // 这边mutex保护的其实就是conn的write_index;
+        printf("yeah it's lock from backend\n");
+        pthread_mutex_lock(&(conn->mutex));
+    }
     write_bytes(to_conn->write_buffer,conn->read_buffer->buffer,conn->read_buffer->read_limit);
+    if(need_block){
+        pthread_mutex_unlock(&(conn->mutex));
+    }
+    // 检测是否已经达到result_set包的结尾
+    if(TRUE == conn->back->selecting){
+        handle_selecting_backend_status(conn);
+    }else{
+        reset_backend_status(conn);
+    }
     // write之后则reset
     reset_conn_from_one_request(conn);
     write_nonblock(to_conn);
-//    if(TRUE == conn->back->selecting){
-//         if(FALSE == handle_backend_resultset(conn)){
-//           	release_conn_and_mempool(conn);
-// 	        return;    
-//         }
-//    }else{
-//        if(FALSE == handle_backend_normal(conn)){
-//           	release_conn_and_mempool(conn);
-// 	        return;             
-//        }
-//    }
 }
 
 
@@ -339,6 +373,14 @@ int create_and_start_rw_thread(int worker_fd,mem_pool* pool){
 // 由于write packet时候已经expand了write_buffer,所以无需考虑buffer不够问题
 int write_nonblock(connection* conn){
     int epfd = conn->epfd;
+    int need_block = is_need_lock(conn);    
+    if(need_block){
+        // 这边mutex保护的其实就是conn的write_index;
+        printf("yeah it's lock from write_nonblock\n");
+        pthread_mutex_lock(&(conn->mutex));
+    }else{
+        printf("it's no need lock\n");
+    }
     // 剩余数据量
     size_t nleft=conn->write_buffer->pos - conn->write_buffer->write_index;
     ssize_t nwritten=0;
@@ -348,17 +390,23 @@ int write_nonblock(connection* conn){
             nwritten = 0;
         }else{
             printf("write connection error,sockfd=%d,errno=%d\n",conn->sockfd,errno);
+            if(need_block){
+                pthread_mutex_unlock(&(conn->mutex));
+            }
             return FALSE;
         }        
     }
-    printf("write bytes = %d\n",nwritten);
     conn->write_buffer->write_index += nwritten;
     nleft -= nwritten;
-    printf("nleft = %d\n",nleft);
+    // 为了逻辑简单，所以nleft分支有两次
     if(nleft == 0){
         // 重置conn,到这表示一个请求结束了，重置buffer
         reset_conn_from_one_request(conn);
-        // 取消写事件,并启动读事件
+    }
+    if(need_block){
+         pthread_mutex_unlock(&(conn->mutex));
+    }    
+    if(nleft == 0){
         return enable_conn_read_and_disable_write(conn);
     }else{
         // 否则打开写事件，取消读事件

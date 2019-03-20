@@ -26,4 +26,8 @@ int init_datasource(Reactor* reactor);
 int put_conn_to_datasource(connection* conn,Datasource* datasource);
 connection* get_conn_from_datasource(Datasource* datasource);
 
+int default_execute(front_conn* front,char* sql,int is_selecting);
+int write_query_command_to_back(connection* conn,char* sql);
+int write_query_command(packet_buffer*pb,char* sql,unsigned char* sql_type);
+
 #endif

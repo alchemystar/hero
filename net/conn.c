@@ -53,6 +53,7 @@ int init_conn(connection* conn,int sockfd,struct sockaddr_in* addr,mem_pool* poo
     conn->meta_pool = pool;
     // 请求内存池，在每次请求过后，重置
     conn->request_pool = mem_pool_create(DEFAULT_MEM_POOL_SIZE);
+    pthread_mutex_init(&(conn->mutex),NULL);
     if(conn->request_pool == NULL){
         return FALSE;
     }
@@ -210,4 +211,27 @@ int enable_conn_read_and_disable_write(connection* conn){
     }
     conn->reading_or_writing = CONN_READING;
     return TRUE;    
+}
+
+int is_need_lock(connection* conn){
+    if(IS_BACK_CONN == conn->is_front_or_back){
+        if(TRUE == conn->back->selecting){
+            return TRUE;
+        }else{
+            return FALSE;
+        }
+    }else{
+        front_conn* front = conn->front;
+        if(NULL == front->back){
+            printf("front->back NULL\n");
+            return FALSE;
+        }
+        if(FALSE == front->back->selecting){
+            printf("front->back selecting FALSE\n");
+            return FALSE;
+        }
+        // 只有在处理结果集的时候才会有并发现象
+        // backend才可能并发往front里面写
+        return TRUE;
+    }
 }

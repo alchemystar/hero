@@ -15,9 +15,6 @@
 #define VERSION 6
 #define TX_ISOLATION 7
 
-// globalDatasource全局变量
-extern Datasource* golbalDatasource;
-
 int select_parse_sql(char* sql,int offset,int length);
 
 int verion_comment_check(char* sql,int offset,int length);
@@ -28,23 +25,9 @@ int write_version_comment(front_conn* front);
 
 int write_auto_increment(front_conn* front);
 
-int write_query_command_to_back(connection* conn,char* sql){
-     // 如果写入失败，要将后端conn删除，返回false后，再由前面删除
-    if(!write_query_command(conn->write_buffer,sql,COM_QUERY)){
-        release_conn_and_mempool(conn);
-        return FALSE;
-    }
-    if(!write_nonblock(conn)){
-        release_conn_and_mempool(conn);
-        return FALSE;
-    }
-    return TRUE;
-}
-
 int handle_select(front_conn* front,char* sql,int offset){
     int sockfd = front->conn->sockfd;
     mem_pool* pool = front->conn->request_pool;
-    connection* back_conn = NULL;
     int type = select_parse_sql(sql,offset,strlen(sql));
     switch(type){
         case VERSION_COMMENT:
@@ -54,24 +37,7 @@ int handle_select(front_conn* front,char* sql,int offset){
             printf("it's auto increment\n");
             return write_auto_increment(front);    
         default:
-            // pass to backend 
-            printf("get conn from datasource\n");
-            if(NULL == front->back){
-                back_conn = get_conn_from_datasource(golbalDatasource);
-            }else{
-                back_conn = front->back;
-            }
-            // 设置为正在进行select
-            back_conn->back->selecting = 1;
-            back_conn->front = front;
-            front->back = back_conn;
-            if(back_conn == NULL){
-                printf("get conn NULL\n");
-                return FALSE;
-            }else{
-                printf("got one database conn\n");
-            }
-            return write_query_command_to_back(back_conn,sql);
+            return default_execute(front,sql,TRUE);
     }
     return TRUE;
 }
@@ -293,9 +259,4 @@ error_process:
     // 错误后提前清空buffer
     reset_packet_buffer(pb);
     return FALSE;      
-}
-
-
-int default_execute(int sockfd,char* sql,int offset,mem_pool* pool){
-    
 }

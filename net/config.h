@@ -12,7 +12,7 @@
 
 #define BACKEND_SERVER_PORT 3306
 // 这边得时常修改！！！todo
-#define BACKEND_INET_ADDR "192.168.1.11"
+#define BACKEND_INET_ADDR "172.20.52.185"
 #define BACKEND_USER_NAME "lzy"
 #define BACKEND_PASS_WORD "123123123"
 #define BACKEND_DATA_BASE "temp_db"

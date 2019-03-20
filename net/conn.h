@@ -39,6 +39,7 @@ typedef int (*resp_fun)(struct _front_conn* conn,unsigned char* buffer);
 
 // connection [front,end]
 typedef struct _connection{
+    pthread_mutex_t mutex;
     // 对应的sock_fd
     int sockfd;   
     // sockaddr
@@ -202,5 +203,7 @@ int poll_add_event(int epfd,int epifd,int mask,void* ptr);
 int poll_mod_event(int epfd,int epifd,int mask,void* ptr);
 int enable_conn_write_and_disable_read(connection* conn);
 int enable_conn_read_and_disable_write(connection* conn);
+
+int is_need_lock(connection* conn);
 
 #endif

@@ -101,3 +101,59 @@ connection* get_conn_from_datasource(Datasource* datasource){
     }
     return conn;
 }
+
+int write_query_command_to_back(connection* conn,char* sql){
+     // 如果写入失败，要将后端conn删除，返回false后，再由前面删除
+    if(!write_query_command(conn->write_buffer,sql,COM_QUERY)){
+        release_conn_and_mempool(conn);
+        return FALSE;
+    }
+    if(!write_nonblock(conn)){
+        release_conn_and_mempool(conn);
+        return FALSE;
+    }
+    return TRUE;
+}
+
+int write_query_command(packet_buffer*pb,char* sql,unsigned char* sql_type){
+    int packet_size = 1 + strlen(sql);
+    printf("write query command,packet_size=%d\n",packet_size);
+    int packet_id = 0;
+    if(!write_UB3(pb,packet_size)){
+        return FALSE;    
+    }
+    if(!write_byte(pb,packet_id)){
+        return FALSE;    
+    }
+    if(!write_byte(pb,sql_type)){
+        return FALSE;    
+    }
+    if(!write_bytes(pb,sql,strlen(sql))){
+        return FALSE;   
+    }
+    return TRUE; 
+}
+
+int default_execute(front_conn* front,char* sql,int is_selecting){
+    connection* back_actual_conn = NULL;
+    // pass to backend 
+    printf("get conn from datasource\n");
+    if(NULL == front->back){
+        back_actual_conn = get_conn_from_datasource(golbalDatasource);
+    }else{
+        printf("front->back is not null\n");
+        back_actual_conn = front->back->conn;
+    }
+    // 设置为正在进行select
+    back_actual_conn->back->selecting = is_selecting;
+    back_actual_conn->front = front;
+    front->back = back_actual_conn->back;
+    back_actual_conn->back->front = front;
+    if(back_actual_conn == NULL){
+        printf("get conn NULL\n");
+        return FALSE;
+    }else{
+        printf("got one database conn\n");
+    }
+    return write_query_command_to_back(back_actual_conn,sql);    
+}

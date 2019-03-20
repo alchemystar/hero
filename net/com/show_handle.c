@@ -3,6 +3,7 @@
 #include "../server_parse.h"
 #include "../proto/packet.h"
 #include "handle_util.h"
+#include "../datasource.h"
 
 #define OTHER -1
 #define DATABASES 1
@@ -50,8 +51,7 @@ int handle_show(front_conn* front,char* sql,int offset){
             return write_collation(front);
         default:
             // todo 改掉 默认这边write_databases
-            return write_show_variables(front);
-            //return TRUE;   
+            return default_execute(front,sql,TRUE);
     }
     return TRUE;
 }

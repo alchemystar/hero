@@ -53,7 +53,7 @@
 
 #define OKAY_PACKET_FIELD_COUNT 0
 #define ERROR_PACKET_FIELD_COUNT 255
-
+#define EOF_FIELD_COUNT 0xfe
 // todo以后考虑对齐(align)问题
 // 这边typedef就可以不用写成struct mysql_packet的形式
 typedef struct {
@@ -199,7 +199,5 @@ int write_field(packet_buffer* pb,field_packet* field);
 int write_eof(packet_buffer* pb,eof_packet* eof);
 int write_row(packet_buffer* pb,row_packet* row);
 int write_error(packet_buffer* pb,error_packet* error);
-
-int write_query_command(packet_buffer*pb,char* sql,unsigned char* sql_type);
 
 #endif

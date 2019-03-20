@@ -68,8 +68,7 @@ int handle_com_query(front_conn* front){
             // return false,上层关闭连接
             return FALSE;       
         default:
-            printf("default return okay");
-            return write_okay(front->conn);
+            return default_execute(front,sql,FALSE); 
     }
     return TRUE;
 }
