@@ -1,4 +1,17 @@
 用C语言写的dbproxy
+Road_Map:
+已完成:
+内存池
+byte_buffer
+BIO模式
+Reactor模式
+Epoll分包
+MySQL前端协议
+MySQL后端协议
+todo: 
+事务支持
+
+
 追求极致的性能
 用作对比的两个server的代码IO模型
 hero(c):epoll 水平触发
