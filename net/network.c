@@ -158,7 +158,6 @@ int send_handshake(front_conn* front,hand_shake_packet** result){
 }
 
 // 用完packet之后得重置buffer
-// todo 用random读取很少的一段数据 来测试一下"粘包"问题！！！！！！！！
 // 包装一些recv ^_^
 int read_packet(connection* conn){
     int sockfd = conn->sockfd;
